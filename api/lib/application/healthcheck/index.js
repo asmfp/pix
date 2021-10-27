@@ -7,6 +7,11 @@ exports.register = async function (server) {
       path: '/api',
       config: {
         auth: false,
+        plugins: {
+          rateLimit: {
+            enabled: true,
+          },
+        },
         handler: healthcheckController.get,
         tags: ['api'],
       },
