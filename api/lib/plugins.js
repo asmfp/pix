@@ -5,6 +5,7 @@ const Inert = require('@hapi/inert');
 const Vision = require('@hapi/vision');
 const { get } = require('lodash');
 const monitoringTools = require('./infrastructure/monitoring-tools');
+const RedisClient = require("./infrastructure/utils/RedisClient");
 
 function logObjectSerializer(obj) {
   if (settings.hapi.enableRequestMonitoring) {
@@ -18,6 +19,13 @@ function logObjectSerializer(obj) {
     return { ...obj };
   }
 }
+
+const RedisClient = new RedisClient(redisUrl, 'api-rate-limiter')
+
+const defaultRate = {
+  limit: 10,
+  window: 60,
+};
 
 const plugins = [
   Inert,
@@ -43,6 +51,19 @@ const plugins = [
       },
       instance: require('./infrastructure/logger'),
       logQueryParams: true,
+    },
+  },
+  {
+    plugin: require('hapi-rate-limiter'),
+    options: {
+      defaultRate: (request) => defaultRate,
+      key: (request) => {
+        return 'request.auth.credentials.apiKey';
+      },
+      redisClient: RedisClient,
+      overLimitError: (rate) => new Error(`Rate Limit Exceeded - try again in ${rate.window} seconds`),
+      onRedisError: (err) => console.log(err),
+      timer: (ms) => console.log(`Rate Limit Latency - ${ms} milliseconds`),
     },
   },
   ...(settings.sentry.enabled
