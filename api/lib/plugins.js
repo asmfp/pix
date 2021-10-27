@@ -8,6 +8,7 @@ const { get } = require('lodash');
 const monitoringTools = require('./infrastructure/monitoring-tools');
 const RedisClient = require('./infrastructure/utils/RedisClient');
 const { redisUrl } = settings.caching;
+const { UnprocessableEntityError } = require('./application/http-errors');
 
 function logObjectSerializer(obj) {
   if (settings.hapi.enableRequestMonitoring) {
@@ -63,9 +64,9 @@ const plugins = [
         return 'request.auth.credentials.apiKey';
       },
       redisClient,
-      overLimitError: (rate) => new Error(`Rate Limit Exceeded - try again in ${rate.window} seconds`),
+      overLimitError: (rate) =>
+        new UnprocessableEntityError(`Rate Limit Exceeded - try again in ${rate.window} seconds`),
       onRedisError: (err) => logger.error(err),
-      timer: (ms) => logger.error(`Rate Limit Latency - ${ms} milliseconds`),
     },
   },
   ...(settings.sentry.enabled
