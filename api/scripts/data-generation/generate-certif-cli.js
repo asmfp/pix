@@ -2,11 +2,17 @@
 'use strict';
 const inquirer = require('inquirer');
 require('dotenv').config({ path: `${__dirname}/../../.env` });
-const { knex } = require(`${__dirname}/../../db/knex-database-connection`);
-const DatabaseBuilder = require(`${__dirname}/../../db/database-builder/database-builder`);
-const databaseBuilder = new DatabaseBuilder({ knex });
+const { knex } = require(`../../db/knex-database-connection`);
+const domainBuilder = require('../../tests/tooling/domain-builder/factory');
+const omit = require('lodash/omit');
 
 console.log('Salut tu veux des sessions?');
+
+const CERTIFICATION_CENTER_IDS_BY_TYPE = {
+  SCO: 1,
+  SUP: 3,
+  PRO: 2,
+};
 
 const questions = [
   {
@@ -14,16 +20,13 @@ const questions = [
     name: 'centerType',
     message: 'Quel type de centre ?',
     choices: ['SCO', 'SUP', 'PRO'],
-    filter(centerType) {
-      return centerType.toLowerCase();
-    },
   },
   {
     type: 'input',
-    name: 'candidates',
-    message: 'Combien de candidats?',
+    name: 'candidateNumber',
+    message: 'Combien de candidats ?',
     validate(value) {
-      const valid = !isNaN(parseFloat(value));
+      const valid = !isNaN(parseInt(value));
       return valid || 'Renseigner un nombre';
     },
     filter: Number,
@@ -31,39 +34,93 @@ const questions = [
   {
     type: 'confirm',
     name: 'needComplementaryCertifications',
-    message: 'As tu besoin de certifications complementaires?',
+    message: 'As tu besoin de certifications complémentaires ?',
     default: false,
+    when({ centerType }) {
+      return centerType !== 'SCO';
+    },
   },
   {
     type: 'checkbox',
     name: 'complementaryCertifications',
     message: 'Quelles certifications complémentaires souhaitez-vous ?',
+    when({ needComplementaryCertifications }) {
+      return needComplementaryCertifications;
+    },
     choices: [
       {
-        key: 'p',
-        name: 'Pix+Edu',
-        value: 'PixEdu',
+        name: 'Pix+ Edu',
+        value: 'Pix+ Edu',
       },
       {
-        key: 'a',
-        name: 'Pix+Droit',
-        value: 'PixDroit',
+        name: 'Pix+ Droit',
+        value: 'Pix+ Droit',
       },
       {
-        key: 'w',
         name: 'Cléa Numérique',
-        value: 'clea',
+        value: 'Cléa Numérique',
       },
     ],
   },
 ];
 
-inquirer.prompt(questions).then((answers) => {
-  console.log('\nDetails:');
-  console.log(JSON.stringify(answers, null, '  '));
+inquirer
+  .prompt(questions)
+  .then(async (answers) => {
+    console.log('\nDetails:');
+    console.log(JSON.stringify(answers, null, '  '));
 
-  databaseBuilder.factory.buildSession();
-  databaseBuilder.commit().then(() => {
-    console.log('Done !');
+    const { centerType, candidateNumber } = answers;
+    const certificationCenterId = CERTIFICATION_CENTER_IDS_BY_TYPE[centerType];
+
+    const sessionId = await _createSessionAndReturnId(certificationCenterId);
+
+    for (let i = 0; i < candidateNumber; i++) {
+      await _createCertificationCandidate(i, sessionId);
+    }
+
+    const results = await _getResults(sessionId);
+    console.table(results);
+
+    process.exit(0);
+  })
+  .catch((error) => {
+    console.error(error);
+    process.exit(1);
   });
-});
+
+async function _createSessionAndReturnId(certificationCenterId) {
+  const [sessionId] = await knex('sessions')
+    .insert(omit(domainBuilder.buildSession({ certificationCenterId }), ['id', 'certificationCandidates']))
+    .returning('id');
+  return sessionId;
+}
+
+async function _createCertificationCandidate(i, sessionId) {
+  const birthdate = new Date('2020-01-01');
+  birthdate.setDate(birthdate.getDate() + i);
+  await knex('certification-candidates').insert(
+    omit(
+      domainBuilder.buildCertificationCandidate({
+        firstName: 'John',
+        lastName: 'Doe',
+        birthdate,
+        sessionId,
+      }),
+      ['id', 'userId', 'complementaryCertifications']
+    )
+  );
+}
+
+async function _getResults(sessionId) {
+  return await knex('sessions')
+    .select(
+      'sessions.id as sessionId',
+      'sessions.accessCode',
+      'certification-candidates.firstName',
+      'certification-candidates.lastName',
+      'certification-candidates.birthdate'
+    )
+    .join('certification-candidates', 'certification-candidates.sessionId', 'sessions.id')
+    .where('sessions.id', sessionId);
+}
