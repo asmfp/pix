@@ -5,6 +5,7 @@ require('dotenv').config({ path: `${__dirname}/../../.env` });
 const { knex } = require(`../../db/knex-database-connection`);
 const domainBuilder = require('../../tests/tooling/domain-builder/factory');
 const omit = require('lodash/omit');
+const times = require('lodash/times');
 
 console.log('Salut tu veux des sessions?');
 
@@ -75,8 +76,10 @@ inquirer
 
     const sessionId = await _createSessionAndReturnId(certificationCenterId);
 
-    for (let i = 0; i < candidateNumber; i++) {
-      await _createCertificationCandidate(i, sessionId);
+    if (centerType === 'SCO') {
+      await _createScoCertificationCandidates(certificationCenterId, candidateNumber, sessionId);
+    } else {
+      await _createNonScoCertificationCandidates(candidateNumber, sessionId);
     }
 
     const results = await _getResults(sessionId);
@@ -96,20 +99,45 @@ async function _createSessionAndReturnId(certificationCenterId) {
   return sessionId;
 }
 
-async function _createCertificationCandidate(i, sessionId) {
-  const birthdate = new Date('2020-01-01');
-  birthdate.setDate(birthdate.getDate() + i);
-  await knex('certification-candidates').insert(
-    omit(
-      domainBuilder.buildCertificationCandidate({
-        firstName: 'John',
-        lastName: 'Doe',
-        birthdate,
-        sessionId,
-      }),
-      ['id', 'userId', 'complementaryCertifications']
-    )
-  );
+async function _createNonScoCertificationCandidates(candidateNumber, sessionId) {
+  times(candidateNumber, async (index) => {
+    const birthdate = new Date('2020-01-01');
+    birthdate.setDate(birthdate.getDate() + index);
+    await knex('certification-candidates').insert(
+      omit(
+        domainBuilder.buildCertificationCandidate({
+          firstName: 'John',
+          lastName: 'Doe',
+          birthdate,
+          sessionId,
+        }),
+        ['id', 'userId', 'complementaryCertifications']
+      )
+    );
+  });
+}
+
+async function _createScoCertificationCandidates(certificationCenterId, candidateNumber, sessionId) {
+  const schoolingRegistrations = await knex('schooling-registrations')
+    .select('schooling-registrations.id as schoolingRegistrationId', 'firstName', 'lastName', 'birthdate')
+    .innerJoin('organizations', 'organizations.id', 'schooling-registrations.organizationId')
+    .innerJoin('certification-centers', 'certification-centers.externalId', 'organizations.externalId')
+    .where('certification-centers.id', certificationCenterId)
+    .limit(candidateNumber);
+  for (const { schoolingRegistrationId, firstName, lastName, birthdate } of schoolingRegistrations) {
+    await knex('certification-candidates').insert(
+      omit(
+        domainBuilder.buildCertificationCandidate({
+          firstName,
+          lastName,
+          birthdate,
+          schoolingRegistrationId,
+          sessionId,
+        }),
+        ['id', 'userId', 'complementaryCertifications']
+      )
+    );
+  }
 }
 
 async function _getResults(sessionId) {
