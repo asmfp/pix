@@ -73,7 +73,7 @@ module.exports = (function () {
     logging: {
       enabled: isFeatureEnabled(process.env.LOG_ENABLED),
       logLevel: process.env.LOG_LEVEL || 'info',
-      logForHumans: isFeatureEnabled(process.env.LOG_FOR_HUMANS),
+      logForHumans: isFeatureEnabled(process.env.LOG_FOR_HUMANS) || process.stdout.isTTY,
       enableLogKnexQueries: isFeatureEnabled(process.env.LOG_KNEX_QUERIES),
       enableLogStartingEventDispatch: isFeatureEnabled(process.env.LOG_STARTING_EVENT_DISPATCH),
       enableLogEndingEventDispatch: isFeatureEnabled(process.env.LOG_ENDING_EVENT_DISPATCH),
