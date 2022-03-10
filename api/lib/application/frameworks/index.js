@@ -15,6 +15,18 @@ exports.register = async function (server) {
           "Elle permet de demander de récupérer toutes les données du référentiel Pix jusqu'aux sujets",
         ],
       },
+    }, {
+      method: 'GET',
+      path: '/api/frameworks',
+      config: {
+        handler: frameworkController.getFrameworks,
+        pre: [{ method: securityPreHandlers.checkUserHasRolePixMaster }],
+        tags: ['api', 'framework'],
+        notes: [
+          "Cette route est restreinte aux utilisateurs authentifiés membre d'une organisation",
+          "Elle permet de demander de récupérer toutes les données du référentiel Pix jusqu'aux sujets",
+        ],
+      },
     },
   ]);
 };
