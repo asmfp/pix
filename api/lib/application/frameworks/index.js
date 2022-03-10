@@ -15,7 +15,8 @@ exports.register = async function (server) {
           "Elle permet de demander de récupérer toutes les données du référentiel Pix jusqu'aux sujets",
         ],
       },
-    }, {
+    },
+    {
       method: 'GET',
       path: '/api/frameworks',
       config: {
