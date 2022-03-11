@@ -3,6 +3,10 @@ extends:
   - 'plugin:i18n-json/recommended'
   - 'plugin:mocha/recommended'
   - 'plugin:prettier/recommended'
+  - 'plugin:@typescript-eslint/recommended'
+
+parser: '@typescript-eslint/parser'
+
 parserOptions:
   ecmaVersion: 2020
 
@@ -11,6 +15,7 @@ globals:
 
 plugins:
   - knex
+  - '@typescript-eslint'
 
 rules:
   no-console: error
