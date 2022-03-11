@@ -29,3 +29,5 @@ ignore:
   - db/migrations
   - db/seeds
   - scripts
+  - dist
+  - .vscode

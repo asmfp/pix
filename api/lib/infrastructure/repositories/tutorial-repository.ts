@@ -1,3 +1,4 @@
+//@ts-nocheck
 const _ = require('lodash');
 const Tutorial = require('../../domain/models/Tutorial');
 const userTutorialRepository = require('./user-tutorial-repository');
@@ -22,7 +23,9 @@ module.exports = {
 
   async findWithUserTutorialForCurrentUser({ userId }) {
     const userTutorials = await userTutorialRepository.find({ userId });
-    const tutorials = await tutorialDatasource.findByRecordIds(userTutorials.map(({ tutorialId }) => tutorialId));
+    const tutorials = await tutorialDatasource.findByRecordIds(
+      userTutorials.map(({ id }: Partial<TutorialInput>) => id)
+    );
 
     return tutorials.map((tutorial) => {
       const userTutorial = userTutorials.find(({ tutorialId }) => tutorialId === tutorial.id);

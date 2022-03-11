@@ -78,6 +78,7 @@
   },
   "devDependencies": {
     "@ls-lint/ls-lint": "^1.10.0",
+    "@tsconfig/node16": "^1.0.2",
     "@typescript-eslint/eslint-plugin": "^5.14.0",
     "@typescript-eslint/parser": "^5.14.0",
     "chai": "^4.3.4",
@@ -102,10 +103,12 @@
     "sinon": "^11.1.2",
     "sinon-chai": "^3.7.0",
     "stream-to-promise": "^3.0.0",
+    "ts-node": "^10.7.0",
     "typescript": "^4.6.2"
   },
   "scripts": {
-    "clean": "rm -rf node_modules",
+    "build": "rm -rf dist && tsc",
+    "clean": "rm -rf node_modules && rm -rf dist",
     "cache:refresh": "node scripts/refresh-cache",
     "db:new-migration": "npx knex --knexfile db/knexfile.js migrate:make $migrationname",
     "db:create": "node scripts/database/create-database",
@@ -125,7 +128,7 @@
     "postdeploy": "npm run db:migrate",
     "preinstall": "npx check-engine",
     "scalingo-postbuild": "node scripts/generate-cron > cron.json",
-    "start": "rm -rf dist && tsc && node dist/bin/www",
+    "start": "npm run build && node dist/bin/www",
     "start:watch": "nodemon bin/www",
     "test": "NODE_ENV=test npm run db:prepare && npm run test:api",
     "test:api": "status=0; npm run test:api:unit || status=1 ; for dir in $(find tests/* -maxdepth 0 -type d -not -path tests/unit) ; do npm run test:api:path -- $dir || status=1 ; done ; exit $status",
@@ -137,7 +140,8 @@
     "test:api:watch": "NODE_ENV=test mocha --recursive tests --watch --reporter dot",
     "test:api:bail": "npm run test:api:unit -- --bail && npm run test:api:integration -- --bail && npm run test:api:acceptance -- --bail",
     "test:ci": "npm run test",
-    "test:lint": "npm test && npm run lint"
+    "test:lint": "npm test && npm run lint",
+    "test:mocha:ts": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' NODE_ENV=test mocha -r ts-node/register 'tests/**/*.js' --recursive --reporter=${MOCHA_REPORTER:-dot}"
   },
   "nodemonConfig": {
     "signal": "SIGTERM"
