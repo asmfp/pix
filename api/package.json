@@ -99,7 +99,8 @@
     "prettier": "^2.4.1",
     "sinon": "^11.1.2",
     "sinon-chai": "^3.7.0",
-    "stream-to-promise": "^3.0.0"
+    "stream-to-promise": "^3.0.0",
+    "typescript": "^4.6.2"
   },
   "scripts": {
     "clean": "rm -rf node_modules",
@@ -122,7 +123,7 @@
     "postdeploy": "npm run db:migrate",
     "preinstall": "npx check-engine",
     "scalingo-postbuild": "node scripts/generate-cron > cron.json",
-    "start": "node bin/www",
+    "start": "rm -rf dist && tsc && node dist/bin/www",
     "start:watch": "nodemon bin/www",
     "test": "NODE_ENV=test npm run db:prepare && npm run test:api",
     "test:api": "status=0; npm run test:api:unit || status=1 ; for dir in $(find tests/* -maxdepth 0 -type d -not -path tests/unit) ; do npm run test:api:path -- $dir || status=1 ; done ; exit $status",

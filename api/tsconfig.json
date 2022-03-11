@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "outDir": "./dist",
+        "allowJs": true,
+        "target": "es5",
+        "resolveJsonModule":true
+    },
+    "include": [
+        "./lib/**/*",
+        "./bin/**/*",
+        "./translations/**/*",
+        "./server",
+    ]
+}

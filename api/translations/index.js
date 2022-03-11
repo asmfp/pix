@@ -1,4 +1,4 @@
-const fr = require('./fr');
-const en = require('./en');
+const fr = require('./fr.json');
+const en = require('./en.json');
 
 module.exports = { fr, en };
