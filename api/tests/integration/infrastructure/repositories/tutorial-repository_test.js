@@ -7,7 +7,7 @@ const TutorialWithUserSavedTutorial = require('../../../../lib/domain/models/Tut
 const UserSavedTutorial = require('../../../../lib/domain/models/UserSavedTutorial');
 const { ENGLISH_SPOKEN } = require('../../../../lib/domain/constants').LOCALE;
 
-describe.only('Integration | Repository | tutorial-repository', function () {
+describe('Integration | Repository | tutorial-repository', function () {
   describe('#findByRecordIdsForCurrentUser', function () {
     it('should find tutorials by ids', async function () {
       // given

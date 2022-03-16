@@ -120,7 +120,7 @@ describe('Unit | Service | sco-account-recovery-service', function () {
             organization: firstOrganization,
             updatedAt: new Date('2000-01-01T15:00:00Z'),
             ...studentInformation,
-            nationalStudentId: studentInformation.inaIna,
+            nationalStudentId: studentInformation.ineIna,
           });
           const lastSchoolingRegistration = domainBuilder.buildSchoolingRegistration({
             id: 3,
@@ -128,7 +128,7 @@ describe('Unit | Service | sco-account-recovery-service', function () {
             organization: secondOrganization,
             updatedAt: new Date('2005-01-01T15:00:00Z'),
             ...studentInformation,
-            nationalStudentId: studentInformation.inaIna,
+            nationalStudentId: studentInformation.ineIna,
           });
           const accountRecoveryDemand = domainBuilder.buildAccountRecoveryDemand({
             userId: expectedUser.id,

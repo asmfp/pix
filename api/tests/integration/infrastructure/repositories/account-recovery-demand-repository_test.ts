@@ -1,7 +1,9 @@
+import { IAccountRecoveryDemand } from './../../../../lib/domain/models/AccountRecoveryDemand';
+import { AccountRecoveryDemand } from '../../../../lib/domain/models/AccountRecoveryDemand';
+
 const { expect, knex, databaseBuilder, domainBuilder, catchErr } = require('../../../test-helper');
 const accountRecoveryDemandRepository = require('../../../../lib/infrastructure/repositories/account-recovery-demand-repository');
 const { NotFoundError } = require('../../../../lib/domain/errors');
-const AccountRecoveryDemand = require('../../../../lib/domain/models/AccountRecoveryDemand');
 const DomainTransaction = require('../../../../lib/infrastructure/DomainTransaction');
 const omit = require('lodash/omit');
 
@@ -206,7 +208,7 @@ describe('Integration | Infrastructure | Repository | account-recovery-demand-re
       const accountRecoveryDemand = domainBuilder.buildAccountRecoveryDemand(accountRecoveryDemandAttributes);
 
       // when
-      const result = await accountRecoveryDemandRepository.save(accountRecoveryDemand);
+      const result: IAccountRecoveryDemand = await accountRecoveryDemandRepository.save(accountRecoveryDemand);
 
       // then
       const accountRecoveryDemands = await knex('account-recovery-demands').select();
