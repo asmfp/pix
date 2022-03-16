@@ -1,6 +1,8 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Serializer... Remove this comment to see the full error message
 const { Serializer } = require('jsonapi-serializer');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
-  serialize(results) {
+  serialize(results: any) {
     return new Serializer('campaign-participation-results', {
       transform,
       attributes: [
@@ -77,22 +79,22 @@ module.exports = {
         ref: 'id',
         attributes: ['title', 'message', 'threshold', 'starCount'],
       },
-      typeForAttribute(attribute) {
+      typeForAttribute(attribute: any) {
         return attribute === 'reachedStage' ? 'reached-stages' : attribute;
       },
     }).serialize(results);
   },
 };
 
-function transform(record) {
+function transform(record: any) {
   return {
     ...record,
     campaignParticipationBadges: record.badgeResults.map(mapBadgeResult),
   };
 }
 
-function mapBadgeResult(badgeResult) {
-  const skillSetResults = badgeResult.skillSetResults.map((skillSetResult) => {
+function mapBadgeResult(badgeResult: any) {
+  const skillSetResults = badgeResult.skillSetResults.map((skillSetResult: any) => {
     return { ...skillSetResult, areaColor: skillSetResult.color };
   });
   return {

@@ -1,8 +1,11 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_'.
 const _ = require('../../../lib/infrastructure/utils/lodash-utils');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const { normalizeAndRemoveAccents: t1, removeSpecialCharacters: t2 } = require('./validation-treatments');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const { getSmallestLevenshteinRatio: t3 } = require('./string-comparison-service');
 
-function treatmentT1T2T3(userAnswer, adminAnswers, applyTreatments = true) {
+function treatmentT1T2T3(userAnswer: any, adminAnswers: any, applyTreatments = true) {
   if (_.isNotArrayOfString(adminAnswers)) return null;
   if (_.isNotString(userAnswer)) return null;
   if (_.isEmpty(adminAnswers)) return null;
@@ -34,6 +37,7 @@ function treatmentT1T2T3(userAnswer, adminAnswers, applyTreatments = true) {
   }
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
   treatmentT1T2T3,
 };

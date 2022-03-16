@@ -1,10 +1,31 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'statuses'.
 const statuses = {
   STARTED: 'started',
   RESET: 'reset',
 };
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Competence... Remove this comment to see the full error message
 class CompetenceEvaluation {
-  constructor({ id, createdAt, updatedAt, status, assessment, scorecard, assessmentId, competenceId, userId } = {}) {
+  assessment: any;
+  assessmentId: any;
+  competenceId: any;
+  createdAt: any;
+  id: any;
+  scorecard: any;
+  status: any;
+  updatedAt: any;
+  userId: any;
+  constructor({
+    id,
+    createdAt,
+    updatedAt,
+    status,
+    assessment,
+    scorecard,
+    assessmentId,
+    competenceId,
+    userId
+  }: any = {}) {
     this.id = id;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
@@ -18,6 +39,8 @@ class CompetenceEvaluation {
   }
 }
 
+// @ts-expect-error ts-migrate(2339) FIXME: Property 'statuses' does not exist on type 'typeof... Remove this comment to see the full error message
 CompetenceEvaluation.statuses = statuses;
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = CompetenceEvaluation;

@@ -1,11 +1,17 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'usecases'.
 const usecases = require('../../domain/usecases');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const participationsByStageSerializer = require('../../infrastructure/serializers/jsonapi/campaign-participations-count-by-stage-serializer');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const participationsByStatusSerializer = require('../../infrastructure/serializers/jsonapi/campaign-participations-counts-by-status-serializer');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const participationsByDaySerializer = require('../../infrastructure/serializers/jsonapi/campaign-participations-counts-by-day-serializer');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const participationsCountByMasteryRateSerializer = require('../../infrastructure/serializers/jsonapi/participations-count-by-mastery-rate');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
-  async getParticipationsByStage(request) {
+  async getParticipationsByStage(request: any) {
     const { userId } = request.auth.credentials;
     const campaignId = request.params.id;
 
@@ -17,7 +23,7 @@ module.exports = {
     });
   },
 
-  async getParticipationsByStatus(request) {
+  async getParticipationsByStatus(request: any) {
     const { userId } = request.auth.credentials;
     const campaignId = request.params.id;
 
@@ -29,7 +35,7 @@ module.exports = {
     });
   },
 
-  async getParticipationsByDay(request) {
+  async getParticipationsByDay(request: any) {
     const { userId } = request.auth.credentials;
     const campaignId = request.params.id;
 
@@ -41,7 +47,7 @@ module.exports = {
     });
   },
 
-  async getParticipationsCountByMasteryRate(request) {
+  async getParticipationsCountByMasteryRate(request: any) {
     const { userId } = request.auth.credentials;
     const campaignId = request.params.id;
 

@@ -1,9 +1,35 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'sortBy'.
 const sortBy = require('lodash/sortBy');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
 const moment = require('moment');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const getImagePathByBadgeKey = require('./get-image-path-by-badge-key');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'toArrayOfF... Remove this comment to see the full error message
 const { toArrayOfFixedLengthStringsConservingWords } = require('../string-utils');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Attestatio... Remove this comment to see the full error message
 class AttestationViewModel {
+  _hasAcquiredAnyComplementaryCertifications: any;
+  _hasAcquiredCleaCertification: any;
+  _hasAcquiredPixPlusDroitCertification: any;
+  _hasAcquiredPixPlusEduCertification: any;
+  _maxReachableLevelOnCertificationDate: any;
+  absoluteMaxLevelIndication: any;
+  birth: any;
+  birthplace: any;
+  certificationCenter: any;
+  certificationDate: any;
+  cleaCertificationImagePath: any;
+  competenceDetailViewModels: any;
+  fullName: any;
+  maxLevel: any;
+  maxReachableLevelIndication: any;
+  maxReachableScore: any;
+  pixPlusDroitCertificationImagePath: any;
+  pixPlusEduCertificationImagePath: any;
+  pixPlusEduTemporaryBadgeMessage: any;
+  pixScore: any;
+  verificationCode: any;
   constructor({
     pixScore,
     maxReachableScore,
@@ -25,8 +51,8 @@ class AttestationViewModel {
     hasAcquiredPixPlusEduCertification,
     pixPlusEduCertificationImagePath,
     pixPlusEduTemporaryBadgeMessage,
-    competenceDetailViewModels,
-  }) {
+    competenceDetailViewModels
+  }: any) {
     this.pixScore = pixScore;
     this.maxReachableScore = maxReachableScore;
     this.maxLevel = maxLevel;
@@ -59,18 +85,21 @@ class AttestationViewModel {
   }
 
   shouldDisplayCleaCertification() {
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Boolean'.
     return Boolean(this._hasAcquiredCleaCertification);
   }
 
   shouldDisplayPixPlusDroitCertification() {
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Boolean'.
     return Boolean(this._hasAcquiredPixPlusDroitCertification);
   }
 
   shouldDisplayPixPlusEduCertification() {
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Boolean'.
     return Boolean(this._hasAcquiredPixPlusEduCertification);
   }
 
-  static from(certificate) {
+  static from(certificate: any) {
     const pixScore = certificate.pixScore.toString();
     const maxReachableScore = certificate.maxReachableScore.toString() + '*';
 
@@ -120,8 +149,8 @@ class AttestationViewModel {
     }
 
     const sortedCompetenceTree = sortBy(certificate.resultCompetenceTree.areas, 'code');
-    const competenceDetailViewModels = sortedCompetenceTree.flatMap((area) => {
-      return area.resultCompetences.map((competence) => {
+    const competenceDetailViewModels = sortedCompetenceTree.flatMap((area: any) => {
+      return area.resultCompetences.map((competence: any) => {
         return CompetenceDetailViewModel.from(competence);
       });
     });
@@ -153,7 +182,12 @@ class AttestationViewModel {
 }
 
 class CompetenceDetailViewModel {
-  constructor({ level, levelValue }) {
+  _levelValue: any;
+  level: any;
+  constructor({
+    level,
+    levelValue
+  }: any) {
     this.level = level;
     this._levelValue = levelValue;
   }
@@ -162,7 +196,7 @@ class CompetenceDetailViewModel {
     return this._levelValue > 0;
   }
 
-  static from(competence) {
+  static from(competence: any) {
     return new CompetenceDetailViewModel({
       level: competence.level.toString(),
       levelValue: competence.level,
@@ -170,8 +204,9 @@ class CompetenceDetailViewModel {
   }
 }
 
-function _formatDate(date) {
+function _formatDate(date: any) {
   return moment(date).locale('fr').format('LL');
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = AttestationViewModel;

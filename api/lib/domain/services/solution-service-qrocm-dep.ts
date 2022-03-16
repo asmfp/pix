@@ -1,65 +1,79 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'jsYaml'.
 const jsYaml = require('js-yaml');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_'.
 const _ = require('../../infrastructure/utils/lodash-utils');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'utils'.
 const utils = require('./solution-service-utils');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'deactivati... Remove this comment to see the full error message
 const deactivationsService = require('./deactivations-service');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'applyPreTr... Remove this comment to see the full error message
 const { applyPreTreatments, applyTreatments } = require('./validation-treatments');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'YamlParsin... Remove this comment to see the full error message
 const { YamlParsingError } = require('../../domain/errors');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'AnswerStat... Remove this comment to see the full error message
 const AnswerStatus = require('../models/AnswerStatus');
 
-function _applyTreatmentsToSolutions(solutions, deactivations) {
-  return _.mapValues(solutions, (validSolutions) => {
-    return _.map(validSolutions, (validSolution) => {
+function _applyTreatmentsToSolutions(solutions: any, deactivations: any) {
+  return _.mapValues(solutions, (validSolutions: any) => {
+    return _.map(validSolutions, (validSolution: any) => {
       const pretreatedSolution = validSolution.toString();
       const allTreatments = ['t1', 't2', 't3'];
-      const enabledTreatments = allTreatments.filter((treatment) => !deactivations[treatment]);
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'filter' does not exist on type '{}'.
+      const enabledTreatments = allTreatments.filter((treatment: any) => !deactivations[treatment]);
 
       return applyTreatments(pretreatedSolution, enabledTreatments);
     });
   });
 }
 
-function _applyTreatmentsToAnswers(answers) {
+// @ts-expect-error ts-migrate(2393) FIXME: Duplicate function implementation.
+function _applyTreatmentsToAnswers(answers: any) {
   return _.mapValues(answers, _.toString);
 }
 
-function _compareAnswersAndSolutions(answers, solutions) {
+// @ts-expect-error ts-migrate(2393) FIXME: Duplicate function implementation.
+function _compareAnswersAndSolutions(answers: any, solutions: any) {
   const validations = {};
 
-  _.each(answers, (answer, index) => {
+  _.each(answers, (answer: any, index: any) => {
     const indexation = answer + '_' + index;
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Object'.
     const solutionKeys = Object.keys(solutions);
-    _.each(solutionKeys, (solutionKey) => {
+    _.each(solutionKeys, (solutionKey: any) => {
       const solutionVariants = solutions[solutionKey];
 
+      // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
       if (_.isUndefined(validations[indexation])) {
+        // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
         validations[indexation] = [];
       }
 
+      // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
       validations[indexation].push(utils.treatmentT1T2T3(answer, solutionVariants));
     });
   });
   return validations;
 }
 
-function _numberOfGoodAnswers(fullValidations, deactivations) {
+function _numberOfGoodAnswers(fullValidations: any, deactivations: any) {
   const allGoodAnswers = _goodAnswers(fullValidations, deactivations);
   const uniqGoodAnswers = _.uniqBy(allGoodAnswers, 'adminAnswers');
   return uniqGoodAnswers.length;
 }
 
-function _goodAnswers(fullValidations, deactivations) {
+function _goodAnswers(fullValidations: any, deactivations: any) {
   return _.chain(fullValidations)
-    .map((fullValidation) => {
+    .map((fullValidation: any) => {
       return _goodAnswer(fullValidation, deactivations);
     })
-    .filter((e) => e !== null)
+    .filter((e: any) => e !== null)
     .value();
 }
 
 // the lowest t1t2t3 ratio is below 0.25
-function _goodAnswer(allValidations, deactivations) {
-  const bestAnswerSoFar = _.minBy(allValidations, (oneValidation) => oneValidation.t1t2t3Ratio);
+function _goodAnswer(allValidations: any, deactivations: any) {
+  const bestAnswerSoFar = _.minBy(allValidations, (oneValidation: any) => oneValidation.t1t2t3Ratio);
   if (deactivationsService.isDefault(deactivations)) {
     return bestAnswerSoFar.t1t2t3Ratio <= 0.25 ? bestAnswerSoFar : null;
   } else if (deactivationsService.hasOnlyT1(deactivations)) {
@@ -77,7 +91,8 @@ function _goodAnswer(allValidations, deactivations) {
   }
 }
 
-function _formatResult(scoring, validations, deactivations) {
+// @ts-expect-error ts-migrate(2393) FIXME: Duplicate function implementation.
+function _formatResult(scoring: any, validations: any, deactivations: any) {
   let result = AnswerStatus.OK;
 
   const numberOfGoodAnswers = _numberOfGoodAnswers(validations, deactivations);
@@ -87,7 +102,9 @@ function _formatResult(scoring, validations, deactivations) {
   } else if (_.isEmpty(scoring) && numberOfGoodAnswers === _.size(validations)) {
     result = AnswerStatus.OK;
   } else {
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Object'.
     const minGrade = _.min(Object.keys(scoring));
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Object'.
     const maxGrade = _.max(Object.keys(scoring));
 
     if (numberOfGoodAnswers >= maxGrade) {
@@ -101,8 +118,12 @@ function _formatResult(scoring, validations, deactivations) {
   return result;
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
-  match({ answerValue, solution }) {
+  match({
+    answerValue,
+    solution
+  }: any) {
     const yamlSolution = solution.value;
     const yamlScoring = solution.scoring;
     const deactivations = solution.deactivations;

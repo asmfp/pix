@@ -1,5 +1,8 @@
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = class EmailingAttempt {
-  constructor(recipientEmail, status) {
+  recipientEmail: any;
+  status: any;
+  constructor(recipientEmail: any, status: any) {
     this.recipientEmail = recipientEmail;
     this.status = status;
   }
@@ -12,11 +15,11 @@ module.exports = class EmailingAttempt {
     return this.status === AttemptStatus.SUCCESS;
   }
 
-  static success(recipientEmail) {
+  static success(recipientEmail: any) {
     return new EmailingAttempt(recipientEmail, AttemptStatus.SUCCESS);
   }
 
-  static failure(recipientEmail) {
+  static failure(recipientEmail: any) {
     return new EmailingAttempt(recipientEmail, AttemptStatus.FAILURE);
   }
 };

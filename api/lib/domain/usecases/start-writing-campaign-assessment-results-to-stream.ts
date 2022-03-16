@@ -1,11 +1,18 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_'.
 const _ = require('lodash');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
 const moment = require('moment');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'bluebird'.
 const bluebird = require('bluebird');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'constants'... Remove this comment to see the full error message
 const constants = require('../../infrastructure/constants');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'UserNotAut... Remove this comment to see the full error message
 const { UserNotAuthorizedToGetCampaignResultsError } = require('../errors');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'csvSeriali... Remove this comment to see the full error message
 const csvSerializer = require('../../infrastructure/serializers/csv/csv-serializer');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = async function startWritingCampaignAssessmentResultsToStream({
   userId,
   campaignId,
@@ -18,8 +25,8 @@ module.exports = async function startWritingCampaignAssessmentResultsToStream({
   organizationRepository,
   knowledgeElementRepository,
   badgeAcquisitionRepository,
-  campaignCsvExportService,
-}) {
+  campaignCsvExportService
+}: any) {
   const campaign = await campaignRepository.get(campaignId);
   const translate = i18n.__;
 
@@ -53,9 +60,11 @@ module.exports = async function startWritingCampaignAssessmentResultsToStream({
   bluebird
     .map(
       campaignParticipationInfoChunks,
-      async (campaignParticipationInfoChunk) => {
+      // @ts-expect-error ts-migrate(2697) FIXME: An async function or method must return a 'Promise... Remove this comment to see the full error message
+      async (campaignParticipationInfoChunk: any) => {
+        // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Object'.
         const userIdsAndDates = Object.fromEntries(
-          campaignParticipationInfoChunk.map((campaignParticipationInfo) => {
+          campaignParticipationInfoChunk.map((campaignParticipationInfo: any) => {
             return [campaignParticipationInfo.userId, campaignParticipationInfo.sharedAt];
           })
         );
@@ -68,25 +77,27 @@ module.exports = async function startWritingCampaignAssessmentResultsToStream({
         let acquiredBadgesByCampaignParticipations;
         if (targetProfileWithLearningContent.hasBadges()) {
           const campaignParticipationsIds = campaignParticipationInfoChunk.map(
-            (campaignParticipationInfo) => campaignParticipationInfo.campaignParticipationId
+            (campaignParticipationInfo: any) => campaignParticipationInfo.campaignParticipationId
           );
           acquiredBadgesByCampaignParticipations =
             await badgeAcquisitionRepository.getAcquiredBadgesByCampaignParticipations({ campaignParticipationsIds });
         }
 
         let csvLines = '';
+        // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Object'.
         for (const [strParticipantId, participantKnowledgeElementsByCompetenceId] of Object.entries(
           knowledgeElementsByUserIdAndCompetenceId
         )) {
+          // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'parseInt'.
           const participantId = parseInt(strParticipantId);
           const campaignParticipationInfo = campaignParticipationInfoChunk.find(
-            (campaignParticipationInfo) => campaignParticipationInfo.userId === participantId
+            (campaignParticipationInfo: any) => campaignParticipationInfo.userId === participantId
           );
           const acquiredBadges =
             acquiredBadgesByCampaignParticipations &&
             acquiredBadgesByCampaignParticipations[campaignParticipationInfo.campaignParticipationId]
               ? acquiredBadgesByCampaignParticipations[campaignParticipationInfo.campaignParticipationId].map(
-                  (badge) => badge.title
+                  (badge: any) => badge.title
                 )
               : [];
           const csvLine = campaignCsvExportService.createOneCsvLine({
@@ -98,6 +109,7 @@ module.exports = async function startWritingCampaignAssessmentResultsToStream({
             acquiredBadges,
             translate,
           });
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'concat' does not exist on type 'string'.
           csvLines = csvLines.concat(csvLine);
         }
 
@@ -108,7 +120,7 @@ module.exports = async function startWritingCampaignAssessmentResultsToStream({
     .then(() => {
       writableStream.end();
     })
-    .catch((error) => {
+    .catch((error: any) => {
       writableStream.emit('error', error);
       throw error;
     });
@@ -121,7 +133,8 @@ module.exports = async function startWritingCampaignAssessmentResultsToStream({
   return { fileName };
 };
 
-async function _checkCreatorHasAccessToCampaignOrganization(userId, organizationId, userRepository) {
+// @ts-expect-error ts-migrate(2393) FIXME: Duplicate function implementation.
+async function _checkCreatorHasAccessToCampaignOrganization(userId: any, organizationId: any, userRepository: any) {
   const user = await userRepository.getWithMemberships(userId);
 
   if (!user.hasAccessToOrganization(organizationId)) {
@@ -131,7 +144,7 @@ async function _checkCreatorHasAccessToCampaignOrganization(userId, organization
   }
 }
 
-function _createHeaderOfCSV(targetProfile, idPixLabel, organization, translate) {
+function _createHeaderOfCSV(targetProfile: any, idPixLabel: any, organization: any, translate: any) {
   const forSupStudents = organization.isSup && organization.isManagingStudents;
   const displayDivision = organization.isSco && organization.isManagingStudents;
 
@@ -155,18 +168,18 @@ function _createHeaderOfCSV(targetProfile, idPixLabel, organization, translate) 
       ? [translate('campaign-export.assessment.success-rate', { value: targetProfile.reachableStages.length })]
       : []),
 
-    ..._.flatMap(targetProfile.badges, (badge) => [
+    ..._.flatMap(targetProfile.badges, (badge: any) => [
       translate('campaign-export.assessment.thematic-result-name', { name: badge.title }),
     ]),
     translate('campaign-export.assessment.mastery-percentage-target-profile'),
 
-    ..._.flatMap(targetProfile.competences, (competence) => [
+    ..._.flatMap(targetProfile.competences, (competence: any) => [
       translate('campaign-export.assessment.skill.mastery-percentage', { name: competence.name }),
       translate('campaign-export.assessment.skill.total-items', { name: competence.name }),
       translate('campaign-export.assessment.skill.items-successfully-completed', { name: competence.name }),
     ]),
 
-    ..._.flatMap(targetProfile.areas, (area) => [
+    ..._.flatMap(targetProfile.areas, (area: any) => [
       translate('campaign-export.assessment.competence-area.mastery-percentage', { name: area.title }),
       translate('campaign-export.assessment.competence-area.total-items', { name: area.title }),
       translate('campaign-export.assessment.competence-area.items-successfully-completed', { name: area.title }),

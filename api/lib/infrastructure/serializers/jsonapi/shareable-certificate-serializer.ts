@@ -1,6 +1,8 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Serializer... Remove this comment to see the full error message
 const { Serializer } = require('jsonapi-serializer');
 
-const typeForAttribute = (attribute) => {
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'typeForAtt... Remove this comment to see the full error message
+const typeForAttribute = (attribute: any) => {
   if (attribute === 'resultCompetenceTree') {
     return 'result-competence-trees';
   }
@@ -9,6 +11,7 @@ const typeForAttribute = (attribute) => {
   }
 };
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'resultComp... Remove this comment to see the full error message
 const resultCompetenceTree = {
   included: true,
   ref: 'id',
@@ -28,6 +31,7 @@ const resultCompetenceTree = {
   },
 };
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'attributes... Remove this comment to see the full error message
 const attributes = [
   'certificationCenter',
   'birthdate',
@@ -45,11 +49,12 @@ const attributes = [
   'maxReachableLevelOnCertificationDate',
 ];
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
-  serialize(certificate) {
+  serialize(certificate: any) {
     return new Serializer('certifications', {
       typeForAttribute,
-      transform(shareableCertificate) {
+      transform(shareableCertificate: any) {
         shareableCertificate.cleaCertificationStatus = shareableCertificate.cleaCertificationResult.status;
         return shareableCertificate;
       },

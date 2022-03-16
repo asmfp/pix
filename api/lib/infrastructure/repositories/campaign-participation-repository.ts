@@ -1,15 +1,26 @@
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const BookshelfCampaignParticipation = require('../orm-models/CampaignParticipation');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'CampaignPa... Remove this comment to see the full error message
 const CampaignParticipation = require('../../domain/models/CampaignParticipation');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'CampaignPa... Remove this comment to see the full error message
 const CampaignParticipationStatuses = require('../../domain/models/CampaignParticipationStatuses');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Campaign'.
 const Campaign = require('../../domain/models/Campaign');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'bookshelfT... Remove this comment to see the full error message
 const bookshelfToDomainConverter = require('../utils/bookshelf-to-domain-converter');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'knex'.
 const { knex } = require('../../../db/knex-database-connection');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'knowledgeE... Remove this comment to see the full error message
 const knowledgeElementRepository = require('./knowledge-element-repository');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'knowledgeE... Remove this comment to see the full error message
 const knowledgeElementSnapshotRepository = require('./knowledge-element-snapshot-repository');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'DomainTran... Remove this comment to see the full error message
 const DomainTransaction = require('../DomainTransaction');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_'.
 const _ = require('lodash');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'SHARED'.
 const { SHARED, TO_SHARE, STARTED } = CampaignParticipationStatuses;
 
 const ATTRIBUTES_TO_UPDATE = [
@@ -26,8 +37,9 @@ const ATTRIBUTES_TO_UPDATE = [
   'schoolingRegistrationId',
 ];
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
-  async hasAssessmentParticipations(userId) {
+  async hasAssessmentParticipations(userId: any) {
     const { count } = await knex('campaign-participations')
       .count('campaign-participations.id')
       .join('campaigns', 'campaigns.id', 'campaignId')
@@ -36,7 +48,7 @@ module.exports = {
       .first();
     return count > 0;
   },
-  async getCodeOfLastParticipationToProfilesCollectionCampaignForUser(userId) {
+  async getCodeOfLastParticipationToProfilesCollectionCampaignForUser(userId: any) {
     const result = await knex('campaign-participations')
       .select('campaigns.code')
       .join('campaigns', 'campaigns.id', 'campaignId')
@@ -48,7 +60,7 @@ module.exports = {
       .first();
     return result?.code || null;
   },
-  async get(id, domainTransaction = DomainTransaction.emptyTransaction()) {
+  async get(id: any, domainTransaction = DomainTransaction.emptyTransaction()) {
     const campaignParticipation = await BookshelfCampaignParticipation.where({ id }).fetch({
       withRelated: ['campaign', 'assessments'],
       transacting: domainTransaction.knexTransaction,
@@ -56,7 +68,7 @@ module.exports = {
     return bookshelfToDomainConverter.buildDomainObject(BookshelfCampaignParticipation, campaignParticipation);
   },
 
-  async update(campaignParticipation, domainTransaction = DomainTransaction.emptyTransaction()) {
+  async update(campaignParticipation: any, domainTransaction = DomainTransaction.emptyTransaction()) {
     const knexConn = domainTransaction.knexTransaction || knex;
     const attributes = _getAttributes(campaignParticipation);
 
@@ -68,9 +80,9 @@ module.exports = {
     return new CampaignParticipation(updatedCampaignParticipation);
   },
 
-  async findProfilesCollectionResultDataByCampaignId(campaignId) {
+  async findProfilesCollectionResultDataByCampaignId(campaignId: any) {
     const results = await knex
-      .with('campaignParticipationWithUser', (qb) => {
+      .with('campaignParticipationWithUser', (qb: any) => {
         qb.select([
           'campaign-participations.*',
           'schooling-registrations.studentNumber',
@@ -92,8 +104,8 @@ module.exports = {
     return results.map(_rowToResult);
   },
 
-  findLatestOngoingByUserId(userId) {
-    return BookshelfCampaignParticipation.query((qb) => {
+  findLatestOngoingByUserId(userId: any) {
+    return BookshelfCampaignParticipation.query((qb: any) => {
       qb.innerJoin('campaigns', 'campaign-participations.campaignId', 'campaigns.id');
       qb.whereNull('campaigns.archivedAt');
       qb.orderBy('campaign-participations.createdAt', 'DESC');
@@ -103,12 +115,14 @@ module.exports = {
         required: false,
         withRelated: ['campaign', 'assessments'],
       })
-      .then((campaignParticipations) =>
-        bookshelfToDomainConverter.buildDomainObjects(BookshelfCampaignParticipation, campaignParticipations)
+      .then((campaignParticipations: any) => bookshelfToDomainConverter.buildDomainObjects(BookshelfCampaignParticipation, campaignParticipations)
       );
   },
 
-  async findOneByCampaignIdAndUserId({ campaignId, userId }) {
+  async findOneByCampaignIdAndUserId({
+    campaignId,
+    userId
+  }: any) {
     const campaignParticipation = await BookshelfCampaignParticipation.where({
       campaignId,
       userId,
@@ -117,7 +131,8 @@ module.exports = {
     return bookshelfToDomainConverter.buildDomainObject(BookshelfCampaignParticipation, campaignParticipation);
   },
 
-  async updateWithSnapshot(campaignParticipation, domainTransaction = DomainTransaction.emptyTransaction()) {
+  // @ts-expect-error ts-migrate(2697) FIXME: An async function or method must return a 'Promise... Remove this comment to see the full error message
+  async updateWithSnapshot(campaignParticipation: any, domainTransaction = DomainTransaction.emptyTransaction()) {
     await this.update(campaignParticipation, domainTransaction);
 
     const knowledgeElements = await knowledgeElementRepository.findUniqByUserId({
@@ -133,7 +148,9 @@ module.exports = {
     });
   },
 
-  async isRetrying({ campaignParticipationId }) {
+  async isRetrying({
+    campaignParticipationId
+  }: any) {
     const { id: campaignId, userId } = await knex('campaigns')
       .select('campaigns.id', 'userId')
       .join('campaign-participations', 'campaigns.id', 'campaignId')
@@ -144,18 +161,17 @@ module.exports = {
       .select('sharedAt', 'isImproved')
       .where({ campaignId, userId });
 
-    return (
-      campaignParticipations.length > 1 &&
-      campaignParticipations.some((participation) => !participation.isImproved && !participation.sharedAt)
-    );
+    return campaignParticipations.length > 1 &&
+    campaignParticipations.some((participation: any) => !participation.isImproved && !participation.sharedAt);
   },
 
-  async countParticipationsByStage(campaignId, stagesBoundaries) {
-    const participationCounts = stagesBoundaries.map((boundary) => {
+  async countParticipationsByStage(campaignId: any, stagesBoundaries: any) {
+    const participationCounts = stagesBoundaries.map((boundary: any) => {
       const from = boundary.from / 100;
       const to = boundary.to / 100;
       return knex.raw(
         'COUNT("id") FILTER (WHERE "masteryRate" between ?? and ??) OVER (PARTITION BY "campaignId") AS ??',
+        // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'String'.
         [from, to, String(boundary.id)]
       );
     });
@@ -172,7 +188,7 @@ module.exports = {
     return result[0];
   },
 
-  async countParticipationsByStatus(campaignId, campaignType) {
+  async countParticipationsByStatus(campaignId: any, campaignType: any) {
     const row = await knex('campaign-participations')
       .select([
         // eslint-disable-next-line knex/avoid-injections
@@ -190,11 +206,13 @@ module.exports = {
   },
 };
 
-function _rowToResult(row) {
+function _rowToResult(row: any) {
   return {
     id: row.id,
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Date'.
     createdAt: new Date(row.createdAt),
     isShared: row.status === CampaignParticipationStatuses.SHARED,
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Date'.
     sharedAt: row.sharedAt ? new Date(row.sharedAt) : null,
     participantExternalId: row.participantExternalId,
     userId: row.userId,
@@ -208,16 +226,19 @@ function _rowToResult(row) {
   };
 }
 
-function _getAttributes(campaignParticipation) {
+function _getAttributes(campaignParticipation: any) {
   return _.pick(campaignParticipation, ATTRIBUTES_TO_UPDATE);
 }
 
-function mapToParticipationByStatus(row = {}, campaignType) {
+function mapToParticipationByStatus(row = {}, campaignType: any) {
   const participationByStatus = {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'shared' does not exist on type '{}'.
     shared: row.shared || 0,
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'completed' does not exist on type '{}'.
     completed: row.completed || 0,
   };
   if (campaignType === Campaign.types.ASSESSMENT) {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'started' does not exist on type '{ share... Remove this comment to see the full error message
     participationByStatus.started = row.started || 0;
   }
   return participationByStatus;

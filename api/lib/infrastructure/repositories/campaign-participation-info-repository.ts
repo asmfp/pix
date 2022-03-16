@@ -1,11 +1,15 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'knex'.
 const { knex } = require('../bookshelf');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Assessment... Remove this comment to see the full error message
 const Assessment = require('../../domain/models/Assessment');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'CampaignPa... Remove this comment to see the full error message
 const CampaignParticipationInfo = require('../../domain/read-models/CampaignParticipationInfo');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
-  async findByCampaignId(campaignId) {
+  async findByCampaignId(campaignId: any) {
     const results = await knex
-      .with('campaignParticipationWithUserAndRankedAssessment', (qb) => {
+      .with('campaignParticipationWithUserAndRankedAssessment', (qb: any) => {
         qb.select([
           'campaign-participations.*',
           'assessments.state',
@@ -39,7 +43,7 @@ function _assessmentRankByCreationDate() {
   ]);
 }
 
-function _rowToCampaignParticipationInfo(row) {
+function _rowToCampaignParticipationInfo(row: any) {
   return new CampaignParticipationInfo({
     participantFirstName: row.firstName,
     participantLastName: row.lastName,
@@ -47,8 +51,11 @@ function _rowToCampaignParticipationInfo(row) {
     studentNumber: row.studentNumber,
     userId: row.userId,
     campaignParticipationId: row.id,
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'states' does not exist on type 'typeof A... Remove this comment to see the full error message
     isCompleted: row.state === Assessment.states.COMPLETED,
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Date'.
     createdAt: new Date(row.createdAt),
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Date'.
     sharedAt: row.sharedAt ? new Date(row.sharedAt) : null,
     division: row.division,
     group: row.group,

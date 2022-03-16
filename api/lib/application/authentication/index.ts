@@ -1,10 +1,16 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Joi'.
 const Joi = require('joi');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'sendJsonAp... Remove this comment to see the full error message
 const { sendJsonApiError, BadRequestError } = require('../http-errors');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const AuthenticationController = require('./authentication-controller');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const responseAuthenticationObjectDoc = require('../../infrastructure/open-api-doc/authentication/response-authentication-doc');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'responseEr... Remove this comment to see the full error message
 const responseErrorObjectDoc = require('../../infrastructure/open-api-doc/livret-scolaire/response-object-error-doc');
 
-exports.register = async (server) => {
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
+exports.register = async (server: any) => {
   server.route([
     {
       method: 'POST',
@@ -117,7 +123,7 @@ exports.register = async (server) => {
               token: Joi.string().required(),
               token_type_hint: ['access_token', 'refresh_token'],
             }),
-          failAction: (request, h) => {
+          failAction: (request: any, h: any) => {
             return sendJsonApiError(
               new BadRequestError('The server could not understand the request due to invalid token.'),
               h
@@ -179,4 +185,5 @@ exports.register = async (server) => {
   ]);
 };
 
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.name = 'authentication-api';

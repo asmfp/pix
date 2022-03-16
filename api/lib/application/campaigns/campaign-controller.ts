@@ -1,25 +1,42 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_'.
 const _ = require('lodash');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const { PassThrough } = require('stream');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'MissingQue... Remove this comment to see the full error message
 const { MissingQueryParamError } = require('../http-errors');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'usecases'.
 const usecases = require('../../domain/usecases');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'tokenServi... Remove this comment to see the full error message
 const tokenService = require('../../../lib/domain/services/token-service');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const campaignToJoinSerializer = require('../../infrastructure/serializers/jsonapi/campaign-to-join-serializer');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'campaignAn... Remove this comment to see the full error message
 const campaignAnalysisSerializer = require('../../infrastructure/serializers/jsonapi/campaign-analysis-serializer');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'campaignRe... Remove this comment to see the full error message
 const campaignReportSerializer = require('../../infrastructure/serializers/jsonapi/campaign-report-serializer');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const campaignCollectiveResultSerializer = require('../../infrastructure/serializers/jsonapi/campaign-collective-result-serializer');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const campaignProfilesCollectionParticipationSummarySerializer = require('../../infrastructure/serializers/jsonapi/campaign-profiles-collection-participation-summary-serializer');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const campaignParticipantsActivitySerializer = require('../../infrastructure/serializers/jsonapi/campaign-participant-activity-serializer');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'divisionSe... Remove this comment to see the full error message
 const divisionSerializer = require('../../infrastructure/serializers/jsonapi/division-serializer');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'groupSeria... Remove this comment to see the full error message
 const groupSerializer = require('../../infrastructure/serializers/jsonapi/group-serializer');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'queryParam... Remove this comment to see the full error message
 const queryParamsUtils = require('../../infrastructure/utils/query-params-utils');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'requestRes... Remove this comment to see the full error message
 const requestResponseUtils = require('../../infrastructure/utils/request-response-utils');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'extractLoc... Remove this comment to see the full error message
 const { extractLocaleFromRequest } = require('../../infrastructure/utils/request-response-utils');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
-  async save(request, h) {
+  async save(request: any, h: any) {
     const { userId: creatorId } = request.auth.credentials;
     const {
       name,
@@ -30,8 +47,10 @@ module.exports = {
       'custom-landing-page-text': customLandingPageText,
       'owner-id': ownerId,
     } = request.payload.data.attributes;
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'parseInt'.
     // eslint-disable-next-line no-restricted-syntax
     const targetProfileId = parseInt(_.get(request, 'payload.data.relationships.target-profile.data.id')) || null;
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'parseInt'.
     // eslint-disable-next-line no-restricted-syntax
     const organizationId = parseInt(_.get(request, 'payload.data.relationships.organization.data.id')) || null;
 
@@ -52,7 +71,7 @@ module.exports = {
     return h.response(campaignReportSerializer.serialize(createdCampaign)).created();
   },
 
-  async getByCode(request) {
+  async getByCode(request: any) {
     const filters = queryParamsUtils.extractParameters(request.query).filter;
     await _validateFilters(filters);
 
@@ -60,7 +79,7 @@ module.exports = {
     return campaignToJoinSerializer.serialize(campaignToJoin);
   },
 
-  async getById(request) {
+  async getById(request: any) {
     const { userId } = request.auth.credentials;
     const campaignId = request.params.id;
 
@@ -70,7 +89,7 @@ module.exports = {
     return campaignReportSerializer.serialize(campaign, {}, { tokenForCampaignResults });
   },
 
-  async getCsvAssessmentResults(request) {
+  async getCsvAssessmentResults(request: any) {
     const token = request.query.accessToken;
     const userId = tokenService.extractUserIdForCampaignResults(token);
     const campaignId = request.params.id;
@@ -97,7 +116,7 @@ module.exports = {
     return writableStream;
   },
 
-  async getCsvProfilesCollectionResults(request) {
+  async getCsvProfilesCollectionResults(request: any) {
     const token = request.query.accessToken;
     const userId = tokenService.extractUserIdForCampaignResults(token);
     const campaignId = request.params.id;
@@ -124,7 +143,7 @@ module.exports = {
     return writableStream;
   },
 
-  update(request) {
+  update(request: any) {
     const { userId } = request.auth.credentials;
     const campaignId = request.params.id;
     const {
@@ -139,21 +158,21 @@ module.exports = {
       .then(campaignReportSerializer.serialize);
   },
 
-  archiveCampaign(request) {
+  archiveCampaign(request: any) {
     const { userId } = request.auth.credentials;
     const campaignId = request.params.id;
 
     return usecases.archiveCampaign({ userId, campaignId }).then(campaignReportSerializer.serialize);
   },
 
-  unarchiveCampaign(request) {
+  unarchiveCampaign(request: any) {
     const { userId } = request.auth.credentials;
     const campaignId = request.params.id;
 
     return usecases.unarchiveCampaign({ userId, campaignId }).then(campaignReportSerializer.serialize);
   },
 
-  async getCollectiveResult(request) {
+  async getCollectiveResult(request: any) {
     const { userId } = request.auth.credentials;
     const campaignId = request.params.id;
     const locale = extractLocaleFromRequest(request);
@@ -162,7 +181,7 @@ module.exports = {
     return campaignCollectiveResultSerializer.serialize(campaignCollectiveResult);
   },
 
-  async getAnalysis(request) {
+  async getAnalysis(request: any) {
     const { userId } = request.auth.credentials;
     const campaignId = request.params.id;
     const locale = extractLocaleFromRequest(request);
@@ -171,13 +190,15 @@ module.exports = {
     return campaignAnalysisSerializer.serialize(campaignAnalysis);
   },
 
-  async findProfilesCollectionParticipations(request) {
+  async findProfilesCollectionParticipations(request: any) {
     const { userId } = request.auth.credentials;
     const campaignId = request.params.id;
     const { page, filter: filters } = queryParamsUtils.extractParameters(request.query);
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Array'.
     if (filters.divisions && !Array.isArray(filters.divisions)) {
       filters.divisions = [filters.divisions];
     }
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Array'.
     if (filters.groups && !Array.isArray(filters.groups)) {
       filters.groups = [filters.groups];
     }
@@ -190,13 +211,15 @@ module.exports = {
     return campaignProfilesCollectionParticipationSummarySerializer.serialize(results);
   },
 
-  async findParticipantsActivity(request) {
+  async findParticipantsActivity(request: any) {
     const campaignId = request.params.id;
 
     const { page, filter: filters } = queryParamsUtils.extractParameters(request.query);
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Array'.
     if (filters.divisions && !Array.isArray(filters.divisions)) {
       filters.divisions = [filters.divisions];
     }
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Array'.
     if (filters.groups && !Array.isArray(filters.groups)) {
       filters.groups = [filters.groups];
     }
@@ -211,7 +234,7 @@ module.exports = {
     return campaignParticipantsActivitySerializer.serialize(paginatedParticipations);
   },
 
-  async division(request) {
+  async division(request: any) {
     const { userId } = request.auth.credentials;
     const campaignId = request.params.id;
 
@@ -219,7 +242,7 @@ module.exports = {
     return divisionSerializer.serialize(divisions);
   },
 
-  async getGroups(request) {
+  async getGroups(request: any) {
     const { userId } = request.auth.credentials;
     const campaignId = request.params.id;
 
@@ -228,12 +251,12 @@ module.exports = {
   },
 };
 
-function _validateFilters(filters) {
+function _validateFilters(filters: any) {
   if (typeof filters.code === 'undefined') {
     throw new MissingQueryParamError('filter.code');
   }
 }
 
-function _getOwnerId(ownerId, defaultOwnerId) {
+function _getOwnerId(ownerId: any, defaultOwnerId: any) {
   return ownerId ? ownerId : defaultOwnerId;
 }

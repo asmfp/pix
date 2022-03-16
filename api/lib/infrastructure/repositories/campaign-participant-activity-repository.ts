@@ -1,12 +1,18 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'knex'.
 const { knex } = require('../../../db/knex-database-connection');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'CampaignPa... Remove this comment to see the full error message
 const CampaignParticipantActivity = require('../../domain/read-models/CampaignParticipantActivity');
 
 const campaignParticipantActivityRepository = {
-  async findPaginatedByCampaignId({ page = { size: 25 }, campaignId, filters = {} }) {
+  async findPaginatedByCampaignId({
+    page = { size: 25 },
+    campaignId,
+    filters = {}
+  }: any) {
     const pagination = await getPagination(campaignId, filters, page);
     const results = await _buildParticipationsPage(knex, campaignId, filters, pagination);
 
-    const campaignParticipantsActivities = results.map((result) => {
+    const campaignParticipantsActivities = results.map((result: any) => {
       return new CampaignParticipantActivity(result);
     });
 
@@ -17,7 +23,7 @@ const campaignParticipantActivityRepository = {
   },
 };
 
-function _buildCampaignParticipationByParticipant(qb, campaignId, filters) {
+function _buildCampaignParticipationByParticipant(qb: any, campaignId: any, filters: any) {
   qb.select(
     'campaign-participations.id AS campaignParticipationId',
     'campaign-participations.userId',
@@ -38,7 +44,7 @@ function _buildCampaignParticipationByParticipant(qb, campaignId, filters) {
     .modify(_filterByGroup, filters);
 }
 
-function _buildPaginationQuery(queryBuilder, campaignId, filters) {
+function _buildPaginationQuery(queryBuilder: any, campaignId: any, filters: any) {
   return queryBuilder
     .select('campaign-participations.id')
     .from('campaign-participations')
@@ -55,31 +61,34 @@ function _buildPaginationQuery(queryBuilder, campaignId, filters) {
     .modify(_filterByGroup, filters);
 }
 
-function _filterByDivisions(qb, filters) {
+function _filterByDivisions(qb: any, filters: any) {
   if (filters.divisions) {
-    const divisionsLowerCase = filters.divisions.map((division) => division.toLowerCase());
+    const divisionsLowerCase = filters.divisions.map((division: any) => division.toLowerCase());
     qb.whereRaw('LOWER("schooling-registrations"."division") = ANY(:divisionsLowerCase)', { divisionsLowerCase });
   }
 }
 
-function _filterByStatus(qb, filters) {
+// @ts-expect-error ts-migrate(2393) FIXME: Duplicate function implementation.
+function _filterByStatus(qb: any, filters: any) {
   if (filters.status) {
     qb.where('campaign-participations.status', filters.status);
   }
 }
-function _filterByGroup(qb, filters) {
+function _filterByGroup(qb: any, filters: any) {
   if (filters.groups) {
-    const groupsLowerCase = filters.groups.map((group) => group.toLowerCase());
+    const groupsLowerCase = filters.groups.map((group: any) => group.toLowerCase());
     qb.whereIn(knex.raw('LOWER("schooling-registrations"."group")'), groupsLowerCase);
   }
 }
 
-function _buildParticipationsPage(queryBuilder, campaignId, filters, { page, pageSize }) {
+function _buildParticipationsPage(queryBuilder: any, campaignId: any, filters: any, {
+  page,
+  pageSize
+}: any) {
   const offset = (page - 1) * pageSize;
 
   return queryBuilder
-    .with('campaign_participants_activities_ordered', (qb) =>
-      _buildCampaignParticipationByParticipant(qb, campaignId, filters)
+    .with('campaign_participants_activities_ordered', (qb: any) => _buildCampaignParticipationByParticipant(qb, campaignId, filters)
     )
     .from('campaign_participants_activities_ordered')
     .orderByRaw('LOWER(??) ASC, LOWER(??) ASC', ['lastName', 'firstName'])
@@ -87,7 +96,7 @@ function _buildParticipationsPage(queryBuilder, campaignId, filters, { page, pag
     .offset(offset);
 }
 
-async function getPagination(campaignId, filters, { number = 1, size = 10 } = {}) {
+async function getPagination(campaignId: any, filters: any, { number = 1, size = 10 } = {}) {
   const page = number < 1 ? 1 : number;
 
   const query = _buildPaginationQuery(knex, campaignId, filters);
@@ -97,8 +106,10 @@ async function getPagination(campaignId, filters, { number = 1, size = 10 } = {}
     page,
     pageSize: size,
     rowCount,
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Math'.
     pageCount: Math.ceil(rowCount / size),
   };
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = campaignParticipantActivityRepository;

@@ -1,5 +1,7 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Joi'.
 const Joi = require('joi');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'schema'.
 const schema = Joi.object({
   REDIS_URL: Joi.string().uri().optional(),
   DATABASE_URL: Joi.string().uri().optional(),
@@ -40,10 +42,13 @@ const schema = Joi.object({
 }).options({ allowUnknown: true });
 
 const validateEnvironmentVariables = function () {
+  // @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'process'. Do you need to install... Remove this comment to see the full error message
   const { error } = schema.validate(process.env);
   if (error) {
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Error'.
     throw new Error('Configuration is invalid: ' + error.message + ', but was: ' + error.details[0].context.value);
   }
 };
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = validateEnvironmentVariables;

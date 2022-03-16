@@ -1,15 +1,23 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'jsYaml'.
 const jsYaml = require('js-yaml');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'levenshtei... Remove this comment to see the full error message
 const levenshtein = require('fast-levenshtein');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_'.
 const _ = require('../../infrastructure/utils/lodash-utils');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'logger'.
 const logger = require('../../infrastructure/logger');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'applyPreTr... Remove this comment to see the full error message
 const { applyPreTreatments, applyTreatments } = require('./validation-treatments');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'YamlParsin... Remove this comment to see the full error message
 const { YamlParsingError } = require('../../domain/errors');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'AnswerStat... Remove this comment to see the full error message
 const AnswerStatus = require('../models/AnswerStatus');
 
-function _applyTreatmentsToSolutions(solutions, enabledTreatments, qrocBlocksTypes = {}) {
-  return _.forEach(solutions, (solution, solutionKey) => {
-    solution.forEach((variant, variantIndex) => {
+function _applyTreatmentsToSolutions(solutions: any, enabledTreatments: any, qrocBlocksTypes = {}) {
+  return _.forEach(solutions, (solution: any, solutionKey: any) => {
+    solution.forEach((variant: any, variantIndex: any) => {
+      // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
       if (qrocBlocksTypes[solutionKey] === 'select') {
         solutions[solutionKey][variantIndex] = applyTreatments(variant, []);
       } else {
@@ -19,8 +27,9 @@ function _applyTreatmentsToSolutions(solutions, enabledTreatments, qrocBlocksTyp
   });
 }
 
-function _applyTreatmentsToAnswers(answers, enabledTreatments, qrocBlocksTypes = {}) {
-  return _.forEach(answers, (answer, answerKey) => {
+function _applyTreatmentsToAnswers(answers: any, enabledTreatments: any, qrocBlocksTypes = {}) {
+  return _.forEach(answers, (answer: any, answerKey: any) => {
+    // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
     if (qrocBlocksTypes[answerKey] === 'select') {
       answers[answerKey] = applyTreatments(answer, []);
     } else {
@@ -29,38 +38,43 @@ function _applyTreatmentsToAnswers(answers, enabledTreatments, qrocBlocksTypes =
   });
 }
 
-function _areApproximatelyEqualAccordingToLevenshteinDistanceRatio(answer, solutionVariants) {
+function _areApproximatelyEqualAccordingToLevenshteinDistanceRatio(answer: any, solutionVariants: any) {
   let smallestLevenshteinDistance = answer.length;
-  solutionVariants.forEach((variant) => {
+  solutionVariants.forEach((variant: any) => {
     const levenshteinDistance = levenshtein.get(answer, variant);
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Math'.
     smallestLevenshteinDistance = Math.min(smallestLevenshteinDistance, levenshteinDistance);
   });
   const ratio = smallestLevenshteinDistance / answer.length;
   return ratio <= 0.25;
 }
 
-function _compareAnswersAndSolutions(answers, solutions, enabledTreatments, qrocBlocksTypes = {}) {
+function _compareAnswersAndSolutions(answers: any, solutions: any, enabledTreatments: any, qrocBlocksTypes = {}) {
   const results = {};
-  _.map(answers, (answer, answerKey) => {
+  _.map(answers, (answer: any, answerKey: any) => {
     const solutionVariants = solutions[answerKey];
     if (!solutionVariants) {
       logger.warn(
+        // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Object'.
         `[ERREUR CLE ANSWER] La clé ${answerKey} n'existe pas. Première clé de l'épreuve : ${Object.keys(solutions)[0]}`
       );
       throw new YamlParsingError();
     }
+    // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
     if (enabledTreatments.includes('t3') && qrocBlocksTypes[answerKey] != 'select') {
+      // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
       results[answerKey] = _areApproximatelyEqualAccordingToLevenshteinDistanceRatio(answer, solutionVariants);
     } else if (solutionVariants) {
+      // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
       results[answerKey] = solutionVariants.includes(answer);
     }
   });
   return results;
 }
 
-function _formatResult(resultDetails) {
+function _formatResult(resultDetails: any) {
   let result = AnswerStatus.OK;
-  _.forEach(resultDetails, (resultDetail) => {
+  _.forEach(resultDetails, (resultDetail: any) => {
     if (!resultDetail) {
       result = AnswerStatus.KO;
     }
@@ -68,13 +82,17 @@ function _formatResult(resultDetails) {
   return result;
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
   _applyTreatmentsToSolutions,
   _applyTreatmentsToAnswers,
   _compareAnswersAndSolutions,
   _formatResult,
 
-  match({ answerValue, solution }) {
+  match({
+    answerValue,
+    solution
+  }: any) {
     const yamlSolution = solution.value;
     const enabledTreatments = solution.enabledTreatments;
     const qrocBlocksTypes = solution.qrocBlocksTypes || {};

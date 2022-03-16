@@ -1,3 +1,4 @@
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = function updateStage({
   stageId,
   title,
@@ -5,8 +6,8 @@ module.exports = function updateStage({
   threshold,
   prescriberTitle,
   prescriberDescription,
-  stageRepository,
-}) {
+  stageRepository
+}: any) {
   return stageRepository.updateStage({
     id: stageId,
     title,

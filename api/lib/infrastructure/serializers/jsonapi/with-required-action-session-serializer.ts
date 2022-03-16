@@ -1,9 +1,11 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Serializer... Remove this comment to see the full error message
 const { Serializer } = require('jsonapi-serializer');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
-  serialize(finalizedSessions) {
+  serialize(finalizedSessions: any) {
     return new Serializer('with-required-action-session', {
-      transform(finalizedSession) {
+      transform(finalizedSession: any) {
         return { ...finalizedSession, id: finalizedSession.sessionId };
       },
       attributes: [

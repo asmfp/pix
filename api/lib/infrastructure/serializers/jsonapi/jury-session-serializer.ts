@@ -1,12 +1,14 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Serializer... Remove this comment to see the full error message
 const { Serializer } = require('jsonapi-serializer');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
-  serializeForPaginatedList(jurySessionsForPaginatedList) {
+  serializeForPaginatedList(jurySessionsForPaginatedList: any) {
     const { jurySessions, pagination } = jurySessionsForPaginatedList;
     return this.serialize(jurySessions, undefined, pagination);
   },
 
-  serialize(jurySessions, hasSupervisorAccess, meta) {
+  serialize(jurySessions: any, hasSupervisorAccess: any, meta: any) {
     return new Serializer('sessions', {
       attributes: [
         'certificationCenterName',
@@ -40,7 +42,7 @@ module.exports = {
         ignoreRelationshipData: true,
         nullIfMissing: true,
         relationshipLinks: {
-          related(record, current, parent) {
+          related(record: any, current: any, parent: any) {
             return `/api/admin/sessions/${parent.id}/jury-certification-summaries`;
           },
         },
@@ -55,7 +57,8 @@ module.exports = {
         included: true,
         attributes: ['firstName', 'lastName'],
       },
-      transform(jurySession) {
+      transform(jurySession: any) {
+        // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Object'.
         const transformedJurySession = Object.assign({}, jurySession);
         transformedJurySession.status = jurySession.status;
         if (hasSupervisorAccess !== undefined) {
@@ -63,7 +66,7 @@ module.exports = {
         }
         return transformedJurySession;
       },
-      typeForAttribute: function (attribute) {
+      typeForAttribute: function (attribute: any) {
         if (attribute === 'assignedCertificationOfficer') {
           return 'user';
         }

@@ -1,11 +1,17 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Joi'.
 const Joi = require('joi');
 const {
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'InvalidCer... Remove this comment to see the full error message
   InvalidCertificationIssueReportForSaving,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Deprecated... Remove this comment to see the full error message
   DeprecatedCertificationIssueReportSubcategory,
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 } = require('../errors');
 const {
   CertificationIssueReportCategories,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Certificat... Remove this comment to see the full error message
   CertificationIssueReportSubcategories,
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 } = require('./CertificationIssueReportCategory');
 
 const categoryOtherJoiSchema = Joi.object({
@@ -104,7 +110,17 @@ const deprecatedSubcategories = [
   CertificationIssueReportSubcategories.OTHER,
 ];
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Certificat... Remove this comment to see the full error message
 class CertificationIssueReport {
+  category: any;
+  certificationCourseId: any;
+  description: any;
+  id: any;
+  isImpactful: any;
+  questionNumber: any;
+  resolution: any;
+  resolvedAt: any;
+  subcategory: any;
   constructor({
     id,
     certificationCourseId,
@@ -113,8 +129,8 @@ class CertificationIssueReport {
     subcategory,
     questionNumber,
     resolvedAt,
-    resolution,
-  } = {}) {
+    resolution
+  }: any = {}) {
     this.id = id;
     this.certificationCourseId = certificationCourseId;
     this.category = category;
@@ -126,6 +142,7 @@ class CertificationIssueReport {
     this.isImpactful = _isImpactful({ category, subcategory });
 
     if (
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'includes' does not exist on type '{}'.
       [CertificationIssueReportCategories.CONNECTION_OR_END_SCREEN, CertificationIssueReportCategories.OTHER].includes(
         this.category
       )
@@ -142,7 +159,14 @@ class CertificationIssueReport {
     }
   }
 
-  static create({ id, certificationCourseId, category, description, subcategory, questionNumber }) {
+  static create({
+    id,
+    certificationCourseId,
+    category,
+    description,
+    subcategory,
+    questionNumber
+  }: any) {
     const certificationIssueReport = new CertificationIssueReport({
       id,
       certificationCourseId,
@@ -174,21 +198,29 @@ class CertificationIssueReport {
   }
 
   isResolved() {
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Boolean'.
     return Boolean(this.resolvedAt);
   }
 
-  resolve(resolution) {
+  resolve(resolution: any) {
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Date'.
     this.resolvedAt = new Date();
     this.resolution = resolution;
   }
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = CertificationIssueReport;
 
-function _isImpactful({ category, subcategory }) {
+function _isImpactful({
+  category,
+  subcategory
+}: any) {
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'includes' does not exist on type '{}'.
   return categoryCodeImpactful.includes(category) || subcategoryCodeImpactful.includes(subcategory);
 }
 
-function _isSubcategoryDeprecated(subcategory) {
+function _isSubcategoryDeprecated(subcategory: any) {
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'includes' does not exist on type '{}'.
   return deprecatedSubcategories.includes(subcategory);
 }

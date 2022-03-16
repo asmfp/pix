@@ -1,6 +1,9 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'campaignVa... Remove this comment to see the full error message
 const campaignValidator = require('../validators/campaign-validator');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'EntityVali... Remove this comment to see the full error message
 const { EntityValidationError } = require('../errors');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = async function updateCampaignDetailsManagement({
   campaignId,
   name,
@@ -10,8 +13,8 @@ module.exports = async function updateCampaignDetailsManagement({
   customResultPageButtonText,
   customResultPageButtonUrl,
   multipleSendings,
-  campaignManagementRepository,
-}) {
+  campaignManagementRepository
+}: any) {
   const campaign = await campaignManagementRepository.get(campaignId);
   campaign.name = name;
   campaign.title = title;

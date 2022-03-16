@@ -1,4 +1,6 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Serializer... Remove this comment to see the full error message
 const { Serializer } = require('jsonapi-serializer');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_'.
 const _ = require('lodash');
 
 const mapType = {
@@ -8,6 +10,7 @@ const mapType = {
   partnerCompetences: 'badge-partner-competences',
 };
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
   serialize(badgeWithLearningContent = {}) {
     return new Serializer('badge', {
@@ -67,24 +70,29 @@ module.exports = {
           },
         },
       },
-      typeForAttribute(attribute) {
+      typeForAttribute(attribute: any) {
+        // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
         return mapType[attribute];
       },
-      transform(record) {
+      transform(record: any) {
         const badge = record.badge;
-        badge.badgeCriteria.forEach((badgeCriterion) => {
-          badgeCriterion.skillSets = badgeCriterion.skillSetIds?.map((skillSetId) => {
+        badge.badgeCriteria.forEach((badgeCriterion: any) => {
+          badgeCriterion.skillSets = badgeCriterion.skillSetIds?.map((skillSetId: any) => {
             return { id: skillSetId };
           });
           badgeCriterion.partnerCompetences = badgeCriterion.skillSets;
         });
-        badge.skillSets.forEach((skillSet) => {
-          const skills = skillSet.skillIds.map((skillId) => {
-            return record.skills.find(({ id }) => skillId === id);
+        badge.skillSets.forEach((skillSet: any) => {
+          const skills = skillSet.skillIds.map((skillId: any) => {
+            return record.skills.find(({
+              id
+            }: any) => skillId === id);
           });
           skillSet.skills = _.compact(skills);
-          skillSet.skills.forEach((skill) => {
-            skill.tube = { ...record.tubes.find(({ id }) => id === skill.tubeId) };
+          skillSet.skills.forEach((skill: any) => {
+            skill.tube = { ...record.tubes.find(({
+              id
+            }: any) => id === skill.tubeId) };
           });
         });
         badge.badgePartnerCompetences = badge.skillSets;

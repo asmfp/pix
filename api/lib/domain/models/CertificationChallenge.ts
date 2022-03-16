@@ -1,4 +1,13 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Certificat... Remove this comment to see the full error message
 class CertificationChallenge {
+  associatedSkillId: any;
+  associatedSkillName: any;
+  certifiableBadgeKey: any;
+  challengeId: any;
+  competenceId: any;
+  courseId: any;
+  id: any;
+  isNeutralized: any;
   constructor({
     id,
     associatedSkillName,
@@ -7,8 +16,8 @@ class CertificationChallenge {
     courseId,
     competenceId,
     isNeutralized,
-    certifiableBadgeKey,
-  } = {}) {
+    certifiableBadgeKey
+  }: any = {}) {
     this.id = id;
     this.associatedSkillName = associatedSkillName;
     this.associatedSkillId = associatedSkillId;
@@ -19,7 +28,12 @@ class CertificationChallenge {
     this.certifiableBadgeKey = certifiableBadgeKey;
   }
 
-  static createForPixCertification({ associatedSkillName, associatedSkillId, challengeId, competenceId }) {
+  static createForPixCertification({
+    associatedSkillName,
+    associatedSkillId,
+    challengeId,
+    competenceId
+  }: any) {
     return new CertificationChallenge({
       id: undefined,
       courseId: undefined,
@@ -37,8 +51,8 @@ class CertificationChallenge {
     associatedSkillId,
     challengeId,
     competenceId,
-    certifiableBadgeKey,
-  }) {
+    certifiableBadgeKey
+  }: any) {
     return new CertificationChallenge({
       id: undefined,
       courseId: undefined,
@@ -52,4 +66,5 @@ class CertificationChallenge {
   }
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = CertificationChallenge;

@@ -1,10 +1,17 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Joi'.
 const Joi = require('joi').extend(require('@joi/date'));
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'validateEn... Remove this comment to see the full error message
 const { validateEntity } = require('../validators/entity-validator');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_'.
 const _ = require('lodash');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'ChallengeT... Remove this comment to see the full error message
 const { ChallengeToBeNeutralizedNotFoundError, ChallengeToBeDeneutralizedNotFoundError } = require('../errors');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'AnswerStat... Remove this comment to see the full error message
 const AnswerStatus = require('./AnswerStatus');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const NeutralizationAttempt = require('./NeutralizationAttempt');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'states'.
 const states = {
   COMPLETED: 'completed',
   STARTED: 'started',
@@ -23,7 +30,17 @@ const certificationAssessmentSchema = Joi.object({
   certificationAnswersByDate: Joi.array().min(0).required(),
 });
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Certificat... Remove this comment to see the full error message
 class CertificationAssessment {
+  certificationAnswersByDate: any;
+  certificationChallenges: any;
+  certificationCourseId: any;
+  completedAt: any;
+  createdAt: any;
+  id: any;
+  isV2Certification: any;
+  state: any;
+  userId: any;
   constructor({
     id,
     userId,
@@ -33,8 +50,8 @@ class CertificationAssessment {
     state,
     isV2Certification,
     certificationChallenges,
-    certificationAnswersByDate,
-  } = {}) {
+    certificationAnswersByDate
+  }: any = {}) {
     this.id = id;
     this.userId = userId;
     this.certificationCourseId = certificationCourseId;
@@ -48,11 +65,11 @@ class CertificationAssessment {
     validateEntity(certificationAssessmentSchema, this);
   }
 
-  getCertificationChallenge(challengeId) {
+  getCertificationChallenge(challengeId: any) {
     return _.find(this.certificationChallenges, { challengeId }) || null;
   }
 
-  neutralizeChallengeByRecId(recId) {
+  neutralizeChallengeByRecId(recId: any) {
     const challengeToBeNeutralized = _.find(this.certificationChallenges, { challengeId: recId });
     if (challengeToBeNeutralized) {
       challengeToBeNeutralized.neutralize();
@@ -61,7 +78,7 @@ class CertificationAssessment {
     }
   }
 
-  neutralizeChallengeByNumberIfKoOrSkippedOrPartially(questionNumber) {
+  neutralizeChallengeByNumberIfKoOrSkippedOrPartially(questionNumber: any) {
     const toBeNeutralizedChallengeAnswer = this.certificationAnswersByDate[questionNumber - 1];
     if (!toBeNeutralizedChallengeAnswer) {
       return NeutralizationAttempt.failure(questionNumber);
@@ -78,7 +95,7 @@ class CertificationAssessment {
     return NeutralizationAttempt.skipped(questionNumber);
   }
 
-  deneutralizeChallengeByRecId(recId) {
+  deneutralizeChallengeByRecId(recId: any) {
     const challengeToBeDeneutralized = _.find(this.certificationChallenges, { challengeId: recId });
     if (challengeToBeDeneutralized) {
       challengeToBeDeneutralized.deneutralize();
@@ -89,16 +106,18 @@ class CertificationAssessment {
 
   listCertifiableBadgePixPlusKeysTaken() {
     return _(this.certificationChallenges)
-      .filter((certificationChallenge) => certificationChallenge.isPixPlus())
+      .filter((certificationChallenge: any) => certificationChallenge.isPixPlus())
       .uniqBy('certifiableBadgeKey')
       .map('certifiableBadgeKey')
       .value();
   }
 
-  findAnswersAndChallengesForCertifiableBadgeKey(certifiableBadgeKey) {
+  findAnswersAndChallengesForCertifiableBadgeKey(certifiableBadgeKey: any) {
     const certificationChallengesForBadge = _.filter(this.certificationChallenges, { certifiableBadgeKey });
     const challengeIds = _.map(certificationChallengesForBadge, 'challengeId');
-    const answersForBadge = _.filter(this.certificationAnswersByDate, ({ challengeId }) =>
+    const answersForBadge = _.filter(this.certificationAnswersByDate, ({
+      challengeId
+    }: any) =>
       _.includes(challengeIds, challengeId)
     );
     return {
@@ -111,15 +130,15 @@ class CertificationAssessment {
     return this.state === states.COMPLETED;
   }
 
-  getChallengeRecIdByQuestionNumber(questionNumber) {
+  getChallengeRecIdByQuestionNumber(questionNumber: any) {
     return this.certificationAnswersByDate[questionNumber - 1]?.challengeId || null;
   }
 
   skipUnansweredChallenges() {
-    this.certificationChallenges.forEach((certificationChallenge) => {
+    this.certificationChallenges.forEach((certificationChallenge: any) => {
       if (
         !this.certificationAnswersByDate.some(
-          (certificationAnswer) => certificationChallenge.challengeId === certificationAnswer.challengeId
+          (certificationAnswer: any) => certificationChallenge.challengeId === certificationAnswer.challengeId
         )
       ) {
         certificationChallenge.skipAutomatically();
@@ -128,10 +147,10 @@ class CertificationAssessment {
   }
 
   neutralizeUnansweredChallenges() {
-    this.certificationChallenges.map((certificationChallenge) => {
+    this.certificationChallenges.map((certificationChallenge: any) => {
       if (
         !this.certificationAnswersByDate.some(
-          (certificationAnswer) => certificationChallenge.challengeId === certificationAnswer.challengeId
+          (certificationAnswer: any) => certificationChallenge.challengeId === certificationAnswer.challengeId
         )
       ) {
         certificationChallenge.neutralize();
@@ -140,13 +159,15 @@ class CertificationAssessment {
   }
 }
 
-function _isAnswerKoOrSkippedOrPartially(answerStatus) {
+function _isAnswerKoOrSkippedOrPartially(answerStatus: any) {
   const isKo = AnswerStatus.isKO(answerStatus);
   const isSkipped = AnswerStatus.isSKIPPED(answerStatus);
   const isPartially = AnswerStatus.isPARTIALLY(answerStatus);
   return isKo || isSkipped || isPartially;
 }
 
+// @ts-expect-error ts-migrate(2339) FIXME: Property 'states' does not exist on type 'typeof C... Remove this comment to see the full error message
 CertificationAssessment.states = states;
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = CertificationAssessment;

@@ -1,17 +1,25 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'knex'.
 const { knex } = require('../../../db/knex-database-connection');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'NotFoundEr... Remove this comment to see the full error message
 const { NotFoundError } = require('../../domain/errors');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_'.
 const _ = require('lodash');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'JuryCertif... Remove this comment to see the full error message
 const JuryCertification = require('../../domain/models/JuryCertification');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Certificat... Remove this comment to see the full error message
 const CertificationIssueReport = require('../../domain/models/CertificationIssueReport');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PartnerCer... Remove this comment to see the full error message
 const PartnerCertification = require('../../domain/models/PartnerCertification');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
-  async get(certificationCourseId) {
+  async get(certificationCourseId: any) {
     const juryCertificationDTO = await _selectJuryCertifications()
       .where('certification-courses.id', certificationCourseId)
       .first();
 
     if (!juryCertificationDTO) {
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
       throw new NotFoundError(`Certification course of id ${certificationCourseId} does not exist.`);
     }
 
@@ -60,7 +68,7 @@ function _selectJuryCertifications() {
     .groupBy('certification-courses.id', 'assessments.id', 'assessment-results.id');
 }
 
-function _filterMostRecentAssessmentResult(qb) {
+function _filterMostRecentAssessmentResult(qb: any) {
   return qb.whereNotExists(
     knex
       .select(1)
@@ -70,19 +78,21 @@ function _filterMostRecentAssessmentResult(qb) {
   );
 }
 
-async function _toDomainWithComplementaryCertifications({ juryCertificationDTO, certificationIssueReportDTOs }) {
+async function _toDomainWithComplementaryCertifications({
+  juryCertificationDTO,
+  certificationIssueReportDTOs
+}: any) {
   const certificationIssueReports = certificationIssueReportDTOs.map(
-    (certificationIssueReport) =>
-      new CertificationIssueReport({
-        id: certificationIssueReport.id,
-        certificationCourseId: certificationIssueReport.certificationCourseId,
-        category: certificationIssueReport.category,
-        description: certificationIssueReport.description,
-        subcategory: certificationIssueReport.subcategory,
-        questionNumber: certificationIssueReport.questionNumber,
-        resolvedAt: certificationIssueReport.resolvedAt,
-        resolution: certificationIssueReport.resolution,
-      })
+    (certificationIssueReport: any) => new CertificationIssueReport({
+      id: certificationIssueReport.id,
+      certificationCourseId: certificationIssueReport.certificationCourseId,
+      category: certificationIssueReport.category,
+      description: certificationIssueReport.description,
+      subcategory: certificationIssueReport.subcategory,
+      questionNumber: certificationIssueReport.questionNumber,
+      resolvedAt: certificationIssueReport.resolvedAt,
+      resolution: certificationIssueReport.resolution,
+    })
   );
 
   const partnerCertifications = _.compact(juryCertificationDTO.partnerCertifications).map(PartnerCertification.from);

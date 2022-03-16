@@ -1,8 +1,12 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_'.
 const _ = require('lodash');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Joi'.
 const Joi = require('joi');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'InvalidCer... Remove this comment to see the full error message
 const { InvalidCertificationReportForFinalization } = require('../errors');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'NO_EXAMINE... Remove this comment to see the full error message
 const NO_EXAMINER_COMMENT = null;
 
 const certificationReportSchemaForFinalization = Joi.object({
@@ -17,7 +21,17 @@ const certificationReportSchemaForFinalization = Joi.object({
   abortReason: Joi.string().allow(null),
 });
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Certificat... Remove this comment to see the full error message
 class CertificationReport {
+  abortReason: any;
+  certificationCourseId: any;
+  certificationIssueReports: any;
+  examinerComment: any;
+  firstName: any;
+  hasSeenEndTestScreen: any;
+  id: any;
+  isCompleted: any;
+  lastName: any;
   constructor({
     firstName,
     lastName,
@@ -26,8 +40,8 @@ class CertificationReport {
     certificationIssueReports = [],
     certificationCourseId,
     isCompleted,
-    abortReason,
-  } = {}) {
+    abortReason
+  }: any = {}) {
     this.id = CertificationReport.idFromCertificationCourseId(certificationCourseId);
     this.firstName = firstName;
     this.lastName = lastName;
@@ -56,7 +70,7 @@ class CertificationReport {
     }
   }
 
-  static fromCertificationCourse(certificationCourse) {
+  static fromCertificationCourse(certificationCourse: any) {
     const certificationCourseDTO = certificationCourse.toDTO();
     return new CertificationReport({
       certificationCourseId: certificationCourseDTO.id,
@@ -69,10 +83,12 @@ class CertificationReport {
     });
   }
 
-  static idFromCertificationCourseId(certificationCourseId) {
+  static idFromCertificationCourseId(certificationCourseId: any) {
     return `CertificationReport:${certificationCourseId}`;
   }
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = CertificationReport;
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports.NO_EXAMINER_COMMENT = NO_EXAMINER_COMMENT;

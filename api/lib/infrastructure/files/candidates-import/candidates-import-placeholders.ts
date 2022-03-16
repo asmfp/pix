@@ -1,3 +1,4 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'IMPORT_CAN... Remove this comment to see the full error message
 const IMPORT_CANDIDATES_SESSION_TEMPLATE_VALUES = [
   {
     placeholder: 'SESSION_ID',
@@ -29,6 +30,7 @@ const IMPORT_CANDIDATES_SESSION_TEMPLATE_VALUES = [
   },
 ];
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'IMPORT_CAN... Remove this comment to see the full error message
 const IMPORT_CANDIDATES_TEMPLATE_VALUES = [
   {
     placeholder: 'COUNT',
@@ -106,8 +108,10 @@ const IMPORT_CANDIDATES_TEMPLATE_VALUES = [
   },
 ];
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'EXTRA_EMPT... Remove this comment to see the full error message
 const EXTRA_EMPTY_CANDIDATE_ROWS = 20;
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
   IMPORT_CANDIDATES_SESSION_TEMPLATE_VALUES,
   IMPORT_CANDIDATES_TEMPLATE_VALUES,

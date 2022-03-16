@@ -1,10 +1,15 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Joi'.
 const Joi = require('joi');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'XRegExp'.
 const XRegExp = require('xregexp');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'passwordVa... Remove this comment to see the full error message
 const { passwordValidationPattern } = require('../../config').account;
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const passwordController = require('./password-controller');
 
-exports.register = async function (server) {
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
+exports.register = async function (server: any) {
   server.route([
     {
       method: 'POST',
@@ -62,4 +67,5 @@ exports.register = async function (server) {
   ]);
 };
 
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.name = 'passwords-api';

@@ -1,11 +1,16 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Answer'.
 const Answer = require('../../../domain/models/Answer');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Serializer... Remove this comment to see the full error message
 const { Serializer } = require('jsonapi-serializer');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const answerStatusJSONAPIAdapter = require('../../adapters/answer-status-json-api-adapter');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
-  serialize(answer) {
+  serialize(answer: any) {
     return new Serializer('answer', {
-      transform: (untouchedAnswer) => {
+      transform: (untouchedAnswer: any) => {
+        // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Object'.
         const answer = Object.assign({}, untouchedAnswer);
         answer.assessment = { id: answer.assessmentId };
         answer.challenge = { id: answer.challengeId };
@@ -26,7 +31,7 @@ module.exports = {
         nullIfMissing: true,
         ignoreRelationshipData: true,
         relationshipLinks: {
-          related(record, current, parent) {
+          related(record: any, current: any, parent: any) {
             return `/api/answers/${parent.id}/correction`;
           },
         },
@@ -38,7 +43,7 @@ module.exports = {
     }).serialize(answer);
   },
 
-  deserialize(payload) {
+  deserialize(payload: any) {
     return new Answer({
       value: _cleanValue(payload.data.attributes.value),
       result: null,
@@ -51,6 +56,6 @@ module.exports = {
   },
 };
 
-function _cleanValue(value) {
+function _cleanValue(value: any) {
   return value.replace('\u0000', '');
 }

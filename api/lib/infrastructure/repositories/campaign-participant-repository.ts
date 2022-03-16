@@ -1,10 +1,15 @@
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const pick = require('lodash/pick');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'CampaignPa... Remove this comment to see the full error message
 const CampaignParticipant = require('../../domain/models/CampaignParticipant');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'CampaignTo... Remove this comment to see the full error message
 const CampaignToStartParticipation = require('../../domain/models/CampaignToStartParticipation');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'AlreadyExi... Remove this comment to see the full error message
 const { AlreadyExistingCampaignParticipationError, NotFoundError } = require('../../domain/errors');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'skillDatas... Remove this comment to see the full error message
 const skillDatasource = require('../datasources/learning-content/skill-datasource');
 
-async function save(campaignParticipant, domainTransaction) {
+async function save(campaignParticipant: any, domainTransaction: any) {
   const newlyCreatedSchoolingRegistrationId = await _createNewSchoolingRegistration(
     campaignParticipant.schoolingRegistration,
     domainTransaction.knexTransaction
@@ -25,7 +30,7 @@ async function save(campaignParticipant, domainTransaction) {
   return campaignParticipationId;
 }
 
-async function _createNewSchoolingRegistration(schoolingRegistration, queryBuilder) {
+async function _createNewSchoolingRegistration(schoolingRegistration: any, queryBuilder: any) {
   if (schoolingRegistration) {
     const [newlyCreatedSchoolingRegistrationId] = await queryBuilder('schooling-registrations')
       .insert({
@@ -39,7 +44,8 @@ async function _createNewSchoolingRegistration(schoolingRegistration, queryBuild
   }
 }
 
-async function _updatePreviousParticipation(campaignParticipation, queryBuilder) {
+// @ts-expect-error ts-migrate(2697) FIXME: An async function or method must return a 'Promise... Remove this comment to see the full error message
+async function _updatePreviousParticipation(campaignParticipation: any, queryBuilder: any) {
   if (campaignParticipation) {
     await queryBuilder('campaign-participations')
       .update({ isImproved: campaignParticipation.isImproved })
@@ -47,7 +53,7 @@ async function _updatePreviousParticipation(campaignParticipation, queryBuilder)
   }
 }
 
-async function _createNewCampaignParticipation(queryBuilder, campaignParticipation) {
+async function _createNewCampaignParticipation(queryBuilder: any, campaignParticipation: any) {
   try {
     const [id] = await queryBuilder('campaign-participations')
       .insert({
@@ -70,14 +76,20 @@ async function _createNewCampaignParticipation(queryBuilder, campaignParticipati
   }
 }
 
-async function _createAssessment(assessment, campaignParticipationId, queryBuilder) {
+// @ts-expect-error ts-migrate(2697) FIXME: An async function or method must return a 'Promise... Remove this comment to see the full error message
+async function _createAssessment(assessment: any, campaignParticipationId: any, queryBuilder: any) {
   if (assessment) {
     const assessmentAttributes = pick(assessment, ['userId', 'method', 'state', 'type', 'courseId', 'isImproving']);
     await queryBuilder('assessments').insert({ campaignParticipationId, ...assessmentAttributes });
   }
 }
 
-async function get({ userId, campaignId, domainTransaction }) {
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'get'.
+async function get({
+  userId,
+  campaignId,
+  domainTransaction
+}: any) {
   const userIdentity = await _getUserIdentityForTrainee(userId, domainTransaction);
 
   const campaignToStartParticipation = await _getCampaignToStart(campaignId, domainTransaction);
@@ -94,11 +106,11 @@ async function get({ userId, campaignId, domainTransaction }) {
   });
 }
 
-function _getUserIdentityForTrainee(userId, domainTransaction) {
+function _getUserIdentityForTrainee(userId: any, domainTransaction: any) {
   return domainTransaction.knexTransaction('users').select('id', 'firstName', 'lastName').where({ id: userId }).first();
 }
 
-async function _getCampaignToStart(campaignId, domainTransaction) {
+async function _getCampaignToStart(campaignId: any, domainTransaction: any) {
   const campaignAttributes = await domainTransaction
     .knexTransaction('campaigns')
     .join('organizations', 'organizations.id', 'organizationId')
@@ -116,6 +128,7 @@ async function _getCampaignToStart(campaignId, domainTransaction) {
     .first();
 
   if (!campaignAttributes) {
+    // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
     throw new NotFoundError(`La campagne d'id ${campaignId} n'existe pas ou son accès est restreint`);
   }
   const skillIds = await domainTransaction
@@ -129,7 +142,7 @@ async function _getCampaignToStart(campaignId, domainTransaction) {
   return new CampaignToStartParticipation({ ...campaignAttributes, skillCount: skills.length });
 }
 
-async function _getSchoolingRegistrationId(campaignId, userId, domainTransaction) {
+async function _getSchoolingRegistrationId(campaignId: any, userId: any, domainTransaction: any) {
   const [id] = await domainTransaction
     .knexTransaction('campaigns')
     .join('schooling-registrations', 'schooling-registrations.organizationId', 'campaigns.organizationId')
@@ -139,7 +152,7 @@ async function _getSchoolingRegistrationId(campaignId, userId, domainTransaction
   return id;
 }
 
-async function _findPreviousCampaignParticipation(campaignId, userId, domainTransaction) {
+async function _findPreviousCampaignParticipation(campaignId: any, userId: any, domainTransaction: any) {
   const campaignParticipationAttributes = await domainTransaction
     .knexTransaction('campaign-participations')
     .select('id', 'participantExternalId', 'validatedSkillsCount', 'status', 'deletedAt')
@@ -152,10 +165,12 @@ async function _findPreviousCampaignParticipation(campaignId, userId, domainTran
     participantExternalId: campaignParticipationAttributes.participantExternalId,
     validatedSkillsCount: campaignParticipationAttributes.validatedSkillsCount,
     status: campaignParticipationAttributes.status,
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Boolean'.
     isDeleted: Boolean(campaignParticipationAttributes.deletedAt),
   };
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
   get,
   save,

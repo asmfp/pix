@@ -1,7 +1,26 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_'.
 const _ = require('lodash');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Tube'.
 class Tube {
-  constructor({ id, name, title, description, practicalTitle, practicalDescription, skills = [], competenceId } = {}) {
+  competenceId: any;
+  description: any;
+  id: any;
+  name: any;
+  practicalDescription: any;
+  practicalTitle: any;
+  skills: any;
+  title: any;
+  constructor({
+    id,
+    name,
+    title,
+    description,
+    practicalTitle,
+    practicalDescription,
+    skills = [],
+    competenceId
+  }: any = {}) {
     this.id = id;
     this.title = title;
     this.description = description;
@@ -19,18 +38,18 @@ class Tube {
     }
   }
 
-  addSkill(skillToAdd) {
-    if (!this.skills.find((skill) => skill.name === skillToAdd.name)) {
+  addSkill(skillToAdd: any) {
+    if (!this.skills.find((skill: any) => skill.name === skillToAdd.name)) {
       this.skills.push(skillToAdd);
     }
   }
 
-  getEasierThan(skill) {
-    return this.skills.filter((tubeSkill) => tubeSkill.difficulty <= skill.difficulty);
+  getEasierThan(skill: any) {
+    return this.skills.filter((tubeSkill: any) => tubeSkill.difficulty <= skill.difficulty);
   }
 
-  getHarderThan(skill) {
-    return this.skills.filter((tubeSkill) => tubeSkill.difficulty >= skill.difficulty);
+  getHarderThan(skill: any) {
+    return this.skills.filter((tubeSkill: any) => tubeSkill.difficulty >= skill.difficulty);
   }
 
   getHardestSkill() {
@@ -38,4 +57,5 @@ class Tube {
   }
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = Tube;

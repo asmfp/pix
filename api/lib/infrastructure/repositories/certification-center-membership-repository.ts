@@ -1,17 +1,29 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'bookshelfU... Remove this comment to see the full error message
 const bookshelfUtils = require('../utils/knex-utils');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const BookshelfCertificationCenterMembership = require('../orm-models/CertificationCenterMembership');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'bookshelfT... Remove this comment to see the full error message
 const bookshelfToDomainConverter = require('../../infrastructure/utils/bookshelf-to-domain-converter');
 const {
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Certificat... Remove this comment to see the full error message
   CertificationCenterMembershipCreationError,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'AlreadyExi... Remove this comment to see the full error message
   AlreadyExistingMembershipError,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Certificat... Remove this comment to see the full error message
   CertificationCenterMembershipDisableError,
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 } = require('../../domain/errors');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'knex'.
 const { knex } = require('../../../db/knex-database-connection');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Certificat... Remove this comment to see the full error message
 const CertificationCenter = require('../../domain/models/CertificationCenter');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'User'.
 const User = require('../../domain/models/User');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Certificat... Remove this comment to see the full error message
 const CertificationCenterMembership = require('../../domain/models/CertificationCenterMembership');
 
-function _toDomain(certificationCenterMembershipDTO) {
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_toDomain'... Remove this comment to see the full error message
+function _toDomain(certificationCenterMembershipDTO: any) {
   let user, certificationCenter;
   if (certificationCenterMembershipDTO.lastName || certificationCenterMembershipDTO.firstName) {
     user = new User({
@@ -40,8 +52,9 @@ function _toDomain(certificationCenterMembershipDTO) {
   });
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
-  async findByUserId(userId) {
+  async findByUserId(userId: any) {
     const certificationCenterMemberships = await BookshelfCertificationCenterMembership.where({
       userId,
       disabledAt: null,
@@ -55,7 +68,9 @@ module.exports = {
     );
   },
 
-  async findActiveByCertificationCenterIdSortedByNames({ certificationCenterId }) {
+  async findActiveByCertificationCenterIdSortedByNames({
+    certificationCenterId
+  }: any) {
     const certificationCenterMemberships = await knex
       .select(
         'certification-center-memberships.*',
@@ -84,7 +99,9 @@ module.exports = {
     return certificationCenterMemberships.map(_toDomain);
   },
 
-  async findActiveByCertificationCenterIdSortedById({ certificationCenterId }) {
+  async findActiveByCertificationCenterIdSortedById({
+    certificationCenterId
+  }: any) {
     const certificationCenterMemberships = await BookshelfCertificationCenterMembership.where({
       certificationCenterId,
       disabledAt: null,
@@ -100,14 +117,17 @@ module.exports = {
     );
   },
 
-  async save({ userId, certificationCenterId }) {
+  async save({
+    userId,
+    certificationCenterId
+  }: any) {
     try {
       const newCertificationCenterMembership = await new BookshelfCertificationCenterMembership({
         userId,
         certificationCenterId,
       })
         .save()
-        .then((model) => model.fetch({ withRelated: ['user', 'certificationCenter'] }));
+        .then((model: any) => model.fetch({ withRelated: ['user', 'certificationCenter'] }));
 
       return bookshelfToDomainConverter.buildDomainObject(
         BookshelfCertificationCenterMembership,
@@ -126,7 +146,10 @@ module.exports = {
     }
   },
 
-  async isMemberOfCertificationCenter({ userId, certificationCenterId }) {
+  async isMemberOfCertificationCenter({
+    userId,
+    certificationCenterId
+  }: any) {
     const certificationCenterMembershipId = await knex('certification-center-memberships')
       .select('id')
       .where({
@@ -136,11 +159,16 @@ module.exports = {
       })
       .first();
 
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Boolean'.
     return Boolean(certificationCenterMembershipId);
   },
 
-  async disableById({ certificationCenterMembershipId }) {
+  // @ts-expect-error ts-migrate(2697) FIXME: An async function or method must return a 'Promise... Remove this comment to see the full error message
+  async disableById({
+    certificationCenterMembershipId
+  }: any) {
     try {
+      // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Date'.
       const now = new Date();
       const result = await knex('certification-center-memberships')
         .where({ id: certificationCenterMembershipId })

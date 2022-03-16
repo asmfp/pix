@@ -1,4 +1,6 @@
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const HapiSwagger = require('hapi-swagger');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const applicationPackage = require('../package.json');
 
 const swaggerOptionsAuthorizationServer = {
@@ -40,7 +42,7 @@ const swaggerOptionsIn = {
   jsonPath: '/swagger.json',
 };
 
-function _buildSwaggerArgs(swaggerOptions) {
+function _buildSwaggerArgs(swaggerOptions: any) {
   return [
     {
       plugin: HapiSwagger,
@@ -57,6 +59,8 @@ const swaggers = [
   swaggerOptionsLivretScolaire,
   swaggerOptionsPoleEmploi,
   swaggerOptionsIn,
+// @ts-expect-error ts-migrate(2339) FIXME: Property 'map' does not exist on type '{}'.
 ].map(_buildSwaggerArgs);
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = swaggers;

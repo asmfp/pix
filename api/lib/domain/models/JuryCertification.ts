@@ -1,28 +1,67 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_'.
 const _ = require('lodash');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Competence... Remove this comment to see the full error message
 const CompetenceMark = require('./CompetenceMark');
 const {
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PIX_EMPLOI... Remove this comment to see the full error message
   PIX_EMPLOI_CLEA,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PIX_EMPLOI... Remove this comment to see the full error message
   PIX_EMPLOI_CLEA_V2,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PIX_DROIT_... Remove this comment to see the full error message
   PIX_DROIT_MAITRE_CERTIF,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PIX_DROIT_... Remove this comment to see the full error message
   PIX_DROIT_EXPERT_CERTIF,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PIX_EDU_FO... Remove this comment to see the full error message
   PIX_EDU_FORMATION_INITIALE_2ND_DEGRE_INITIE,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PIX_EDU_FO... Remove this comment to see the full error message
   PIX_EDU_FORMATION_INITIALE_2ND_DEGRE_CONFIRME,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PIX_EDU_FO... Remove this comment to see the full error message
   PIX_EDU_FORMATION_CONTINUE_2ND_DEGRE_CONFIRME,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PIX_EDU_FO... Remove this comment to see the full error message
   PIX_EDU_FORMATION_CONTINUE_2ND_DEGRE_AVANCE,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PIX_EDU_FO... Remove this comment to see the full error message
   PIX_EDU_FORMATION_CONTINUE_2ND_DEGRE_EXPERT,
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 } = require('../models/Badge').keys;
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'status'.
 const status = {
   CANCELLED: 'cancelled',
 };
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'partnerCer... Remove this comment to see the full error message
 const partnerCertificationStatus = {
   ACQUIRED: 'acquired',
   REJECTED: 'rejected',
   NOT_TAKEN: 'not_taken',
 };
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'JuryCertif... Remove this comment to see the full error message
 class JuryCertification {
+  assessmentId: any;
+  birthCountry: any;
+  birthINSEECode: any;
+  birthPostalCode: any;
+  birthdate: any;
+  birthplace: any;
+  certificationCourseId: any;
+  certificationIssueReports: any;
+  commentForCandidate: any;
+  commentForJury: any;
+  commentForOrganization: any;
+  competenceMarks: any;
+  completedAt: any;
+  createdAt: any;
+  firstName: any;
+  isPublished: any;
+  juryId: any;
+  lastName: any;
+  partnerCertifications: any;
+  pixScore: any;
+  sessionId: any;
+  sex: any;
+  status: any;
+  userId: any;
   constructor({
     certificationCourseId,
     sessionId,
@@ -47,8 +86,8 @@ class JuryCertification {
     commentForOrganization,
     commentForJury,
     certificationIssueReports,
-    partnerCertifications,
-  }) {
+    partnerCertifications
+  }: any) {
     this.certificationCourseId = certificationCourseId;
     this.sessionId = sessionId;
     this.userId = userId;
@@ -75,12 +114,15 @@ class JuryCertification {
     this.partnerCertifications = partnerCertifications;
   }
 
-  static from({ juryCertificationDTO, certificationIssueReports, partnerCertifications }) {
+  static from({
+    juryCertificationDTO,
+    certificationIssueReports,
+    partnerCertifications
+  }: any) {
     const competenceMarkDTOs = _.compact(juryCertificationDTO.competenceMarks).map(
-      (competenceMarkDTO) =>
-        new CompetenceMark({
-          ...competenceMarkDTO,
-        })
+      (competenceMarkDTO: any) => new CompetenceMark({
+        ...competenceMarkDTO,
+      })
     );
 
     return new JuryCertification({
@@ -142,8 +184,10 @@ class JuryCertification {
     return this._getStatusFromPartnerCertification([PIX_EDU_FORMATION_CONTINUE_2ND_DEGRE_EXPERT]);
   }
 
-  _getStatusFromPartnerCertification(partnerCertificationKeys) {
-    const partnerCertification = this.partnerCertifications.find(({ partnerKey }) =>
+  _getStatusFromPartnerCertification(partnerCertificationKeys: any) {
+    const partnerCertification = this.partnerCertifications.find(({
+      partnerKey
+    }: any) =>
       partnerCertificationKeys.includes(partnerKey)
     );
     if (!partnerCertification) {
@@ -153,9 +197,11 @@ class JuryCertification {
   }
 }
 
-function _getStatus(assessmentResultStatus, isCourseCancelled) {
+// @ts-expect-error ts-migrate(2393) FIXME: Duplicate function implementation.
+function _getStatus(assessmentResultStatus: any, isCourseCancelled: any) {
   if (isCourseCancelled) return status.CANCELLED;
   return assessmentResultStatus;
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = JuryCertification;

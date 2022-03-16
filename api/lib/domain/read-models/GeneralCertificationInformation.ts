@@ -1,13 +1,27 @@
 class GeneralCertificationInformation {
+  birthCountry: any;
+  birthINSEECode: any;
+  birthPostalCode: any;
+  birthdate: any;
+  birthplace: any;
+  certificationCourseId: any;
+  certificationIssueReports: any;
+  completedAt: any;
+  createdAt: any;
+  firstName: any;
+  isCancelled: any;
+  isPublished: any;
+  lastName: any;
+  sessionId: any;
+  sex: any;
+  userId: any;
   constructor({
     certificationCourseId,
-
     sessionId,
     createdAt,
     completedAt,
     isPublished,
     isCancelled,
-
     firstName,
     lastName,
     birthdate,
@@ -17,9 +31,8 @@ class GeneralCertificationInformation {
     birthINSEECode,
     sex,
     userId,
-
-    certificationIssueReports,
-  }) {
+    certificationIssueReports
+  }: any) {
     this.certificationCourseId = certificationCourseId;
 
     this.sessionId = sessionId;
@@ -42,4 +55,5 @@ class GeneralCertificationInformation {
   }
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = GeneralCertificationInformation;

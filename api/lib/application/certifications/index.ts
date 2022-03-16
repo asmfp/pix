@@ -1,10 +1,15 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Joi'.
 const Joi = require('joi');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'certificat... Remove this comment to see the full error message
 const certificationController = require('./certification-controller');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'identifier... Remove this comment to see the full error message
 const identifiersType = require('../../domain/types/identifiers-type');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'securityPr... Remove this comment to see the full error message
 const securityPreHandlers = require('../security-pre-handlers');
 
-exports.register = async function (server) {
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
+exports.register = async function (server: any) {
   server.route([
     {
       method: 'GET',
@@ -119,4 +124,5 @@ exports.register = async function (server) {
   ]);
 };
 
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.name = 'certifications-api';

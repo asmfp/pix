@@ -1,24 +1,35 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'isEmpty'.
 const { isEmpty, map, uniqBy } = require('lodash');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'bluebird'.
 const bluebird = require('bluebird');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Organizati... Remove this comment to see the full error message
 const Organization = require('../models/Organization');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Organizati... Remove this comment to see the full error message
 const OrganizationTag = require('../models/OrganizationTag');
 const {
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'ManyOrgani... Remove this comment to see the full error message
   ManyOrganizationsFoundError,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Organizati... Remove this comment to see the full error message
   OrganizationAlreadyExistError,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Organizati... Remove this comment to see the full error message
   OrganizationTagNotFound,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'ObjectVali... Remove this comment to see the full error message
   ObjectValidationError,
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 } = require('../errors');
 const ORGANIZATION_TAG_SEPARATOR = '_';
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'organizati... Remove this comment to see the full error message
 const organizationInvitationService = require('../../domain/services/organization-invitation-service');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = async function createProOrganizationsWithTags({
   organizations,
   domainTransaction,
   organizationRepository,
   tagRepository,
   organizationTagRepository,
-  organizationInvitationRepository,
-}) {
+  organizationInvitationRepository
+}: any) {
   _checkIfOrganizationsDataAreNotEmptyAndUnique(organizations);
 
   await _checkIfOrganizationsAlreadyExistInDatabase(organizations, organizationRepository);
@@ -29,16 +40,21 @@ module.exports = async function createProOrganizationsWithTags({
 
   let createdOrganizations = null;
 
-  await domainTransaction.execute(async (domainTransaction) => {
-    const organizationsToCreate = Array.from(organizationsData.values()).map((data) => data.organization);
+  // @ts-expect-error ts-migrate(2697) FIXME: An async function or method must return a 'Promise... Remove this comment to see the full error message
+  await domainTransaction.execute(async (domainTransaction: any) => {
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Array'.
+    const organizationsToCreate = Array.from(organizationsData.values()).map((data: any) => data.organization);
 
     createdOrganizations = await organizationRepository.batchCreateProOrganizations(
       organizationsToCreate,
       domainTransaction
     );
-    const organizationsTags = createdOrganizations.flatMap(({ id, externalId }) => {
-      return organizationsData.get(externalId).tags.map((tagName) => {
-        const foundTag = allTags.find((tagInDB) => tagInDB.name === tagName.toUpperCase());
+    const organizationsTags = createdOrganizations.flatMap(({
+      id,
+      externalId
+    }: any) => {
+      return organizationsData.get(externalId).tags.map((tagName: any) => {
+        const foundTag = allTags.find((tagInDB: any) => tagInDB.name === tagName.toUpperCase());
         if (foundTag) {
           return new OrganizationTag({ organizationId: id, tagId: foundTag.id });
         } else {
@@ -49,9 +65,10 @@ module.exports = async function createProOrganizationsWithTags({
     await organizationTagRepository.batchCreate(organizationsTags, domainTransaction);
   });
 
-  const createdOrganizationsWithEmail = createdOrganizations.filter((organization) => !!organization.email);
+  // @ts-expect-error ts-migrate(2531) FIXME: Object is possibly 'null'.
+  const createdOrganizationsWithEmail = createdOrganizations.filter((organization: any) => !!organization.email);
 
-  await bluebird.mapSeries(createdOrganizationsWithEmail, (organization) => {
+  await bluebird.mapSeries(createdOrganizationsWithEmail, (organization: any) => {
     const { locale, organizationInvitationRole } = organizationsData.get(organization.externalId);
     return organizationInvitationService.createProOrganizationInvitation({
       organizationRepository,
@@ -66,7 +83,7 @@ module.exports = async function createProOrganizationsWithTags({
   return createdOrganizations;
 };
 
-function _checkIfOrganizationsDataAreNotEmptyAndUnique(organizations) {
+function _checkIfOrganizationsDataAreNotEmptyAndUnique(organizations: any) {
   if (!organizations) {
     throw new ObjectValidationError('Les organisations ne sont pas renseignées.');
   }
@@ -77,7 +94,8 @@ function _checkIfOrganizationsDataAreNotEmptyAndUnique(organizations) {
   }
 }
 
-async function _checkIfOrganizationsAlreadyExistInDatabase(organizations, organizationRepository) {
+// @ts-expect-error ts-migrate(2697) FIXME: An async function or method must return a 'Promise... Remove this comment to see the full error message
+async function _checkIfOrganizationsAlreadyExistInDatabase(organizations: any, organizationRepository: any) {
   const organizationIds = await organizationRepository.findByExternalIdsFetchingIdsOnly(
     map(organizations, 'externalId')
   );
@@ -86,7 +104,8 @@ async function _checkIfOrganizationsAlreadyExistInDatabase(organizations, organi
   }
 }
 
-function _validateAndMapOrganizationsData(organizations) {
+function _validateAndMapOrganizationsData(organizations: any) {
+  // @ts-expect-error ts-migrate(2583) FIXME: Cannot find name 'Map'. Do you need to change your... Remove this comment to see the full error message
   const mapOrganizationByExternalId = new Map();
 
   for (const organization of organizations) {

@@ -1,9 +1,15 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'checkEvent... Remove this comment to see the full error message
 const { checkEventTypes } = require('./check-event-types');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Certificat... Remove this comment to see the full error message
 const CertificationScoringCompleted = require('./CertificationScoringCompleted');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Certificat... Remove this comment to see the full error message
 const CertificationRescoringCompleted = require('./CertificationRescoringCompleted');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'featureTog... Remove this comment to see the full error message
 const { featureToggles } = require('../../config');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'CLEA'.
 const { CLEA } = require('../models/ComplementaryCertification');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'eventTypes... Remove this comment to see the full error message
 const eventTypes = [CertificationScoringCompleted, CertificationRescoringCompleted];
 
 async function handleCleaCertificationScoring({
@@ -16,8 +22,8 @@ async function handleCleaCertificationScoring({
   knowledgeElementRepository,
   targetProfileRepository,
   badgeCriteriaService,
-  complementaryCertificationCourseRepository,
-}) {
+  complementaryCertificationCourseRepository
+}: any) {
   checkEventTypes(event, eventTypes);
   const { certificationCourseId, userId, reproducibilityRate } = event;
 
@@ -59,14 +65,15 @@ async function handleCleaCertificationScoring({
   );
 }
 
+// @ts-expect-error ts-migrate(2697) FIXME: An async function or method must return a 'Promise... Remove this comment to see the full error message
 async function _verifyBadgeValidity(
-  certificationCourseRepository,
-  event,
-  badgeRepository,
-  cleaCertificationScoring,
-  targetProfileRepository,
-  knowledgeElementRepository,
-  badgeCriteriaService
+  certificationCourseRepository: any,
+  event: any,
+  badgeRepository: any,
+  cleaCertificationScoring: any,
+  targetProfileRepository: any,
+  knowledgeElementRepository: any,
+  badgeCriteriaService: any
 ) {
   const beginningCertificationDate = await certificationCourseRepository.getCreationDate(event.certificationCourseId);
 
@@ -88,11 +95,11 @@ async function _verifyBadgeValidity(
 }
 
 async function _handleScoringAndRescoringWithToggleEnabled(
-  complementaryCertificationCourseRepository,
-  certificationCourseId,
-  partnerCertificationScoringRepository,
-  userId,
-  reproducibilityRate
+  complementaryCertificationCourseRepository: any,
+  certificationCourseId: any,
+  partnerCertificationScoringRepository: any,
+  userId: any,
+  reproducibilityRate: any
 ) {
   const hasRunCleA = await complementaryCertificationCourseRepository.hasComplementaryCertification({
     certificationCourseId,
@@ -111,11 +118,12 @@ async function _handleScoringAndRescoringWithToggleEnabled(
   return partnerCertificationScoringRepository.save({ partnerCertificationScoring: cleaCertificationScoring });
 }
 
+// @ts-expect-error ts-migrate(2697) FIXME: An async function or method must return a 'Promise... Remove this comment to see the full error message
 async function _handleRescoringWithToggleDisabled(
-  event,
-  certificationCenterRepository,
-  cleaCertificationResultRepository,
-  partnerCertificationScoringRepository
+  event: any,
+  certificationCenterRepository: any,
+  cleaCertificationResultRepository: any,
+  partnerCertificationScoringRepository: any
 ) {
   const { certificationCourseId } = event;
 
@@ -139,17 +147,18 @@ async function _handleRescoringWithToggleDisabled(
   return;
 }
 
+// @ts-expect-error ts-migrate(2697) FIXME: An async function or method must return a 'Promise... Remove this comment to see the full error message
 async function _handleScoringWithToggleDisabled(
-  partnerCertificationScoringRepository,
-  certificationCourseId,
-  userId,
-  reproducibilityRate,
-  certificationCourseRepository,
-  event,
-  badgeRepository,
-  targetProfileRepository,
-  knowledgeElementRepository,
-  badgeCriteriaService
+  partnerCertificationScoringRepository: any,
+  certificationCourseId: any,
+  userId: any,
+  reproducibilityRate: any,
+  certificationCourseRepository: any,
+  event: any,
+  badgeRepository: any,
+  targetProfileRepository: any,
+  knowledgeElementRepository: any,
+  badgeCriteriaService: any
 ) {
   const cleaCertificationScoring = await partnerCertificationScoringRepository.buildCleaCertificationScoring({
     certificationCourseId,
@@ -175,4 +184,5 @@ async function _handleScoringWithToggleDisabled(
 }
 
 handleCleaCertificationScoring.eventTypes = eventTypes;
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = handleCleaCertificationScoring;

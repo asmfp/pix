@@ -1,27 +1,44 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_'.
 const _ = require('lodash');
 
 const {
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'NotFoundEr... Remove this comment to see the full error message
   NotFoundError,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'SchoolingR... Remove this comment to see the full error message
   SchoolingRegistrationNotFound,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'SchoolingR... Remove this comment to see the full error message
   SchoolingRegistrationsCouldNotBeSavedError,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'UserCouldN... Remove this comment to see the full error message
   UserCouldNotBeReconciledError,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'UserNotFou... Remove this comment to see the full error message
   UserNotFoundError,
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 } = require('../../domain/errors');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'UserWithSc... Remove this comment to see the full error message
 const UserWithSchoolingRegistration = require('../../domain/models/UserWithSchoolingRegistration');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Authentica... Remove this comment to see the full error message
 const AuthenticationMethod = require('../../domain/models/AuthenticationMethod');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'SchoolingR... Remove this comment to see the full error message
 const SchoolingRegistration = require('../../domain/models/SchoolingRegistration');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'SchoolingR... Remove this comment to see the full error message
 const SchoolingRegistrationForAdmin = require('../../domain/read-models/SchoolingRegistrationForAdmin');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const studentRepository = require('./student-repository');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Bookshelf'... Remove this comment to see the full error message
 const Bookshelf = require('../bookshelf');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'knex'.
 const { knex } = require('../../../db/knex-database-connection');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'BookshelfS... Remove this comment to see the full error message
 const BookshelfSchoolingRegistration = require('../orm-models/SchoolingRegistration');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'bookshelfT... Remove this comment to see the full error message
 const bookshelfToDomainConverter = require('../utils/bookshelf-to-domain-converter');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'DomainTran... Remove this comment to see the full error message
 const DomainTransaction = require('../DomainTransaction');
 
-function _toUserWithSchoolingRegistrationDTO(BookshelfSchoolingRegistration) {
+function _toUserWithSchoolingRegistrationDTO(BookshelfSchoolingRegistration: any) {
   const rawUserWithSchoolingRegistration = BookshelfSchoolingRegistration.toJSON();
 
   return new UserWithSchoolingRegistration({
@@ -31,8 +48,15 @@ function _toUserWithSchoolingRegistrationDTO(BookshelfSchoolingRegistration) {
 }
 
 function _setSchoolingRegistrationFilters(
-  qb,
-  { lastName, firstName, studentNumber, divisions, groups, connexionType } = {}
+  qb: any,
+  {
+    lastName,
+    firstName,
+    studentNumber,
+    divisions,
+    groups,
+    connexionType
+  }: any = {}
 ) {
   if (lastName) {
     qb.whereRaw('LOWER("schooling-registrations"."lastName") LIKE ?', `%${lastName.toLowerCase()}%`);
@@ -49,7 +73,7 @@ function _setSchoolingRegistrationFilters(
   if (groups) {
     qb.whereIn(
       knex.raw('LOWER("schooling-registrations"."group")'),
-      groups.map((group) => group.toLowerCase())
+      groups.map((group: any) => group.toLowerCase())
     );
   }
   if (connexionType === 'none') {
@@ -67,8 +91,8 @@ function _setSchoolingRegistrationFilters(
   }
 }
 
-function _canReconcile(existingSchoolingRegistrations, student) {
-  const existingRegistrationForUserId = existingSchoolingRegistrations.find((currentSchoolingRegistration) => {
+function _canReconcile(existingSchoolingRegistrations: any, student: any) {
+  const existingRegistrationForUserId = existingSchoolingRegistrations.find((currentSchoolingRegistration: any) => {
     return currentSchoolingRegistration.userId === student.account.userId;
   });
   return (
@@ -77,31 +101,39 @@ function _canReconcile(existingSchoolingRegistrations, student) {
   );
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
-  findByIds({ ids }) {
+  findByIds({
+    ids
+  }: any) {
     const schoolingRegistrations = BookshelfSchoolingRegistration.where('id', 'in', ids).fetchAll();
 
     return bookshelfToDomainConverter.buildDomainObjects(BookshelfSchoolingRegistration, schoolingRegistrations);
   },
 
-  findByOrganizationId({ organizationId }, transaction = DomainTransaction.emptyTransaction()) {
+  findByOrganizationId({
+    organizationId
+  }: any, transaction = DomainTransaction.emptyTransaction()) {
     const knexConn = transaction.knexTransaction || knex;
     return knexConn('schooling-registrations')
       .where({ organizationId })
       .orderByRaw('LOWER("lastName") ASC, LOWER("firstName") ASC')
-      .then((schoolingRegistrations) =>
-        schoolingRegistrations.map((schoolingRegistration) => new SchoolingRegistration(schoolingRegistration))
+      .then((schoolingRegistrations: any) => schoolingRegistrations.map((schoolingRegistration: any) => new SchoolingRegistration(schoolingRegistration))
       );
   },
 
-  async findByOrganizationIdAndUpdatedAtOrderByDivision({ organizationId, page, filter }) {
+  async findByOrganizationIdAndUpdatedAtOrderByDivision({
+    organizationId,
+    page,
+    filter
+  }: any) {
     const BEGINNING_OF_THE_2020_SCHOOL_YEAR = '2020-08-15';
-    const query = BookshelfSchoolingRegistration.where((qb) => {
+    const query = BookshelfSchoolingRegistration.where((qb: any) => {
       qb.where({ organizationId });
       qb.where('updatedAt', '>', BEGINNING_OF_THE_2020_SCHOOL_YEAR);
       qb.where('isDisabled', false);
     })
-      .query((qb) => {
+      .query((qb: any) => {
         qb.orderByRaw('LOWER("division") ASC, LOWER("lastName") ASC, LOWER("firstName") ASC');
         if (filter.divisions) {
           qb.whereIn('division', filter.divisions);
@@ -120,37 +152,47 @@ module.exports = {
     };
   },
 
-  async findByUserId({ userId }) {
+  async findByUserId({
+    userId
+  }: any) {
     const schoolingRegistrations = await BookshelfSchoolingRegistration.where({ userId }).orderBy('id').fetchAll();
 
     return bookshelfToDomainConverter.buildDomainObjects(BookshelfSchoolingRegistration, schoolingRegistrations);
   },
 
-  async isSchoolingRegistrationIdLinkedToUserAndSCOOrganization({ userId, schoolingRegistrationId }) {
+  async isSchoolingRegistrationIdLinkedToUserAndSCOOrganization({
+    userId,
+    schoolingRegistrationId
+  }: any) {
     const exist = await Bookshelf.knex('schooling-registrations')
       .select('schooling-registrations.id')
       .join('organizations', 'schooling-registrations.organizationId', 'organizations.id')
       .where({ userId, type: 'SCO', 'schooling-registrations.id': schoolingRegistrationId })
       .first();
 
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Boolean'.
     return Boolean(exist);
   },
 
-  async disableAllSchoolingRegistrationsInOrganization({ domainTransaction, organizationId }) {
+  // @ts-expect-error ts-migrate(2697) FIXME: An async function or method must return a 'Promise... Remove this comment to see the full error message
+  async disableAllSchoolingRegistrationsInOrganization({
+    domainTransaction,
+    organizationId
+  }: any) {
     const knexConn = domainTransaction.knexTransaction;
     await knexConn('schooling-registrations')
       .where({ organizationId, isDisabled: false })
       .update({ isDisabled: true, updatedAt: knexConn.raw('CURRENT_TIMESTAMP') });
   },
 
-  async addOrUpdateOrganizationSchoolingRegistrations(schoolingRegistrationDatas, organizationId, domainTransaction) {
+  // @ts-expect-error ts-migrate(2697) FIXME: An async function or method must return a 'Promise... Remove this comment to see the full error message
+  async addOrUpdateOrganizationSchoolingRegistrations(schoolingRegistrationDatas: any, organizationId: any, domainTransaction: any) {
     const knexConn = domainTransaction.knexTransaction;
     const schoolingRegistrationsFromFile = schoolingRegistrationDatas.map(
-      (schoolingRegistrationData) =>
-        new SchoolingRegistration({
-          ...schoolingRegistrationData,
-          organizationId,
-        })
+      (schoolingRegistrationData: any) => new SchoolingRegistration({
+        ...schoolingRegistrationData,
+        organizationId,
+      })
     );
     const existingSchoolingRegistrations = await this.findByOrganizationId({ organizationId }, domainTransaction);
 
@@ -161,10 +203,10 @@ module.exports = {
     );
 
     try {
-      const schoolingRegistrationsToSave = reconciledSchoolingRegistrationsToImport.map((schoolingRegistration) => ({
+      const schoolingRegistrationsToSave = reconciledSchoolingRegistrationsToImport.map((schoolingRegistration: any) => ({
         ..._.omit(schoolingRegistration, ['id', 'createdAt']),
         updatedAt: knexConn.raw('CURRENT_TIMESTAMP'),
-        isDisabled: false,
+        isDisabled: false
       }));
 
       await knexConn('schooling-registrations')
@@ -177,19 +219,19 @@ module.exports = {
   },
 
   async _reconcileSchoolingRegistrations(
-    schoolingRegistrationsToImport,
-    existingSchoolingRegistrations,
-    domainTransaction
+    schoolingRegistrationsToImport: any,
+    existingSchoolingRegistrations: any,
+    domainTransaction: any
   ) {
     const nationalStudentIdsFromFile = schoolingRegistrationsToImport.map(
-      (schoolingRegistrationData) => schoolingRegistrationData.nationalStudentId
+      (schoolingRegistrationData: any) => schoolingRegistrationData.nationalStudentId
     );
     const students = await studentRepository.findReconciledStudentsByNationalStudentId(
       _.compact(nationalStudentIdsFromFile),
       domainTransaction
     );
 
-    _.each(students, (student) => {
+    _.each(students, (student: any) => {
       const alreadyReconciledSchoolingRegistration = _.find(schoolingRegistrationsToImport, {
         userId: student.account.userId,
       });
@@ -206,8 +248,11 @@ module.exports = {
     return schoolingRegistrationsToImport;
   },
 
-  async findByOrganizationIdAndBirthdate({ organizationId, birthdate }) {
-    const schoolingRegistrations = await BookshelfSchoolingRegistration.query((qb) => {
+  async findByOrganizationIdAndBirthdate({
+    organizationId,
+    birthdate
+  }: any) {
+    const schoolingRegistrations = await BookshelfSchoolingRegistration.query((qb: any) => {
       qb.where('organizationId', organizationId);
       qb.where('birthdate', birthdate);
       qb.where('isDisabled', false);
@@ -216,7 +261,10 @@ module.exports = {
     return bookshelfToDomainConverter.buildDomainObjects(BookshelfSchoolingRegistration, schoolingRegistrations);
   },
 
-  async reconcileUserToSchoolingRegistration({ userId, schoolingRegistrationId }) {
+  async reconcileUserToSchoolingRegistration({
+    userId,
+    schoolingRegistrationId
+  }: any) {
     try {
       const schoolingRegistration = await BookshelfSchoolingRegistration.where({ id: schoolingRegistrationId })
         .where('isDisabled', false)
@@ -232,7 +280,11 @@ module.exports = {
     }
   },
 
-  async reconcileUserByNationalStudentIdAndOrganizationId({ nationalStudentId, userId, organizationId }) {
+  async reconcileUserByNationalStudentIdAndOrganizationId({
+    nationalStudentId,
+    userId,
+    organizationId
+  }: any) {
     try {
       const schoolingRegistration = await BookshelfSchoolingRegistration.where({
         organizationId,
@@ -245,7 +297,7 @@ module.exports = {
     }
   },
 
-  async getSchoolingRegistrationForAdmin(schoolingRegistrationId) {
+  async getSchoolingRegistrationForAdmin(schoolingRegistrationId: any) {
     const schoolingRegistration = await knex('schooling-registrations')
       .select(
         'schooling-registrations.id as id',
@@ -266,12 +318,14 @@ module.exports = {
       .first();
 
     if (!schoolingRegistration) {
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
       throw new NotFoundError(`Schooling registration not found for ID ${schoolingRegistrationId}`);
     }
     return new SchoolingRegistrationForAdmin(schoolingRegistration);
   },
 
-  async dissociateUserFromSchoolingRegistration(schoolingRegistrationId) {
+  // @ts-expect-error ts-migrate(2697) FIXME: An async function or method must return a 'Promise... Remove this comment to see the full error message
+  async dissociateUserFromSchoolingRegistration(schoolingRegistrationId: any) {
     await BookshelfSchoolingRegistration.where({ id: schoolingRegistrationId }).save(
       { userId: null },
       {
@@ -283,8 +337,8 @@ module.exports = {
   async findOneByUserIdAndOrganizationId({
     userId,
     organizationId,
-    domainTransaction = DomainTransaction.emptyTransaction(),
-  }) {
+    domainTransaction = DomainTransaction.emptyTransaction()
+  }: any) {
     const schoolingRegistration = await knex('schooling-registrations')
       .transacting(domainTransaction)
       .first('*')
@@ -293,21 +347,24 @@ module.exports = {
     return new SchoolingRegistration(schoolingRegistration);
   },
 
-  get(schoolingRegistrationId) {
+  get(schoolingRegistrationId: any) {
     return BookshelfSchoolingRegistration.where({ id: schoolingRegistrationId })
       .fetch()
-      .then((schoolingRegistration) =>
-        bookshelfToDomainConverter.buildDomainObject(BookshelfSchoolingRegistration, schoolingRegistration)
+      .then((schoolingRegistration: any) => bookshelfToDomainConverter.buildDomainObject(BookshelfSchoolingRegistration, schoolingRegistration)
       )
-      .catch((err) => {
+      .catch((err: any) => {
         if (err instanceof BookshelfSchoolingRegistration.NotFoundError) {
+          // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
           throw new NotFoundError(`Student not found for ID ${schoolingRegistrationId}`);
         }
         throw err;
       });
   },
 
-  async getLatestSchoolingRegistration({ nationalStudentId, birthdate }) {
+  async getLatestSchoolingRegistration({
+    nationalStudentId,
+    birthdate
+  }: any) {
     const schoolingRegistration = await knex
       .where({ nationalStudentId, birthdate })
       .whereNotNull('userId')
@@ -323,9 +380,13 @@ module.exports = {
     return schoolingRegistration;
   },
 
-  async findPaginatedFilteredSchoolingRegistrations({ organizationId, filter, page = {} }) {
+  async findPaginatedFilteredSchoolingRegistrations({
+    organizationId,
+    filter,
+    page = {}
+  }: any) {
     const { models, pagination } = await BookshelfSchoolingRegistration.where({ organizationId })
-      .query((qb) => {
+      .query((qb: any) => {
         qb.select(
           'schooling-registrations.id',
           'schooling-registrations.firstName',
@@ -347,6 +408,7 @@ module.exports = {
         qb.leftJoin('authentication-methods', function () {
           this.on('users.id', 'authentication-methods.userId').andOnVal(
             'authentication-methods.identityProvider',
+            // @ts-expect-error ts-migrate(2339) FIXME: Property 'identityProviders' does not exist on typ... Remove this comment to see the full error message
             AuthenticationMethod.identityProviders.GAR
           );
         });
@@ -365,7 +427,11 @@ module.exports = {
     };
   },
 
-  updateUserIdWhereNull({ schoolingRegistrationId, userId, domainTransaction = DomainTransaction.emptyTransaction() }) {
+  updateUserIdWhereNull({
+    schoolingRegistrationId,
+    userId,
+    domainTransaction = DomainTransaction.emptyTransaction()
+  }: any) {
     return BookshelfSchoolingRegistration.where({ id: schoolingRegistrationId, userId: null })
       .save(
         { userId },
@@ -375,10 +441,9 @@ module.exports = {
           method: 'update',
         }
       )
-      .then((schoolingRegistration) =>
-        bookshelfToDomainConverter.buildDomainObject(BookshelfSchoolingRegistration, schoolingRegistration)
+      .then((schoolingRegistration: any) => bookshelfToDomainConverter.buildDomainObject(BookshelfSchoolingRegistration, schoolingRegistration)
       )
-      .catch((err) => {
+      .catch((err: any) => {
         if (err instanceof BookshelfSchoolingRegistration.NoRowsUpdatedError) {
           throw new SchoolingRegistrationNotFound(
             `SchoolingRegistration not found for ID ${schoolingRegistrationId} and user ID null.`
@@ -388,7 +453,10 @@ module.exports = {
       });
   },
 
-  async isActive({ userId, campaignId }) {
+  async isActive({
+    userId,
+    campaignId
+  }: any) {
     const registration = await knex('schooling-registrations')
       .select('schooling-registrations.isDisabled')
       .join('organizations', 'organizations.id', 'schooling-registrations.organizationId')

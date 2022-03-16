@@ -1,9 +1,15 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'ForbiddenA... Remove this comment to see the full error message
 const { ForbiddenAccess, ChallengeNotAskedError, CertificationEndedBySupervisorError } = require('../errors');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Examiner'.
 const Examiner = require('../models/Examiner');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'KnowledgeE... Remove this comment to see the full error message
 const KnowledgeElement = require('../models/KnowledgeElement');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'logger'.
 const logger = require('../../infrastructure/logger');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const dateUtils = require('../../infrastructure/utils/date-utils');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = async function correctAnswerThenUpdateAssessment({
   answer,
   userId,
@@ -19,8 +25,8 @@ module.exports = async function correctAnswerThenUpdateAssessment({
   knowledgeElementRepository,
   flashAssessmentResultRepository,
   flashAlgorithmService,
-  algorithmDataFetcherService,
-} = {}) {
+  algorithmDataFetcherService
+}: any = {}) {
   const assessment = await assessmentRepository.get(answer.assessmentId);
   if (assessment.userId !== userId) {
     throw new ForbiddenAccess('User is not allowed to add an answer for this assessment.');
@@ -61,6 +67,7 @@ module.exports = async function correctAnswerThenUpdateAssessment({
 
   let answerSaved = await answerRepository.saveWithKnowledgeElements(correctedAnswer, knowledgeElementsFromAnswer);
 
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'length' does not exist on type 'unknown'... Remove this comment to see the full error message
   if (assessment.hasKnowledgeElements() && knowledgeElementsFromAnswer.length === 0) {
     const context = {
       assessmentId: assessment.id,
@@ -103,7 +110,11 @@ module.exports = async function correctAnswerThenUpdateAssessment({
   return answerSaved;
 };
 
-function _evaluateAnswer({ challenge, answer, assessment }) {
+function _evaluateAnswer({
+  challenge,
+  answer,
+  assessment
+}: any) {
   const examiner = new Examiner({ validator: challenge.validator });
   return examiner.evaluate({
     answer,
@@ -118,8 +129,8 @@ async function _getKnowledgeElements({
   challenge,
   skillRepository,
   targetProfileRepository,
-  knowledgeElementRepository,
-}) {
+  knowledgeElementRepository
+}: any) {
   if (!assessment.hasKnowledgeElements()) {
     return [];
   }
@@ -156,11 +167,11 @@ async function _getKnowledgeElements({
   });
 }
 
-function _getSkillsFilteredByStatus(knowledgeElements, targetSkills, status) {
+function _getSkillsFilteredByStatus(knowledgeElements: any, targetSkills: any, status: any) {
   return knowledgeElements
-    .filter((knowledgeElement) => knowledgeElement.status === status)
-    .map((knowledgeElement) => knowledgeElement.skillId)
-    .map((skillId) => targetSkills.find((skill) => skill.id === skillId));
+    .filter((knowledgeElement: any) => knowledgeElement.status === status)
+    .map((knowledgeElement: any) => knowledgeElement.skillId)
+    .map((skillId: any) => targetSkills.find((skill: any) => skill.id === skillId));
 }
 
 async function _addLevelUpInformation({
@@ -172,8 +183,8 @@ async function _addLevelUpInformation({
   competenceEvaluationRepository,
   knowledgeElementRepository,
   scorecardBeforeAnswer,
-  locale,
-}) {
+  locale
+}: any) {
   answerSaved.levelup = {};
 
   if (!scorecardBeforeAnswer) {

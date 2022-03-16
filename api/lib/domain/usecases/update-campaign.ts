@@ -1,7 +1,11 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_'.
 const _ = require('lodash');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'UserNotAut... Remove this comment to see the full error message
 const { UserNotAuthorizedToUpdateResourceError, EntityValidationError } = require('../errors');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'campaignVa... Remove this comment to see the full error message
 const campaignValidator = require('../validators/campaign-validator');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = async function updateCampaign({
   userId,
   campaignId,
@@ -11,8 +15,9 @@ module.exports = async function updateCampaign({
   ownerId,
   userRepository,
   campaignRepository,
-  membershipRepository,
-}) {
+  membershipRepository
+}: any) {
+  // @ts-expect-error ts-migrate(2583) FIXME: Cannot find name 'Promise'. Do you need to change ... Remove this comment to see the full error message
   const [user, campaign] = await Promise.all([
     userRepository.getWithMemberships(userId),
     campaignRepository.get(campaignId),

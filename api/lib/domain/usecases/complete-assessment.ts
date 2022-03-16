@@ -1,14 +1,18 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Assessment... Remove this comment to see the full error message
 const AssessmentCompleted = require('../events/AssessmentCompleted');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'CampaignPa... Remove this comment to see the full error message
 const CampaignParticipationStatuses = require('../models/CampaignParticipationStatuses');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'AlreadyRat... Remove this comment to see the full error message
 const { AlreadyRatedAssessmentError } = require('../errors');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = async function completeAssessment({
   assessmentId,
   domainTransaction,
   campaignParticipationRepository,
-  assessmentRepository,
-}) {
+  assessmentRepository
+}: any) {
   const assessment = await assessmentRepository.get(assessmentId, domainTransaction);
 
   if (assessment.isCompleted()) {

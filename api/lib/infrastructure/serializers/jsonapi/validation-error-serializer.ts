@@ -1,6 +1,7 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_'.
 const _ = require('lodash');
 
-function _buildError(field, message) {
+function _buildError(field: any, message: any) {
   return {
     status: '400',
     title: 'Invalid Attribute',
@@ -10,7 +11,7 @@ function _buildError(field, message) {
   };
 }
 
-function _buildEntirePayloadError(message) {
+function _buildEntirePayloadError(message: any) {
   return {
     status: '400',
     title: 'Invalid Payload',
@@ -19,11 +20,12 @@ function _buildEntirePayloadError(message) {
   };
 }
 
-function serialize(validationErrors) {
-  const errors = [];
+function serialize(validationErrors: any) {
+  const errors: any = [];
 
-  Object.keys(validationErrors.data).forEach(function (field) {
-    validationErrors.data[field].forEach((message) => {
+  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Object'.
+  Object.keys(validationErrors.data).forEach(function (field: any) {
+    validationErrors.data[field].forEach((message: any) => {
       if (_.isEmpty(field)) {
         errors.push(_buildEntirePayloadError(message));
       } else {
@@ -37,4 +39,5 @@ function serialize(validationErrors) {
   };
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = { serialize };

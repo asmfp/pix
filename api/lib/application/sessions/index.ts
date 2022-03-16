@@ -1,15 +1,26 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Joi'.
 const Joi = require('joi');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'securityPr... Remove this comment to see the full error message
 const securityPreHandlers = require('../security-pre-handlers');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const sessionController = require('./session-controller');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const sessionForSupervisingController = require('./session-for-supervising-controller');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const finalizedSessionController = require('./finalized-session-controller');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'authorizat... Remove this comment to see the full error message
 const authorization = require('../preHandlers/authorization');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'identifier... Remove this comment to see the full error message
 const identifiersType = require('../../domain/types/identifiers-type');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'sendJsonAp... Remove this comment to see the full error message
 const { sendJsonApiError, UnprocessableEntityError } = require('../http-errors');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'endTestScr... Remove this comment to see the full error message
 const endTestScreenRemovalEnabled = require('../preHandlers/end-test-screen-removal-enabled');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'assessment... Remove this comment to see the full error message
 const assessmentSupervisorAuthorization = require('../preHandlers/session-supervisor-authorization');
 
-exports.register = async (server) => {
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
+exports.register = async (server: any) => {
   server.route([
     {
       method: 'GET',
@@ -407,7 +418,8 @@ exports.register = async (server) => {
               },
             },
           }),
-          failAction: (request, h) => {
+          failAction: (request: any, h: any) => {
+            // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 1.
             return sendJsonApiError(new UnprocessableEntityError('Un des champs saisis n’est pas valide.'), h);
           },
         },
@@ -672,4 +684,5 @@ exports.register = async (server) => {
   ]);
 };
 
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.name = 'sessions-api';

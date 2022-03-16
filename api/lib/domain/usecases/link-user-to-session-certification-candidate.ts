@@ -1,14 +1,25 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_'.
 const _ = require('lodash');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Certificat... Remove this comment to see the full error message
 const CertificationCandidate = require('../models/CertificationCandidate');
 const {
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Certificat... Remove this comment to see the full error message
   CertificationCandidateAlreadyLinkedToUserError,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Certificat... Remove this comment to see the full error message
   CertificationCandidateByPersonalInfoNotFoundError,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'MatchingRe... Remove this comment to see the full error message
   MatchingReconciledStudentNotFoundError,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Certificat... Remove this comment to see the full error message
   CertificationCandidateByPersonalInfoTooManyMatchesError,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'UserAlread... Remove this comment to see the full error message
   UserAlreadyLinkedToCandidateInSessionError,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'SessionNot... Remove this comment to see the full error message
   SessionNotAccessible,
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 } = require('../errors');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'UserLinked... Remove this comment to see the full error message
 const UserLinkedToCertificationCandidate = require('../events/UserLinkedToCertificationCandidate');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const UserAlreadyLinkedToCertificationCandidate = require('../events/UserAlreadyLinkedToCertificationCandidate');
 
 async function linkUserToSessionCertificationCandidate({
@@ -21,8 +32,8 @@ async function linkUserToSessionCertificationCandidate({
   certificationCenterRepository,
   organizationRepository,
   schoolingRegistrationRepository,
-  sessionRepository,
-}) {
+  sessionRepository
+}: any) {
   const session = await sessionRepository.get(sessionId);
   if (!session.isAccessible()) {
     throw new SessionNotAccessible();
@@ -47,6 +58,7 @@ async function linkUserToSessionCertificationCandidate({
     organizationRepository,
   });
 
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'isLinkedToAUser' does not exist on type ... Remove this comment to see the full error message
   if (!certificationCandidate.isLinkedToAUser()) {
     if (isSessionFromAScoAndManagingStudentsOrganization) {
       await _checkCandidateMatchTheReconciledStudent({
@@ -64,6 +76,7 @@ async function linkUserToSessionCertificationCandidate({
     return new UserLinkedToCertificationCandidate();
   }
 
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'isLinkedToUserId' does not exist on type... Remove this comment to see the full error message
   if (certificationCandidate.isLinkedToUserId(userId)) {
     return new UserAlreadyLinkedToCertificationCandidate();
   } else {
@@ -74,8 +87,8 @@ async function linkUserToSessionCertificationCandidate({
 async function _getSessionCertificationCandidateByPersonalInfo({
   sessionId,
   participatingCertificationCandidate,
-  certificationCandidateRepository,
-}) {
+  certificationCandidateRepository
+}: any) {
   const matchingSessionCandidates = await certificationCandidateRepository.findBySessionIdAndPersonalInfo({
     sessionId,
     firstName: participatingCertificationCandidate.firstName,
@@ -99,8 +112,8 @@ async function _getSessionCertificationCandidateByPersonalInfo({
 async function _isSessionFromAScoAndManagingStudentsOrganization({
   sessionId,
   certificationCenterRepository,
-  organizationRepository,
-}) {
+  organizationRepository
+}: any) {
   const sessionCertificationCenter = await certificationCenterRepository.getBySessionId(sessionId);
 
   if (sessionCertificationCenter.isSco) {
@@ -114,12 +127,20 @@ async function _isSessionFromAScoAndManagingStudentsOrganization({
   }
 }
 
-function _getOrganizationLinkedToCertificationCenter({ certificationCenter, organizationRepository }) {
+function _getOrganizationLinkedToCertificationCenter({
+  certificationCenter,
+  organizationRepository
+}: any) {
   const commonExternalId = certificationCenter.externalId;
   return organizationRepository.getScoOrganizationByExternalId(commonExternalId);
 }
 
-async function _linkUserToCandidate({ sessionId, userId, certificationCandidate, certificationCandidateRepository }) {
+async function _linkUserToCandidate({
+  sessionId,
+  userId,
+  certificationCandidate,
+  certificationCandidateRepository
+}: any) {
   const existingCandidateLinkedToUser = await certificationCandidateRepository.findOneBySessionIdAndUserId({
     sessionId,
     userId,
@@ -138,11 +159,12 @@ async function _linkUserToCandidate({ sessionId, userId, certificationCandidate,
   return certificationCandidate;
 }
 
+// @ts-expect-error ts-migrate(2697) FIXME: An async function or method must return a 'Promise... Remove this comment to see the full error message
 async function _checkCandidateMatchTheReconciledStudent({
   userId,
   certificationCandidate,
-  schoolingRegistrationRepository,
-}) {
+  schoolingRegistrationRepository
+}: any) {
   const isSchoolingRegistrationIdLinkedToUserAndSCOOrganization =
     await schoolingRegistrationRepository.isSchoolingRegistrationIdLinkedToUserAndSCOOrganization({
       userId,
@@ -154,6 +176,7 @@ async function _checkCandidateMatchTheReconciledStudent({
   }
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
   linkUserToSessionCertificationCandidate,
 };

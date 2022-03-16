@@ -1,9 +1,11 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Serializer... Remove this comment to see the full error message
 const { Serializer } = require('jsonapi-serializer');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
-  serialize(userOrgaSettings) {
+  serialize(userOrgaSettings: any) {
     return new Serializer('user-orga-settings', {
-      transform(record) {
+      transform(record: any) {
         if (!record.user) {
           delete record.user;
         }
@@ -32,7 +34,7 @@ module.exports = {
           ignoreRelationshipData: true,
           nullIfMissing: true,
           relationshipLinks: {
-            related: function (record, current, parent) {
+            related: function (record: any, current: any, parent: any) {
               return `/api/organizations/${parent.id}/campaigns`;
             },
           },
@@ -42,7 +44,7 @@ module.exports = {
           ignoreRelationshipData: true,
           nullIfMissing: true,
           relationshipLinks: {
-            related: function (record, current, parent) {
+            related: function (record: any, current: any, parent: any) {
               return `/api/organizations/${parent.id}/target-profiles`;
             },
           },
@@ -52,7 +54,7 @@ module.exports = {
           ignoreRelationshipData: true,
           nullIfMissing: true,
           relationshipLinks: {
-            related: function (record, current, parent) {
+            related: function (record: any, current: any, parent: any) {
               return `/api/organizations/${parent.id}/memberships`;
             },
           },
@@ -62,7 +64,7 @@ module.exports = {
           ignoreRelationshipData: true,
           nullIfMissing: true,
           relationshipLinks: {
-            related: function (record, current, parent) {
+            related: function (record: any, current: any, parent: any) {
               return `/api/organizations/${parent.id}/students`;
             },
           },
@@ -72,7 +74,7 @@ module.exports = {
           ignoreRelationshipData: true,
           nullIfMissing: true,
           relationshipLinks: {
-            related: function (record, current, parent) {
+            related: function (record: any, current: any, parent: any) {
               return `/api/organizations/${parent.id}/invitations`;
             },
           },

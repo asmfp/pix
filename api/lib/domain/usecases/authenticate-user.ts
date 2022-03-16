@@ -1,16 +1,25 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'get'.
 const get = require('lodash/get');
 
 const {
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'ForbiddenA... Remove this comment to see the full error message
   ForbiddenAccess,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'MissingOrI... Remove this comment to see the full error message
   MissingOrInvalidCredentialsError,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'UserShould... Remove this comment to see the full error message
   UserShouldChangePasswordError,
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 } = require('../../domain/errors');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const apps = require('../constants');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const authenticationService = require('../../domain/services/authentication-service');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'endTestScr... Remove this comment to see the full error message
 const endTestScreenRemovalService = require('../../domain/services/end-test-screen-removal-service');
 
-async function _checkUserAccessScope(scope, user) {
+// @ts-expect-error ts-migrate(2697) FIXME: An async function or method must return a 'Promise... Remove this comment to see the full error message
+async function _checkUserAccessScope(scope: any, user: any) {
   if (scope === apps.PIX_ORGA.SCOPE && !user.isLinkedToOrganizations()) {
     throw new ForbiddenAccess(apps.PIX_ORGA.NOT_LINKED_ORGANIZATION_MSG);
   }
@@ -28,14 +37,15 @@ async function _checkUserAccessScope(scope, user) {
   }
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = async function authenticateUser({
   password,
   scope,
   source,
   username,
   refreshTokenService,
-  userRepository,
-}) {
+  userRepository
+}: any) {
   try {
     const foundUser = await authenticationService.getUserByUsernameAndPassword({
       username,

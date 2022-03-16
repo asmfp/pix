@@ -1,12 +1,21 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Assessment... Remove this comment to see the full error message
 const AssessmentResult = require('../models/AssessmentResult');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Certificat... Remove this comment to see the full error message
 const CertificationScoringCompleted = require('./CertificationScoringCompleted.js');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Competence... Remove this comment to see the full error message
 const CompetenceMark = require('../models/CompetenceMark');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'bluebird'.
 const bluebird = require('bluebird');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Certificat... Remove this comment to see the full error message
 const { CertificationComputeError } = require('../errors');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Assessment... Remove this comment to see the full error message
 const AssessmentCompleted = require('./AssessmentCompleted');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'checkEvent... Remove this comment to see the full error message
 const { checkEventTypes } = require('./check-event-types');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'eventTypes... Remove this comment to see the full error message
 const eventTypes = [AssessmentCompleted];
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'EMITTER'.
 const EMITTER = 'PIX-ALGO';
 
 async function handleCertificationScoring({
@@ -16,8 +25,8 @@ async function handleCertificationScoring({
   certificationAssessmentRepository,
   certificationCourseRepository,
   competenceMarkRepository,
-  scoringCertificationService,
-}) {
+  scoringCertificationService
+}: any) {
   checkEventTypes(event, eventTypes);
 
   if (event.isCertificationType) {
@@ -40,8 +49,8 @@ async function _calculateCertificationScore({
   assessmentResultRepository,
   certificationCourseRepository,
   competenceMarkRepository,
-  scoringCertificationService,
-}) {
+  scoringCertificationService
+}: any) {
   try {
     const certificationAssessmentScore = await scoringCertificationService.calculateCertificationAssessmentScore({
       certificationAssessment,
@@ -77,15 +86,15 @@ async function _saveResult({
   certificationAssessmentScore,
   assessmentResultRepository,
   certificationCourseRepository,
-  competenceMarkRepository,
-}) {
+  competenceMarkRepository
+}: any) {
   const assessmentResult = await _createAssessmentResult({
     certificationAssessment,
     certificationAssessmentScore,
     assessmentResultRepository,
   });
 
-  await bluebird.mapSeries(certificationAssessmentScore.competenceMarks, (competenceMark) => {
+  await bluebird.mapSeries(certificationAssessmentScore.competenceMarks, (competenceMark: any) => {
     const competenceMarkDomain = new CompetenceMark({
       ...competenceMark,
       ...{ assessmentResultId: assessmentResult.id },
@@ -93,6 +102,7 @@ async function _saveResult({
     return competenceMarkRepository.save(competenceMarkDomain);
   });
   const certificationCourse = await certificationCourseRepository.get(certificationAssessment.certificationCourseId);
+  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Date'.
   certificationCourse.complete({ now: new Date() });
   return certificationCourseRepository.update(certificationCourse);
 }
@@ -100,8 +110,8 @@ async function _saveResult({
 function _createAssessmentResult({
   certificationAssessment,
   certificationAssessmentScore,
-  assessmentResultRepository,
-}) {
+  assessmentResultRepository
+}: any) {
   const assessmentResult = AssessmentResult.buildStandardAssessmentResult({
     pixScore: certificationAssessmentScore.nbPix,
     status: certificationAssessmentScore.status,
@@ -115,8 +125,8 @@ async function _saveResultAfterCertificationComputeError({
   certificationAssessment,
   assessmentResultRepository,
   certificationCourseRepository,
-  certificationComputeError,
-}) {
+  certificationComputeError
+}: any) {
   const assessmentResult = AssessmentResult.buildAlgoErrorResult({
     error: certificationComputeError,
     assessmentId: certificationAssessment.id,
@@ -124,8 +134,10 @@ async function _saveResultAfterCertificationComputeError({
   });
   await assessmentResultRepository.save(assessmentResult);
   const certificationCourse = await certificationCourseRepository.get(certificationAssessment.certificationCourseId);
+  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Date'.
   certificationCourse.complete({ now: new Date() });
   return certificationCourseRepository.update(certificationCourse);
 }
 handleCertificationScoring.eventTypes = eventTypes;
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = handleCertificationScoring;

@@ -1,4 +1,17 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'UserWithSc... Remove this comment to see the full error message
 class UserWithSchoolingRegistration {
+  birthdate: any;
+  division: any;
+  email: any;
+  firstName: any;
+  group: any;
+  id: any;
+  isAuthenticatedFromGAR: any;
+  lastName: any;
+  organizationId: any;
+  studentNumber: any;
+  userId: any;
+  username: any;
   constructor({
     id,
     lastName,
@@ -11,8 +24,8 @@ class UserWithSchoolingRegistration {
     isAuthenticatedFromGAR,
     studentNumber,
     division,
-    group,
-  } = {}) {
+    group
+  }: any = {}) {
     this.id = id;
     this.lastName = lastName;
     this.firstName = firstName;
@@ -28,4 +41,5 @@ class UserWithSchoolingRegistration {
   }
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = UserWithSchoolingRegistration;

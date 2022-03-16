@@ -1,28 +1,45 @@
 const {
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PIX_DROIT_... Remove this comment to see the full error message
   PIX_DROIT_MAITRE_CERTIF,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PIX_DROIT_... Remove this comment to see the full error message
   PIX_DROIT_EXPERT_CERTIF,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PIX_EDU_FO... Remove this comment to see the full error message
   PIX_EDU_FORMATION_INITIALE_2ND_DEGRE_INITIE,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PIX_EDU_FO... Remove this comment to see the full error message
   PIX_EDU_FORMATION_INITIALE_2ND_DEGRE_CONFIRME,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PIX_EDU_FO... Remove this comment to see the full error message
   PIX_EDU_FORMATION_CONTINUE_2ND_DEGRE_CONFIRME,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PIX_EDU_FO... Remove this comment to see the full error message
   PIX_EDU_FORMATION_CONTINUE_2ND_DEGRE_AVANCE,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PIX_EDU_FO... Remove this comment to see the full error message
   PIX_EDU_FORMATION_CONTINUE_2ND_DEGRE_EXPERT,
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 } = require('../../domain/models/Badge').keys;
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'CertifiedB... Remove this comment to see the full error message
 class CertifiedBadgeImage {
-  constructor({ path, isTemporaryBadge, levelName }) {
+  isTemporaryBadge: any;
+  levelName: any;
+  path: any;
+  constructor({
+    path,
+    isTemporaryBadge,
+    levelName
+  }: any) {
     this.path = path;
     this.isTemporaryBadge = isTemporaryBadge;
     this.levelName = levelName;
   }
 
-  static finalFromPath(path) {
+  static finalFromPath(path: any) {
     return new CertifiedBadgeImage({
       path,
       isTemporaryBadge: false,
     });
   }
 
-  static fromPartnerKey(partnerKey, temporaryPartnerKey) {
+  // @ts-expect-error ts-migrate(7030) FIXME: Not all code paths return a value.
+  static fromPartnerKey(partnerKey: any, temporaryPartnerKey: any) {
     const badgeKey = partnerKey || temporaryPartnerKey;
     const isTemporaryBadge = !partnerKey;
 
@@ -43,6 +60,7 @@ class CertifiedBadgeImage {
     }
 
     if (
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'includes' does not exist on type '{}'.
       [PIX_EDU_FORMATION_INITIALE_2ND_DEGRE_CONFIRME, PIX_EDU_FORMATION_CONTINUE_2ND_DEGRE_CONFIRME].includes(badgeKey)
     ) {
       return new CertifiedBadgeImage({
@@ -70,4 +88,5 @@ class CertifiedBadgeImage {
   }
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = CertifiedBadgeImage;

@@ -1,13 +1,22 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'checkEvent... Remove this comment to see the full error message
 const { checkEventTypes } = require('./check-event-types');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'SessionFin... Remove this comment to see the full error message
 const SessionFinalized = require('./SessionFinalized');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Certificat... Remove this comment to see the full error message
 const CertificationIssueReportResolutionAttempt = require('../models/CertificationIssueReportResolutionAttempt');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'AutoJuryDo... Remove this comment to see the full error message
 const AutoJuryDone = require('./AutoJuryDone');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Certificat... Remove this comment to see the full error message
 const CertificationJuryDone = require('./CertificationJuryDone');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'bluebird'.
 const bluebird = require('bluebird');
 const {
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Certificat... Remove this comment to see the full error message
   CertificationIssueReportResolutionStrategies,
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 } = require('../models/CertificationIssueReportResolutionStrategies');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'eventTypes... Remove this comment to see the full error message
 const eventTypes = [SessionFinalized];
 
 async function handleAutoJury({
@@ -16,8 +25,8 @@ async function handleAutoJury({
   certificationAssessmentRepository,
   certificationCourseRepository,
   challengeRepository,
-  logger,
-}) {
+  logger
+}: any) {
   checkEventTypes(event, eventTypes);
   const certificationCourses = await certificationCourseRepository.findCertificationCoursesBySessionId({
     sessionId: event.sessionId,
@@ -55,6 +64,7 @@ async function handleAutoJury({
         certificationCourseId: certificationCourse.getId(),
       });
 
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'push' does not exist on type '{}'.
       certificationJuryDoneEvents.push(certificationJuryDoneEvent);
     }
   }
@@ -75,8 +85,8 @@ async function handleAutoJury({
 async function _autoCompleteUnfinishedTest({
   certificationCourse,
   certificationAssessment,
-  certificationAssessmentRepository,
-}) {
+  certificationAssessmentRepository
+}: any) {
   if (certificationCourse.isCompleted()) {
     return false;
   }
@@ -100,8 +110,8 @@ async function _autoResolveCertificationIssueReport({
   certificationIssueReportRepository,
   certificationAssessmentRepository,
   resolutionStrategies,
-  logger,
-}) {
+  logger
+}: any) {
   const certificationIssueReports = await certificationIssueReportRepository.findByCertificationCourseId(
     certificationCourse.getId()
   );
@@ -109,7 +119,7 @@ async function _autoResolveCertificationIssueReport({
     return null;
   }
 
-  const resolutionAttempts = await bluebird.mapSeries(certificationIssueReports, async (certificationIssueReport) => {
+  const resolutionAttempts = await bluebird.mapSeries(certificationIssueReports, async (certificationIssueReport: any) => {
     try {
       return await resolutionStrategies.resolve({ certificationIssueReport, certificationAssessment });
     } catch (e) {
@@ -118,7 +128,7 @@ async function _autoResolveCertificationIssueReport({
     }
   });
 
-  if (resolutionAttempts.some((attempt) => attempt.isResolvedWithEffect())) {
+  if (resolutionAttempts.some((attempt: any) => attempt.isResolvedWithEffect())) {
     await certificationAssessmentRepository.save(certificationAssessment);
     return true;
   }
@@ -127,4 +137,5 @@ async function _autoResolveCertificationIssueReport({
 }
 
 handleAutoJury.eventTypes = eventTypes;
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = handleAutoJury;

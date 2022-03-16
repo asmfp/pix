@@ -1,15 +1,26 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Joi'.
 const Joi = require('joi');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'XRegExp'.
 const XRegExp = require('xregexp');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'featureTog... Remove this comment to see the full error message
 const featureToggles = require('../preHandlers/feature-toggles');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'securityPr... Remove this comment to see the full error message
 const securityPreHandlers = require('../security-pre-handlers');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const userController = require('./user-controller');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'sendJsonAp... Remove this comment to see the full error message
 const { sendJsonApiError, BadRequestError } = require('../http-errors');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const userVerification = require('../preHandlers/user-existence-verification');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'passwordVa... Remove this comment to see the full error message
 const { passwordValidationPattern } = require('../../config').account;
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'EntityVali... Remove this comment to see the full error message
 const { EntityValidationError } = require('../../domain/errors');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'identifier... Remove this comment to see the full error message
 const identifiersType = require('../../domain/types/identifiers-type');
 
-exports.register = async function (server) {
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
+exports.register = async function (server: any) {
   server.route([
     {
       method: 'POST',
@@ -72,7 +83,7 @@ exports.register = async function (server) {
           params: Joi.object({
             id: identifiersType.userId,
           }),
-          failAction: (request, h) => {
+          failAction: (request: any, h: any) => {
             return sendJsonApiError(new BadRequestError("L'identifiant de l'utilisateur n'est pas au bon format."), h);
           },
         },
@@ -294,7 +305,7 @@ exports.register = async function (server) {
               },
             },
           }),
-          failAction: (request, h, error) => {
+          failAction: (request: any, h: any, error: any) => {
             return EntityValidationError.fromJoiErrors(error.details);
           },
         },
@@ -334,7 +345,7 @@ exports.register = async function (server) {
               },
             },
           }),
-          failAction: (request, h, error) => {
+          failAction: (request: any, h: any, error: any) => {
             return EntityValidationError.fromJoiErrors(error.details);
           },
         },
@@ -741,7 +752,7 @@ exports.register = async function (server) {
               },
             },
           }),
-          failAction: (request, h, error) => {
+          failAction: (request: any, h: any, error: any) => {
             return EntityValidationError.fromJoiErrors(error.details);
           },
         },
@@ -812,4 +823,5 @@ exports.register = async function (server) {
   ]);
 };
 
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.name = 'users-api';

@@ -1,9 +1,14 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
 const moment = require('moment');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Unexpected... Remove this comment to see the full error message
 const { UnexpectedPoleEmploiStateError, UnexpectedUserAccountError } = require('../errors');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Authentica... Remove this comment to see the full error message
 const AuthenticationMethod = require('../models/AuthenticationMethod');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'logger'.
 const logger = require('../../infrastructure/logger');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = async function authenticatePoleEmploiUser({
   authenticatedUserId,
   clientId,
@@ -15,8 +20,8 @@ module.exports = async function authenticatePoleEmploiUser({
   tokenService,
   authenticationMethodRepository,
   poleEmploiTokensRepository,
-  userRepository,
-}) {
+  userRepository
+}: any) {
   if (stateSent !== stateReceived) {
     logger.error(`State sent ${stateSent} did not match the state received ${stateReceived}`);
     throw new UnexpectedPoleEmploiStateError();
@@ -26,6 +31,7 @@ module.exports = async function authenticatePoleEmploiUser({
 
   const userInfo = await authenticationService.getPoleEmploiUserInfo(poleEmploiTokens.idToken);
 
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'PoleEmploiAuthenticationComplement' does... Remove this comment to see the full error message
   const authenticationComplement = new AuthenticationMethod.PoleEmploiAuthenticationComplement({
     accessToken: poleEmploiTokens.accessToken,
     refreshToken: poleEmploiTokens.refreshToken,
@@ -68,8 +74,13 @@ module.exports = async function authenticatePoleEmploiUser({
   };
 };
 
-function _buildPoleEmploiAuthenticationMethod({ userInfo, authenticationComplement, userId }) {
+function _buildPoleEmploiAuthenticationMethod({
+  userInfo,
+  authenticationComplement,
+  userId
+}: any) {
   return new AuthenticationMethod({
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'identityProviders' does not exist on typ... Remove this comment to see the full error message
     identityProvider: AuthenticationMethod.identityProviders.POLE_EMPLOI,
     userId,
     externalIdentifier: userInfo.externalIdentityId,
@@ -83,10 +94,11 @@ async function _getPixAccessTokenFromAlreadyAuthenticatedPixUser({
   authenticationComplement,
   authenticationMethodRepository,
   userRepository,
-  tokenService,
-}) {
+  tokenService
+}: any) {
   const authenticationMethod = await authenticationMethodRepository.findOneByUserIdAndIdentityProvider({
     userId: authenticatedUserId,
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'identityProviders' does not exist on typ... Remove this comment to see the full error message
     identityProvider: AuthenticationMethod.identityProviders.POLE_EMPLOI,
   });
 
@@ -117,8 +129,8 @@ async function _getPixAccessTokenFromPoleEmploiUser({
   authenticationComplement,
   authenticationMethodRepository,
   userRepository,
-  tokenService,
-}) {
+  tokenService
+}: any) {
   await authenticationMethodRepository.updatePoleEmploiAuthenticationComplementByUserId({
     authenticationComplement,
     userId: user.id,

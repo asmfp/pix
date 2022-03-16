@@ -1,9 +1,14 @@
 const {
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Certificat... Remove this comment to see the full error message
   CertificationCandidateByPersonalInfoTooManyMatchesError,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'CpfBirthIn... Remove this comment to see the full error message
   CpfBirthInformationValidationError,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Certificat... Remove this comment to see the full error message
   CertificationCandidateAddError,
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 } = require('../errors');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = async function addCertificationCandidateToSession({
   sessionId,
   certificationCandidate,
@@ -12,8 +17,8 @@ module.exports = async function addCertificationCandidateToSession({
   certificationCandidateRepository,
   certificationCpfService,
   certificationCpfCountryRepository,
-  certificationCpfCityRepository,
-}) {
+  certificationCpfCityRepository
+}: any) {
   certificationCandidate.sessionId = sessionId;
   const isSco = await sessionRepository.isSco({ sessionId });
 

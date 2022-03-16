@@ -1,4 +1,23 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Organizati... Remove this comment to see the full error message
 class OrganizationForAdmin {
+  archivedAt: any;
+  archivistFirstName: any;
+  archivistLastName: any;
+  createdBy: any;
+  credit: any;
+  documentationUrl: any;
+  email: any;
+  externalId: any;
+  formNPSUrl: any;
+  id: any;
+  isManagingStudents: any;
+  logoUrl: any;
+  name: any;
+  provinceCode: any;
+  showNPS: any;
+  showSkills: any;
+  tags: any;
+  type: any;
   constructor({
     id,
     name,
@@ -17,8 +36,8 @@ class OrganizationForAdmin {
     archivedAt,
     archivistFirstName,
     archivistLastName,
-    tags = [],
-  } = {}) {
+    tags = []
+  }: any = {}) {
     this.id = id;
     this.name = name;
     this.type = type;
@@ -39,6 +58,7 @@ class OrganizationForAdmin {
     this.tags = tags;
   }
 
+  // @ts-expect-error ts-migrate(1056) FIXME: Accessors are only available when targeting ECMASc... Remove this comment to see the full error message
   get archivistFullName() {
     return this.archivistFirstName && this.archivistLastName
       ? `${this.archivistFirstName} ${this.archivistLastName}`
@@ -46,4 +66,5 @@ class OrganizationForAdmin {
   }
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = OrganizationForAdmin;

@@ -1,13 +1,25 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'knex'.
 const { knex } = require('../bookshelf');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Campaign'.
 const Campaign = require('../../domain/models/Campaign');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'CampaignPa... Remove this comment to see the full error message
 const CampaignParticipationOverview = require('../../domain/read-models/CampaignParticipationOverview');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'fetchPage'... Remove this comment to see the full error message
 const { fetchPage } = require('../utils/knex-utils');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'targetProf... Remove this comment to see the full error message
 const targetProfileWithLearningContentRepository = require('../../../lib/infrastructure/repositories/target-profile-with-learning-content-repository.js');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'bluebird'.
 const bluebird = require('bluebird');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'CampaignPa... Remove this comment to see the full error message
 const CampaignParticipationStatuses = require('../../domain/models/CampaignParticipationStatuses');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
-  async findByUserIdWithFilters({ userId, states, page }) {
+  async findByUserIdWithFilters({
+    userId,
+    states,
+    page
+  }: any) {
     const queryBuilder = _findByUserId({ userId });
 
     if (states && states.length > 0) {
@@ -25,9 +37,11 @@ module.exports = {
   },
 };
 
-function _findByUserId({ userId }) {
+function _findByUserId({
+  userId
+}: any) {
   return knex
-    .with('campaign-participation-overviews', (qb) => {
+    .with('campaign-participation-overviews', (qb: any) => {
       qb.select({
         id: 'campaign-participations.id',
         createdAt: 'campaign-participations.createdAt',
@@ -88,12 +102,12 @@ function _sortEndedBySharedAt() {
   END DESC`;
 }
 
-function _filterByStates(queryBuilder, states) {
+function _filterByStates(queryBuilder: any, states: any) {
   queryBuilder.whereIn('participationState', states);
 }
 
-function _toReadModel(campaignParticipationOverviews) {
-  return bluebird.mapSeries(campaignParticipationOverviews, async (data) => {
+function _toReadModel(campaignParticipationOverviews: any) {
+  return bluebird.mapSeries(campaignParticipationOverviews, async (data: any) => {
     let targetProfile;
     if (data.targetProfileId) {
       targetProfile = await targetProfileWithLearningContentRepository.get({ id: data.targetProfileId });

@@ -1,10 +1,39 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_'.
 const _ = require('lodash');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Joi'.
 const Joi = require('joi').extend(require('@joi/date'));
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'EntityVali... Remove this comment to see the full error message
 const { EntityValidationError } = require('../errors');
 
 const ABORT_REASONS = ['candidate', 'technical'];
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Certificat... Remove this comment to see the full error message
 class CertificationCourse {
+  _abortReason: any;
+  _assessment: any;
+  _birthCountry: any;
+  _birthINSEECode: any;
+  _birthPostalCode: any;
+  _birthdate: any;
+  _birthplace: any;
+  _certificationIssueReports: any;
+  _challenges: any;
+  _complementaryCertificationCourses: any;
+  _completedAt: any;
+  _createdAt: any;
+  _externalId: any;
+  _firstName: any;
+  _hasSeenEndTestScreen: any;
+  _id: any;
+  _isCancelled: any;
+  _isPublished: any;
+  _isV2Certification: any;
+  _lastName: any;
+  _maxReachableLevelOnCertificationDate: any;
+  _sessionId: any;
+  _sex: any;
+  _userId: any;
+  _verificationCode: any;
   constructor({
     id,
     firstName,
@@ -30,8 +59,8 @@ class CertificationCourse {
     maxReachableLevelOnCertificationDate,
     isCancelled = false,
     abortReason,
-    complementaryCertificationCourses = [],
-  } = {}) {
+    complementaryCertificationCourses = []
+  }: any = {}) {
     this._id = id;
     this._firstName = firstName;
     this._lastName = lastName;
@@ -64,8 +93,8 @@ class CertificationCourse {
     challenges,
     verificationCode,
     maxReachableLevelOnCertificationDate,
-    complementaryCertificationCourses,
-  }) {
+    complementaryCertificationCourses
+  }: any) {
     return new CertificationCourse({
       userId: certificationCandidate.userId,
       sessionId: certificationCandidate.sessionId,
@@ -86,14 +115,14 @@ class CertificationCourse {
     });
   }
 
-  withAssessment(assessment) {
+  withAssessment(assessment: any) {
     return new CertificationCourse({
       ...this.toDTO(),
       assessment: assessment,
     });
   }
 
-  reportIssue(issueReport) {
+  reportIssue(issueReport: any) {
     this._certificationIssueReports.push(issueReport);
   }
 
@@ -105,11 +134,13 @@ class CertificationCourse {
     this._isCancelled = false;
   }
 
-  complete({ now }) {
+  complete({
+    now
+  }: any) {
     this._completedAt = now;
   }
 
-  abort(reason) {
+  abort(reason: any) {
     const { error } = Joi.string()
       .valid(...ABORT_REASONS)
       .validate(reason);
@@ -124,7 +155,7 @@ class CertificationCourse {
     this._abortReason = null;
   }
 
-  correctFirstName(modifiedFirstName) {
+  correctFirstName(modifiedFirstName: any) {
     const sanitizedString = _sanitizedString(modifiedFirstName);
     if (_.isEmpty(sanitizedString)) {
       throw new EntityValidationError({
@@ -134,7 +165,7 @@ class CertificationCourse {
     this._firstName = sanitizedString;
   }
 
-  correctLastName(modifiedLastName) {
+  correctLastName(modifiedLastName: any) {
     const sanitizedString = _sanitizedString(modifiedLastName);
     if (_.isEmpty(sanitizedString)) {
       throw new EntityValidationError({
@@ -144,15 +175,16 @@ class CertificationCourse {
     this._lastName = sanitizedString;
   }
 
-  correctBirthplace(modifiedBirthplace) {
+  correctBirthplace(modifiedBirthplace: any) {
     const sanitizedString = _sanitizedString(modifiedBirthplace);
     if (!_.isEmpty(sanitizedString?.trim())) {
       this._birthplace = sanitizedString;
     }
   }
 
-  correctSex(modifiedSex) {
+  correctSex(modifiedSex: any) {
     const sanitizedString = _sanitizedString(modifiedSex);
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'includes' does not exist on type '{}'.
     if (!_.isEmpty(sanitizedString) && !['M', 'F'].includes(sanitizedString)) {
       throw new EntityValidationError({
         invalidAttributes: [{ attribute: 'sex', message: "Candidate's sex must be M or F" }],
@@ -161,14 +193,19 @@ class CertificationCourse {
     this._sex = sanitizedString;
   }
 
-  correctBirthInformation({ birthCountry, birthCity, birthPostalCode, birthINSEECode }) {
+  correctBirthInformation({
+    birthCountry,
+    birthCity,
+    birthPostalCode,
+    birthINSEECode
+  }: any) {
     this._birthCountry = birthCountry;
     this._birthplace = birthCity;
     this._birthPostalCode = birthPostalCode;
     this._birthINSEECode = birthINSEECode;
   }
 
-  correctBirthdate(modifiedBirthdate) {
+  correctBirthdate(modifiedBirthdate: any) {
     const { error } = Joi.date()
       .format('YYYY-MM-DD')
       .greater('1900-01-01')
@@ -184,6 +221,7 @@ class CertificationCourse {
   }
 
   isCompleted() {
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Boolean'.
     return Boolean(this._completedAt);
   }
 
@@ -199,7 +237,7 @@ class CertificationCourse {
     return this._isPublished;
   }
 
-  doesBelongTo(userId) {
+  doesBelongTo(userId: any) {
     return this._userId === userId;
   }
 
@@ -242,7 +280,7 @@ class CertificationCourse {
   }
 }
 
-function _sanitizedString(string) {
+function _sanitizedString(string: any) {
   const trimmedString = string?.trim();
   const multipleWhiteSpacesInARow = / +/g;
   const withUnifiedWithSpaces = trimmedString?.replace(multipleWhiteSpacesInARow, ' ');
@@ -250,4 +288,5 @@ function _sanitizedString(string) {
   return withUnifiedWithSpaces;
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = CertificationCourse;

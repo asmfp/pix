@@ -1,13 +1,20 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Joi'.
 const Joi = require('joi').extend(require('@joi/date'));
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'XRegExp'.
 const XRegExp = require('xregexp');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'inePattern... Remove this comment to see the full error message
 const inePattern = new RegExp('^[0-9]{9}[a-zA-Z]{2}$');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'inaPattern... Remove this comment to see the full error message
 const inaPattern = new RegExp('^[0-9]{10}[a-zA-Z]{1}$');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const accountRecoveryController = require('./account-recovery-controller');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'passwordVa... Remove this comment to see the full error message
 const { passwordValidationPattern } = require('../../config').account;
 
-exports.register = async function (server) {
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
+exports.register = async function (server: any) {
   server.route([
     {
       method: 'POST',
@@ -82,4 +89,5 @@ exports.register = async function (server) {
   ]);
 };
 
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.name = 'account-recovery-api';

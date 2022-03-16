@@ -1,10 +1,13 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Serializer... Remove this comment to see the full error message
 const { Serializer } = require('jsonapi-serializer');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'User'.
 const User = require('../../../domain/models/User');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
-  serialize(users, meta) {
+  serialize(users: any, meta: any) {
     return new Serializer('user', {
-      transform(record) {
+      transform(record: any) {
         record.profile = null;
         return record;
       },
@@ -36,7 +39,7 @@ module.exports = {
         ref: 'id',
         ignoreRelationshipData: true,
         relationshipLinks: {
-          related(record, current, parent) {
+          related(record: any, current: any, parent: any) {
             return `/api/users/${parent.id}/memberships`;
           },
         },
@@ -45,7 +48,7 @@ module.exports = {
         ref: 'id',
         ignoreRelationshipData: true,
         relationshipLinks: {
-          related: function (record, current, parent) {
+          related: function (record: any, current: any, parent: any) {
             return `/api/users/${parent.id}/certification-center-memberships`;
           },
         },
@@ -54,7 +57,7 @@ module.exports = {
         ref: 'id',
         ignoreRelationshipData: true,
         relationshipLinks: {
-          related: function (record, current, parent) {
+          related: function (record: any, current: any, parent: any) {
             return `/api/users/${parent.id}/pixscore`;
           },
         },
@@ -63,7 +66,7 @@ module.exports = {
         ref: 'id',
         ignoreRelationshipData: true,
         relationshipLinks: {
-          related: function (record, current, parent) {
+          related: function (record: any, current: any, parent: any) {
             return `/api/users/${parent.id}/scorecards`;
           },
         },
@@ -72,7 +75,7 @@ module.exports = {
         ref: 'id',
         ignoreRelationshipData: true,
         relationshipLinks: {
-          related: function (record, current, parent) {
+          related: function (record: any, current: any, parent: any) {
             return `/api/users/${parent.id}/profile`;
           },
         },
@@ -81,7 +84,7 @@ module.exports = {
         ref: 'id',
         ignoreRelationshipData: true,
         relationshipLinks: {
-          related: function (record, current, parent) {
+          related: function (record: any, current: any, parent: any) {
             return `/api/users/${parent.id}/campaign-participations`;
           },
         },
@@ -91,7 +94,7 @@ module.exports = {
         ignoreRelationshipData: true,
         nullIfMissing: true,
         relationshipLinks: {
-          related: function (record, current, parent) {
+          related: function (record: any, current: any, parent: any) {
             return `/api/users/${parent.id}/is-certifiable`;
           },
         },
@@ -100,7 +103,7 @@ module.exports = {
     }).serialize(users);
   },
 
-  deserialize(json) {
+  deserialize(json: any) {
     return new User({
       id: json.data.id,
       firstName: json.data.attributes['first-name'],

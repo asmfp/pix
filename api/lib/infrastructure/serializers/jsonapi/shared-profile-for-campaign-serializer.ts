@@ -1,5 +1,7 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Serializer... Remove this comment to see the full error message
 const { Serializer } = require('jsonapi-serializer');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
   serialize(sharedProfileForCampaign = {}) {
     return new Serializer('SharedProfileForCampaign', {
@@ -7,9 +9,13 @@ module.exports = {
       // When a nested object (here: Area) is built with a class constructor
       // in a nested object, it will skip the serialization of the area
       // But when we use plain object instead of a class then serialization works.
-      transform: (profile) => ({
+      transform: (profile: any) => ({
         ...profile,
-        scorecards: profile.scorecards.map((scorecard) => ({ ...scorecard, area: { ...scorecard.area } })),
+
+        scorecards: profile.scorecards.map((scorecard: any) => ({
+          ...scorecard,
+          area: { ...scorecard.area }
+        }))
       }),
       attributes: ['pixScore', 'sharedAt', 'scorecards', 'canRetry'],
       scorecards: {

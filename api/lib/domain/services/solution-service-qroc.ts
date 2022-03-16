@@ -1,23 +1,38 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'utils'.
 const utils = require('./solution-service-utils');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'deactivati... Remove this comment to see the full error message
 const deactivationsService = require('../../../lib/domain/services/deactivations-service');
 const {
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'isNumeric'... Remove this comment to see the full error message
   isNumeric,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'splitIntoW... Remove this comment to see the full error message
   splitIntoWordsAndRemoveBackspaces,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'cleanStrin... Remove this comment to see the full error message
   cleanStringAndParseFloat,
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 } = require('../../../lib/infrastructure/utils/string-utils');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'every'.
 const { every, includes, isEmpty, isString, map } = require('lodash');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'applyTreat... Remove this comment to see the full error message
 const { applyTreatments, applyPreTreatments } = require('./validation-treatments');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'AnswerStat... Remove this comment to see the full error message
 const AnswerStatus = require('../models/AnswerStatus');
 
 const LEVENSHTEIN_DISTANCE_MAX_RATE = 0.25;
 const CHALLENGE_NUMBER_FORMAT = 'nombre';
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
-  match({ answer, challengeFormat, solution }) {
+  match({
+    answer,
+    challengeFormat,
+    solution
+  }: any) {
     const solutionValue = solution.value;
     const deactivations = solution.deactivations;
     const qrocBlocksTypes = solution.qrocBlocksTypes || {};
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Object'.
     const shouldApplyTreatments = qrocBlocksTypes[Object.keys(qrocBlocksTypes)[0]] === 'select' ? false : true;
 
     const isIncorrectAnswerFormat = !isString(answer);
@@ -28,7 +43,7 @@ module.exports = {
     }
 
     const solutions = splitIntoWordsAndRemoveBackspaces(solutionValue);
-    const areAllNumericSolutions = every(solutions, (solution) => {
+    const areAllNumericSolutions = every(solutions, (solution: any) => {
       return isNumeric(solution);
     });
 
@@ -40,8 +55,8 @@ module.exports = {
   },
 };
 
-function _getAnswerStatusFromNumberMatching(answer, solutions) {
-  const treatedSolutions = solutions.map((solution) => cleanStringAndParseFloat(solution));
+function _getAnswerStatusFromNumberMatching(answer: any, solutions: any) {
+  const treatedSolutions = solutions.map((solution: any) => cleanStringAndParseFloat(solution));
   const treatedAnswer = cleanStringAndParseFloat(answer);
   const indexOfSolution = treatedSolutions.indexOf(treatedAnswer);
   const isAnswerMatchingSolution = indexOfSolution !== -1;
@@ -51,26 +66,28 @@ function _getAnswerStatusFromNumberMatching(answer, solutions) {
   return AnswerStatus.KO;
 }
 
-function _getAnswerStatusFromStringMatching(answer, solutions, deactivations, shouldApplyTreatments) {
+function _getAnswerStatusFromStringMatching(answer: any, solutions: any, deactivations: any, shouldApplyTreatments: any) {
   const treatedAnswer = applyPreTreatments(answer);
   const treatedSolutions = _applyTreatmentsToSolutions(solutions, deactivations, shouldApplyTreatments);
   const validations = utils.treatmentT1T2T3(treatedAnswer, treatedSolutions, shouldApplyTreatments);
   return _getAnswerStatusAccordingToLevenshteinDistance(validations, deactivations);
 }
 
-function _applyTreatmentsToSolutions(solutions, deactivations, shouldApplyTreatments) {
-  return map(solutions, (solution) => {
+// @ts-expect-error ts-migrate(2393) FIXME: Duplicate function implementation.
+function _applyTreatmentsToSolutions(solutions: any, deactivations: any, shouldApplyTreatments: any) {
+  return map(solutions, (solution: any) => {
     if (shouldApplyTreatments === false) {
       return solution;
     }
 
     const allTreatments = ['t1', 't2', 't3'];
-    const enabledTreatments = allTreatments.filter((treatment) => !deactivations[treatment]);
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'filter' does not exist on type '{}'.
+    const enabledTreatments = allTreatments.filter((treatment: any) => !deactivations[treatment]);
     return applyTreatments(solution, enabledTreatments);
   });
 }
 
-function _getAnswerStatusAccordingToLevenshteinDistance(validations, deactivations) {
+function _getAnswerStatusAccordingToLevenshteinDistance(validations: any, deactivations: any) {
   if (deactivationsService.isDefault(deactivations)) {
     if (validations.t1t2t3Ratio <= LEVENSHTEIN_DISTANCE_MAX_RATE) {
       return AnswerStatus.OK;

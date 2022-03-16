@@ -1,6 +1,10 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'SendingEma... Remove this comment to see the full error message
 const { SendingEmailToResultRecipientError, SessionAlreadyPublishedError } = require('../../domain/errors');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'mailServic... Remove this comment to see the full error message
 const mailService = require('../../domain/services/mail-service');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'uniqBy'.
 const uniqBy = require('lodash/uniqBy');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'some'.
 const some = require('lodash/some');
 
 async function publishSession({
@@ -8,8 +12,9 @@ async function publishSession({
   certificationRepository,
   finalizedSessionRepository,
   sessionRepository,
-  publishedAt = new Date(),
-}) {
+  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Date'.
+  publishedAt = new Date()
+}: any) {
   const session = await sessionRepository.getWithCertificationCandidates(sessionId);
   if (session.isPublished()) {
     throw new SessionAlreadyPublishedError();
@@ -34,7 +39,7 @@ async function publishSession({
   }
 }
 
-async function _sendPrescriberEmails(session) {
+async function _sendPrescriberEmails(session: any) {
   const recipientEmails = _distinctCandidatesResultRecipientEmails(session.certificationCandidates);
 
   const emailingAttempts = [];
@@ -47,41 +52,45 @@ async function _sendPrescriberEmails(session) {
       resultRecipientEmail: recipientEmail,
       daysBeforeExpiration: 30,
     });
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'push' does not exist on type '{}'.
     emailingAttempts.push(emailingAttempt);
   }
   return emailingAttempts;
 }
 
-function _distinctCandidatesResultRecipientEmails(certificationCandidates) {
+function _distinctCandidatesResultRecipientEmails(certificationCandidates: any) {
   return uniqBy(certificationCandidates, 'resultRecipientEmail')
-    .map((candidate) => candidate.resultRecipientEmail)
+    .map((candidate: any) => candidate.resultRecipientEmail)
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Boolean'.
     .filter(Boolean);
 }
 
-function _someHaveSucceeded(emailingAttempts) {
-  return some(emailingAttempts, (emailAttempt) => emailAttempt.hasSucceeded());
+function _someHaveSucceeded(emailingAttempts: any) {
+  return some(emailingAttempts, (emailAttempt: any) => emailAttempt.hasSucceeded());
 }
 
-function _noneHaveFailed(emailingAttempts) {
-  return !some(emailingAttempts, (emailAttempt) => emailAttempt.hasFailed());
+function _noneHaveFailed(emailingAttempts: any) {
+  return !some(emailingAttempts, (emailAttempt: any) => emailAttempt.hasFailed());
 }
 
-function _someHaveFailed(emailingAttempts) {
-  return some(emailingAttempts, (emailAttempt) => emailAttempt.hasFailed());
+function _someHaveFailed(emailingAttempts: any) {
+  return some(emailingAttempts, (emailAttempt: any) => emailAttempt.hasFailed());
 }
 
-function _failedAttemptsRecipients(emailingAttempts) {
+function _failedAttemptsRecipients(emailingAttempts: any) {
   return emailingAttempts
-    .filter((emailAttempt) => emailAttempt.hasFailed())
-    .map((emailAttempt) => emailAttempt.recipientEmail);
+    .filter((emailAttempt: any) => emailAttempt.hasFailed())
+    .map((emailAttempt: any) => emailAttempt.recipientEmail);
 }
 
-async function _updateFinalizedSession(finalizedSessionRepository, sessionId, publishedAt) {
+// @ts-expect-error ts-migrate(2393) FIXME: Duplicate function implementation.
+async function _updateFinalizedSession(finalizedSessionRepository: any, sessionId: any, publishedAt: any) {
   const finalizedSession = await finalizedSessionRepository.get({ sessionId });
   finalizedSession.publish(publishedAt);
   await finalizedSessionRepository.save(finalizedSession);
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
   publishSession,
 };

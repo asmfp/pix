@@ -1,4 +1,15 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'UserDetail... Remove this comment to see the full error message
 class UserDetailsForAdmin {
+  authenticationMethods: any;
+  cgu: any;
+  email: any;
+  firstName: any;
+  id: any;
+  lastName: any;
+  pixCertifTermsOfServiceAccepted: any;
+  pixOrgaTermsOfServiceAccepted: any;
+  schoolingRegistrations: any;
+  username: any;
   constructor({
     id,
     cgu,
@@ -9,8 +20,8 @@ class UserDetailsForAdmin {
     pixOrgaTermsOfServiceAccepted,
     pixCertifTermsOfServiceAccepted,
     schoolingRegistrations,
-    authenticationMethods,
-  } = {}) {
+    authenticationMethods
+  }: any = {}) {
     this.id = id;
     this.cgu = cgu;
     this.firstName = firstName;
@@ -24,4 +35,5 @@ class UserDetailsForAdmin {
   }
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = UserDetailsForAdmin;

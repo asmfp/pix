@@ -1,25 +1,36 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_'.
 const _ = require('lodash');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'bluebird'.
 const bluebird = require('bluebird');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'constants'... Remove this comment to see the full error message
 const constants = require('../constants');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'knex'.
 const { knex } = require('../bookshelf');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'KnowledgeE... Remove this comment to see the full error message
 const KnowledgeElement = require('../../domain/models/KnowledgeElement');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'CampaignPa... Remove this comment to see the full error message
 const CampaignParticipationStatuses = require('../../domain/models/CampaignParticipationStatuses');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const BookshelfKnowledgeElement = require('../orm-models/KnowledgeElement');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'bookshelfT... Remove this comment to see the full error message
 const bookshelfToDomainConverter = require('../utils/bookshelf-to-domain-converter');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'knowledgeE... Remove this comment to see the full error message
 const knowledgeElementSnapshotRepository = require('./knowledge-element-snapshot-repository');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'DomainTran... Remove this comment to see the full error message
 const DomainTransaction = require('../../infrastructure/DomainTransaction');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'SHARED'.
 const { SHARED } = CampaignParticipationStatuses;
 
-function _getUniqMostRecents(knowledgeElements) {
+function _getUniqMostRecents(knowledgeElements: any) {
   return _(knowledgeElements).orderBy('createdAt', 'desc').uniqBy('skillId').value();
 }
 
-function _dropResetKnowledgeElements(knowledgeElements) {
+function _dropResetKnowledgeElements(knowledgeElements: any) {
   return _.reject(knowledgeElements, { status: KnowledgeElement.StatusType.RESET });
 }
 
-function _applyFilters(knowledgeElements) {
+function _applyFilters(knowledgeElements: any) {
   const uniqsMostRecentPerSkill = _getUniqMostRecents(knowledgeElements);
   return _dropResetKnowledgeElements(uniqsMostRecentPerSkill);
 }
@@ -27,10 +38,10 @@ function _applyFilters(knowledgeElements) {
 function _findByUserIdAndLimitDateQuery({
   userId,
   limitDate,
-  domainTransaction = DomainTransaction.emptyTransaction(),
-}) {
+  domainTransaction = DomainTransaction.emptyTransaction()
+}: any) {
   const knexConn = domainTransaction.knexTransaction || knex;
-  return knexConn('knowledge-elements').where((qb) => {
+  return knexConn('knowledge-elements').where((qb: any) => {
     qb.where({ userId });
     if (limitDate) {
       qb.where('createdAt', '<', limitDate);
@@ -38,17 +49,21 @@ function _findByUserIdAndLimitDateQuery({
   });
 }
 
-async function _findAssessedByUserIdAndLimitDateQuery({ userId, limitDate, domainTransaction }) {
+async function _findAssessedByUserIdAndLimitDateQuery({
+  userId,
+  limitDate,
+  domainTransaction
+}: any) {
   const knowledgeElementRows = await _findByUserIdAndLimitDateQuery({ userId, limitDate, domainTransaction });
 
   const knowledgeElements = _.map(
     knowledgeElementRows,
-    (knowledgeElementRow) => new KnowledgeElement(knowledgeElementRow)
+    (knowledgeElementRow: any) => new KnowledgeElement(knowledgeElementRow)
   );
   return _applyFilters(knowledgeElements);
 }
 
-async function _filterValidatedKnowledgeElementsByCampaignId(knowledgeElements, campaignId) {
+async function _filterValidatedKnowledgeElementsByCampaignId(knowledgeElements: any, campaignId: any) {
   const targetProfileSkillsFromDB = await knex('target-profiles_skills')
     .select('target-profiles_skills.skillId')
     .join('target-profiles', 'target-profiles.id', 'target-profiles_skills.targetProfileId')
@@ -57,7 +72,7 @@ async function _filterValidatedKnowledgeElementsByCampaignId(knowledgeElements, 
 
   const targetProfileSkillIds = _.map(targetProfileSkillsFromDB, 'skillId');
 
-  return _.filter(knowledgeElements, (knowledgeElement) => {
+  return _.filter(knowledgeElements, (knowledgeElement: any) => {
     if (knowledgeElement.isInvalidated) {
       return false;
     }
@@ -65,12 +80,14 @@ async function _filterValidatedKnowledgeElementsByCampaignId(knowledgeElements, 
   });
 }
 
-async function _findSnapshotsForUsers(userIdsAndDates) {
+async function _findSnapshotsForUsers(userIdsAndDates: any) {
   const knowledgeElementsGroupedByUser = await knowledgeElementSnapshotRepository.findByUserIdsAndSnappedAtDates(
     userIdsAndDates
   );
 
+  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Object'.
   for (const [userIdStr, knowledgeElementsFromSnapshot] of Object.entries(knowledgeElementsGroupedByUser)) {
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'parseInt'.
     const userId = parseInt(userIdStr);
     let knowledgeElements = knowledgeElementsFromSnapshot;
     if (!knowledgeElements) {
@@ -84,32 +101,40 @@ async function _findSnapshotsForUsers(userIdsAndDates) {
   return knowledgeElementsGroupedByUser;
 }
 
-async function _countValidatedTargetedByCompetencesForUsers(userIdsAndDates, targetProfileWithLearningContent) {
+async function _countValidatedTargetedByCompetencesForUsers(userIdsAndDates: any, targetProfileWithLearningContent: any) {
   const knowledgeElementsGroupedByUser = await _findSnapshotsForUsers(userIdsAndDates);
   return targetProfileWithLearningContent.countValidatedTargetedKnowledgeElementsByCompetence(
     _.flatMap(knowledgeElementsGroupedByUser)
   );
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
-  async save(knowledgeElement) {
+  async save(knowledgeElement: any) {
     const knowledgeElementToSave = _.omit(knowledgeElement, ['id', 'createdAt']);
     const savedKnowledgeElement = await new BookshelfKnowledgeElement(knowledgeElementToSave).save();
 
     return bookshelfToDomainConverter.buildDomainObject(BookshelfKnowledgeElement, savedKnowledgeElement);
   },
 
-  async findUniqByUserId({ userId, limitDate, domainTransaction }) {
+  async findUniqByUserId({
+    userId,
+    limitDate,
+    domainTransaction
+  }: any) {
     return _findAssessedByUserIdAndLimitDateQuery({ userId, limitDate, domainTransaction });
   },
 
-  async findUniqByUserIdAndAssessmentId({ userId, assessmentId }) {
+  async findUniqByUserIdAndAssessmentId({
+    userId,
+    assessmentId
+  }: any) {
     const query = _findByUserIdAndLimitDateQuery({ userId });
     const knowledgeElementRows = await query.where({ assessmentId });
 
     const knowledgeElements = _.map(
       knowledgeElementRows,
-      (knowledgeElementRow) => new KnowledgeElement(knowledgeElementRow)
+      (knowledgeElementRow: any) => new KnowledgeElement(knowledgeElementRow)
     );
     return _applyFilters(knowledgeElements);
   },
@@ -117,24 +142,30 @@ module.exports = {
   async findUniqByUserIdAndCompetenceId({
     userId,
     competenceId,
-    domainTransaction = DomainTransaction.emptyTransaction(),
-  }) {
+    domainTransaction = DomainTransaction.emptyTransaction()
+  }: any) {
     const query = _findByUserIdAndLimitDateQuery({ userId });
     const knowledgeElementRows = await query.where({ competenceId }, { transacting: domainTransaction });
 
     const knowledgeElements = _.map(
       knowledgeElementRows,
-      (knowledgeElementRow) => new KnowledgeElement(knowledgeElementRow)
+      (knowledgeElementRow: any) => new KnowledgeElement(knowledgeElementRow)
     );
     return _applyFilters(knowledgeElements);
   },
 
-  async findUniqByUserIdGroupedByCompetenceId({ userId, limitDate }) {
+  async findUniqByUserIdGroupedByCompetenceId({
+    userId,
+    limitDate
+  }: any) {
     const knowledgeElements = await this.findUniqByUserId({ userId, limitDate });
     return _.groupBy(knowledgeElements, 'competenceId');
   },
 
-  async findByCampaignIdAndUserIdForSharedCampaignParticipation({ campaignId, userId }) {
+  async findByCampaignIdAndUserIdForSharedCampaignParticipation({
+    campaignId,
+    userId
+  }: any) {
     const [sharedCampaignParticipation] = await knex('campaign-participations')
       .select('sharedAt')
       .where({ campaignId, status: SHARED, userId })
@@ -150,7 +181,7 @@ module.exports = {
     return _filterValidatedKnowledgeElementsByCampaignId(knowledgeElements, campaignId);
   },
 
-  async findByCampaignIdForSharedCampaignParticipation(campaignId) {
+  async findByCampaignIdForSharedCampaignParticipation(campaignId: any) {
     const sharedCampaignParticipations = await knex('campaign-participations')
       .select('userId', 'sharedAt')
       .where({ campaignId, status: SHARED });
@@ -158,7 +189,10 @@ module.exports = {
     const knowledgeElements = _.flatMap(
       await bluebird.map(
         sharedCampaignParticipations,
-        async ({ userId, sharedAt }) => {
+        async ({
+          userId,
+          sharedAt
+        }: any) => {
           return _findAssessedByUserIdAndLimitDateQuery({ userId, limitDate: sharedAt });
         },
         { concurrency: constants.CONCURRENCY_HEAVY_OPERATIONS }
@@ -168,28 +202,32 @@ module.exports = {
     return _filterValidatedKnowledgeElementsByCampaignId(knowledgeElements, campaignId);
   },
 
-  async findSnapshotGroupedByCompetencesForUsers(userIdsAndDates) {
+  async findSnapshotGroupedByCompetencesForUsers(userIdsAndDates: any) {
     const knowledgeElementsGroupedByUser = await _findSnapshotsForUsers(userIdsAndDates);
 
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Object'.
     for (const [userId, knowledgeElements] of Object.entries(knowledgeElementsGroupedByUser)) {
+      // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
       knowledgeElementsGroupedByUser[userId] = _.groupBy(knowledgeElements, 'competenceId');
     }
     return knowledgeElementsGroupedByUser;
   },
 
-  async countValidatedTargetedByCompetencesForUsers(userIdsAndDates, targetProfileWithLearningContent) {
+  async countValidatedTargetedByCompetencesForUsers(userIdsAndDates: any, targetProfileWithLearningContent: any) {
     return _countValidatedTargetedByCompetencesForUsers(userIdsAndDates, targetProfileWithLearningContent);
   },
 
-  async countValidatedTargetedByCompetencesForOneUser(userId, limitDate, targetProfileWithLearningContent) {
+  async countValidatedTargetedByCompetencesForOneUser(userId: any, limitDate: any, targetProfileWithLearningContent: any) {
     return _countValidatedTargetedByCompetencesForUsers({ [userId]: limitDate }, targetProfileWithLearningContent);
   },
 
-  async findTargetedGroupedByCompetencesForUsers(userIdsAndDates, targetProfileWithLearningContent) {
+  async findTargetedGroupedByCompetencesForUsers(userIdsAndDates: any, targetProfileWithLearningContent: any) {
     const knowledgeElementsGroupedByUser = await _findSnapshotsForUsers(userIdsAndDates);
     const knowledgeElementsGroupedByUserAndCompetence = {};
 
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Object'.
     for (const [userId, knowledgeElements] of Object.entries(knowledgeElementsGroupedByUser)) {
+      // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
       knowledgeElementsGroupedByUserAndCompetence[userId] =
         targetProfileWithLearningContent.getKnowledgeElementsGroupedByCompetence(knowledgeElements);
     }
@@ -197,7 +235,7 @@ module.exports = {
     return knowledgeElementsGroupedByUserAndCompetence;
   },
 
-  async findValidatedTargetedGroupedByTubes(userIdsAndDates, targetProfileWithLearningContent) {
+  async findValidatedTargetedGroupedByTubes(userIdsAndDates: any, targetProfileWithLearningContent: any) {
     const knowledgeElementsGroupedByUser = await _findSnapshotsForUsers(userIdsAndDates);
 
     return targetProfileWithLearningContent.getValidatedKnowledgeElementsGroupedByTube(
@@ -205,11 +243,11 @@ module.exports = {
     );
   },
 
-  async findSnapshotForUsers(userIdsAndDates) {
+  async findSnapshotForUsers(userIdsAndDates: any) {
     return _findSnapshotsForUsers(userIdsAndDates);
   },
 
-  async findInvalidatedAndDirectByUserId(userId) {
+  async findInvalidatedAndDirectByUserId(userId: any) {
     const invalidatedKnowledgeElements = await knex('knowledge-elements')
       .where({
         userId,
@@ -223,7 +261,7 @@ module.exports = {
     }
 
     return invalidatedKnowledgeElements.map(
-      (invalidatedKnowledgeElement) => new KnowledgeElement(invalidatedKnowledgeElement)
+      (invalidatedKnowledgeElement: any) => new KnowledgeElement(invalidatedKnowledgeElement)
     );
   },
 };

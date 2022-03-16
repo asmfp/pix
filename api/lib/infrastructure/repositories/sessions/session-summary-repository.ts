@@ -1,9 +1,16 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'knex'.
 const { knex } = require('../../bookshelf');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'fetchPage'... Remove this comment to see the full error message
 const { fetchPage } = require('../../utils/knex-utils');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'SessionSum... Remove this comment to see the full error message
 const SessionSummary = require('../../../domain/read-models/SessionSummary');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
-  async findPaginatedByCertificationCenterId({ certificationCenterId, page }) {
+  async findPaginatedByCertificationCenterId({
+    certificationCenterId,
+    page
+  }: any) {
     const query = knex('sessions')
       .distinct('sessions.id')
       .select({
@@ -39,9 +46,10 @@ module.exports = {
 
     const { results, pagination } = await fetchPage(query, page);
     const atLeastOneSession = await knex('sessions').select('id').where({ certificationCenterId }).first();
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Boolean'.
     const hasSessions = Boolean(atLeastOneSession);
 
-    const sessionSummaries = results.map((result) => SessionSummary.from(result));
+    const sessionSummaries = results.map((result: any) => SessionSummary.from(result));
     return { models: sessionSummaries, meta: { ...pagination, hasSessions } };
   },
 };

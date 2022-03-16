@@ -1,11 +1,13 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Serializer... Remove this comment to see the full error message
 const { Serializer } = require('jsonapi-serializer');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
-  serialize(prescriber) {
+  serialize(prescriber: any) {
     return new Serializer('prescriber', {
-      transform: (record) => {
+      transform: (record: any) => {
         const recordWithoutClass = { ...record };
-        recordWithoutClass.memberships.forEach((membership) => {
+        recordWithoutClass.memberships.forEach((membership: any) => {
           membership.organization = { ...membership.organization };
         });
         recordWithoutClass.userOrgaSettings = {
@@ -61,7 +63,7 @@ module.exports = {
             ignoreRelationshipData: true,
             nullIfMissing: true,
             relationshipLinks: {
-              related: function (record, current, parent) {
+              related: function (record: any, current: any, parent: any) {
                 return `/api/organizations/${parent.id}/memberships`;
               },
             },
@@ -71,7 +73,7 @@ module.exports = {
             ignoreRelationshipData: true,
             nullIfMissing: true,
             relationshipLinks: {
-              related: function (record, current, parent) {
+              related: function (record: any, current: any, parent: any) {
                 return `/api/organizations/${parent.id}/invitations`;
               },
             },
@@ -81,7 +83,7 @@ module.exports = {
             ignoreRelationshipData: true,
             nullIfMissing: true,
             relationshipLinks: {
-              related: function (record, current, parent) {
+              related: function (record: any, current: any, parent: any) {
                 return `/api/organizations/${parent.id}/students`;
               },
             },
@@ -91,7 +93,7 @@ module.exports = {
             ignoreRelationshipData: true,
             nullIfMissing: true,
             relationshipLinks: {
-              related: function (record, current, parent) {
+              related: function (record: any, current: any, parent: any) {
                 return `/api/organizations/${parent.id}/target-profiles`;
               },
             },
@@ -101,7 +103,7 @@ module.exports = {
             ignoreRelationshipData: true,
             nullIfMissing: true,
             relationshipLinks: {
-              related: function (record, current, parent) {
+              related: function (record: any, current: any, parent: any) {
                 return `/api/organizations/${parent.id}/groups`;
               },
             },
@@ -111,7 +113,7 @@ module.exports = {
             ignoreRelationshipData: true,
             nullIfMissing: true,
             relationshipLinks: {
-              related(record, current, parent) {
+              related(record: any, current: any, parent: any) {
                 return `/api/organizations/${parent.id}/divisions`;
               },
             },

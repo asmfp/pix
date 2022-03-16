@@ -1,8 +1,13 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'checkEvent... Remove this comment to see the full error message
 const { checkEventTypes } = require('./check-event-types');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'CampaignPa... Remove this comment to see the full error message
 const CampaignParticipationStarted = require('./CampaignParticipationStarted');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PoleEmploi... Remove this comment to see the full error message
 const PoleEmploiPayload = require('../../infrastructure/externals/pole-emploi/PoleEmploiPayload');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PoleEmploi... Remove this comment to see the full error message
 const PoleEmploiSending = require('../models/PoleEmploiSending');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'eventTypes... Remove this comment to see the full error message
 const eventTypes = [CampaignParticipationStarted];
 
 async function handlePoleEmploiParticipationStarted({
@@ -13,8 +18,8 @@ async function handlePoleEmploiParticipationStarted({
   poleEmploiSendingRepository,
   targetProfileRepository,
   userRepository,
-  poleEmploiNotifier,
-}) {
+  poleEmploiNotifier
+}: any) {
   checkEventTypes(event, eventTypes);
 
   const { campaignParticipationId } = event;
@@ -48,4 +53,5 @@ async function handlePoleEmploiParticipationStarted({
 }
 
 handlePoleEmploiParticipationStarted.eventTypes = eventTypes;
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = handlePoleEmploiParticipationStarted;

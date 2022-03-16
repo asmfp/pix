@@ -1,10 +1,25 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'campaignPa... Remove this comment to see the full error message
 const campaignParticipationService = require('../services/campaign-participation-service');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Competence... Remove this comment to see the full error message
 const CompetenceResult = require('./CompetenceResult');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'CampaignPa... Remove this comment to see the full error message
 const CampaignParticipationBadge = require('./CampaignParticipationBadge');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_'.
 const _ = require('lodash');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'CampaignPa... Remove this comment to see the full error message
 class CampaignParticipationResult {
+  campaignParticipationBadges: any;
+  competenceResults: any;
+  id: any;
+  isCompleted: any;
+  knowledgeElementsCount: any;
+  reachedStage: any;
+  stageCount: any;
+  testedSkillsCount: any;
+  totalSkillsCount: any;
+  validatedSkillsCount: any;
   constructor({
     id,
     isCompleted,
@@ -12,12 +27,14 @@ class CampaignParticipationResult {
     testedSkillsCount,
     validatedSkillsCount,
     knowledgeElementsCount,
+
     // relationships
     campaignParticipationBadges,
+
     competenceResults = [],
     reachedStage,
-    stageCount,
-  } = {}) {
+    stageCount
+  }: any = {}) {
     this.id = id;
     this.isCompleted = isCompleted;
     this.totalSkillsCount = totalSkillsCount;
@@ -38,8 +55,8 @@ class CampaignParticipationResult {
     targetProfile,
     knowledgeElements,
     campaignBadges = [],
-    acquiredBadgeIds = [],
-  }) {
+    acquiredBadgeIds = []
+  }: any) {
     const targetProfileSkillsIds = targetProfile.getSkillIds();
     const targetedKnowledgeElements = _removeUntargetedKnowledgeElements(knowledgeElements, targetProfileSkillsIds);
 
@@ -48,7 +65,7 @@ class CampaignParticipationResult {
       targetProfileSkillsIds,
       targetedKnowledgeElements
     );
-    const campaignParticipationBadges = _.flatMap(campaignBadges, (badge) => {
+    const campaignParticipationBadges = _.flatMap(campaignBadges, (badge: any) => {
       const skillSetResults = _computeSkillSetResults(badge, targetProfileSkillsIds, targetedKnowledgeElements);
       const isBadgeAcquired = _.includes(acquiredBadgeIds, badge.id);
       return CampaignParticipationBadge.buildFrom({ badge, skillSetResults, isAcquired: isBadgeAcquired });
@@ -74,6 +91,7 @@ class CampaignParticipationResult {
     });
   }
 
+  // @ts-expect-error ts-migrate(1056) FIXME: Accessors are only available when targeting ECMASc... Remove this comment to see the full error message
   get masteryPercentage() {
     return _computeMasteryPercentage({
       totalSkillsCount: this.totalSkillsCount,
@@ -81,45 +99,55 @@ class CampaignParticipationResult {
     });
   }
 
+  // @ts-expect-error ts-migrate(1056) FIXME: Accessors are only available when targeting ECMASc... Remove this comment to see the full error message
   get progress() {
     return campaignParticipationService.progress(this.isCompleted, this.knowledgeElementsCount, this.totalSkillsCount);
   }
 }
 
-function _computeReachedStage({ stages, totalSkillsCount, validatedSkillsCount }) {
+function _computeReachedStage({
+  stages,
+  totalSkillsCount,
+  validatedSkillsCount
+}: any) {
   if (!stages) {
     return null;
   }
   const masteryPercentage = _computeMasteryPercentage({ totalSkillsCount, validatedSkillsCount });
-  const reachedStages = stages.filter((stage) => masteryPercentage >= stage.threshold);
+  const reachedStages = stages.filter((stage: any) => masteryPercentage >= stage.threshold);
   return {
     ..._.last(reachedStages),
     starCount: reachedStages.length,
   };
 }
 
-function _computeMasteryPercentage({ totalSkillsCount, validatedSkillsCount }) {
+// @ts-expect-error ts-migrate(2393) FIXME: Duplicate function implementation.
+function _computeMasteryPercentage({
+  totalSkillsCount,
+  validatedSkillsCount
+}: any) {
   if (totalSkillsCount !== 0) {
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Math'.
     return Math.round((validatedSkillsCount * 100) / totalSkillsCount);
   } else {
     return 0;
   }
 }
 
-function _removeUntargetedKnowledgeElements(knowledgeElements, targetProfileSkillsIds) {
-  return _.filter(knowledgeElements, (ke) => targetProfileSkillsIds.some((skillId) => skillId === ke.skillId));
+// @ts-expect-error ts-migrate(2393) FIXME: Duplicate function implementation.
+function _removeUntargetedKnowledgeElements(knowledgeElements: any, targetProfileSkillsIds: any) {
+  return _.filter(knowledgeElements, (ke: any) => targetProfileSkillsIds.some((skillId: any) => skillId === ke.skillId));
 }
 
-function _computeCompetenceResults(competences, targetProfileSkillsIds, targetedKnowledgeElements) {
+function _computeCompetenceResults(competences: any, targetProfileSkillsIds: any, targetedKnowledgeElements: any) {
   let targetedCompetences = _removeUntargetedSkillIdsFromCompetences(competences, targetProfileSkillsIds);
   targetedCompetences = _removeCompetencesWithoutAnyTargetedSkillsLeft(targetedCompetences);
-  const targetedCompetenceResults = _.map(targetedCompetences, (competence) =>
-    _getTestedCompetenceResults(competence, targetedKnowledgeElements)
+  const targetedCompetenceResults = _.map(targetedCompetences, (competence: any) => _getTestedCompetenceResults(competence, targetedKnowledgeElements)
   );
   return targetedCompetenceResults;
 }
 
-function _computeSkillSetResults(badge, targetProfileSkillsIds, targetedKnowledgeElements) {
+function _computeSkillSetResults(badge: any, targetProfileSkillsIds: any, targetedKnowledgeElements: any) {
   if (!badge || _.isEmpty(badge.skillSets)) {
     return [];
   }
@@ -127,20 +155,20 @@ function _computeSkillSetResults(badge, targetProfileSkillsIds, targetedKnowledg
   return _computeCompetenceResults(badge.skillSets, targetProfileSkillsIds, targetedKnowledgeElements);
 }
 
-function _removeUntargetedSkillIdsFromCompetences(competences, targetProfileSkillsIds) {
-  return _.map(competences, (competence) => {
+function _removeUntargetedSkillIdsFromCompetences(competences: any, targetProfileSkillsIds: any) {
+  return _.map(competences, (competence: any) => {
     competence.skillIds = _.intersection(competence.skillIds, targetProfileSkillsIds);
     return competence;
   });
 }
 
-function _removeCompetencesWithoutAnyTargetedSkillsLeft(competences) {
-  return _.filter(competences, (competence) => !_.isEmpty(competence.skillIds));
+function _removeCompetencesWithoutAnyTargetedSkillsLeft(competences: any) {
+  return _.filter(competences, (competence: any) => !_.isEmpty(competence.skillIds));
 }
 
-function _getTestedCompetenceResults(competence, targetedKnowledgeElements) {
-  const targetedKnowledgeElementsForCompetence = _.filter(targetedKnowledgeElements, (ke) =>
-    _.includes(competence.skillIds, ke.skillId)
+// @ts-expect-error ts-migrate(2393) FIXME: Duplicate function implementation.
+function _getTestedCompetenceResults(competence: any, targetedKnowledgeElements: any) {
+  const targetedKnowledgeElementsForCompetence = _.filter(targetedKnowledgeElements, (ke: any) => _.includes(competence.skillIds, ke.skillId)
   );
   const validatedKnowledgeElementsForCompetence = _.filter(targetedKnowledgeElementsForCompetence, 'isValidated');
 
@@ -163,9 +191,10 @@ function _getTestedCompetenceResults(competence, targetedKnowledgeElements) {
   });
 }
 
-function _getAreaName(competence) {
+function _getAreaName(competence: any) {
   if (!competence.area) return;
   return competence.area.name;
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = CampaignParticipationResult;

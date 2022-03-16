@@ -1,11 +1,17 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Joi'.
 const Joi = require('joi').extend(require('@joi/date'));
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'sendJsonAp... Remove this comment to see the full error message
 const { sendJsonApiError, UnprocessableEntityError, NotFoundError } = require('../http-errors');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'securityPr... Remove this comment to see the full error message
 const securityPreHandlers = require('../security-pre-handlers');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const schoolingRegistrationUserAssociationController = require('./schooling-registration-user-association-controller');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'identifier... Remove this comment to see the full error message
 const identifiersType = require('../../domain/types/identifiers-type');
 
-exports.register = async function (server) {
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
+exports.register = async function (server: any) {
   server.route([
     {
       method: 'POST',
@@ -27,7 +33,8 @@ exports.register = async function (server) {
               type: 'schooling-registration-user-associations',
             },
           }),
-          failAction: (request, h) => {
+          failAction: (request: any, h: any) => {
+            // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 1.
             return sendJsonApiError(new UnprocessableEntityError('Un des champs saisis n’est pas valide.'), h);
           },
         },
@@ -59,7 +66,8 @@ exports.register = async function (server) {
               type: 'schooling-registration-user-associations',
             },
           }),
-          failAction: (request, h) => {
+          failAction: (request: any, h: any) => {
+            // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 1.
             return sendJsonApiError(new UnprocessableEntityError('Un des champs saisis n’est pas valide.'), h);
           },
         },
@@ -87,7 +95,8 @@ exports.register = async function (server) {
               type: 'schooling-registration-user-associations',
             },
           }),
-          failAction: (request, h) => {
+          failAction: (request: any, h: any) => {
+            // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 1.
             return sendJsonApiError(new UnprocessableEntityError('Un des champs saisis n’est pas valide.'), h);
           },
         },
@@ -131,7 +140,8 @@ exports.register = async function (server) {
               },
             },
           }),
-          failAction: (request, h) => {
+          failAction: (request: any, h: any) => {
+            // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 1.
             return sendJsonApiError(new UnprocessableEntityError('Un des champs saisis n’est pas valide.'), h);
           },
         },
@@ -168,11 +178,13 @@ exports.register = async function (server) {
               },
             },
           }),
-          failAction: (request, h, err) => {
+          failAction: (request: any, h: any, err: any) => {
             const isStudentNumber = err.details[0].path.includes('student-number');
             if (isStudentNumber) {
+              // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 1.
               return sendJsonApiError(new UnprocessableEntityError('Un des champs saisis n’est pas valide.'), h);
             }
+            // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
             return sendJsonApiError(new NotFoundError('Ressource non trouvée'), h);
           },
         },
@@ -210,4 +222,5 @@ exports.register = async function (server) {
   ]);
 };
 
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.name = 'schooling-registration-user-associations-api';

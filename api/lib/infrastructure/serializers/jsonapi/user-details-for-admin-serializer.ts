@@ -1,8 +1,11 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Serializer... Remove this comment to see the full error message
 const { Serializer } = require('jsonapi-serializer');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'UserDetail... Remove this comment to see the full error message
 const UserDetailsForAdmin = require('../../../domain/models/UserDetailsForAdmin');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
-  serialize(usersDetailsForAdmin) {
+  serialize(usersDetailsForAdmin: any) {
     return new Serializer('user', {
       attributes: [
         'firstName',
@@ -39,7 +42,7 @@ module.exports = {
       },
     }).serialize(usersDetailsForAdmin);
   },
-  deserialize(json) {
+  deserialize(json: any) {
     return new UserDetailsForAdmin({
       id: json.data.id,
       firstName: json.data.attributes['first-name'],

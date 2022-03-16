@@ -1,11 +1,15 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'EventDispa... Remove this comment to see the full error message
 class EventDispatcherLogger {
-  constructor(monitoringTools, settings, performance) {
+  _monitoringTools: any;
+  _performance: any;
+  _settings: any;
+  constructor(monitoringTools: any, settings: any, performance: any) {
     this._monitoringTools = monitoringTools;
     this._settings = settings;
     this._performance = performance;
   }
 
-  onEventDispatchStarted(event, eventHandlerName) {
+  onEventDispatchStarted(event: any, eventHandlerName: any) {
     if (this._settings?.logging?.enableLogStartingEventDispatch) {
       this._monitoringTools.logInfoWithCorrelationIds({
         ...buildLogBody({ event, eventHandlerName }),
@@ -17,7 +21,7 @@ class EventDispatcherLogger {
     };
   }
 
-  onEventDispatchSuccess(event, eventHandlerName, loggingContext) {
+  onEventDispatchSuccess(event: any, eventHandlerName: any, loggingContext: any) {
     if (this._settings?.logging?.enableLogEndingEventDispatch) {
       this._monitoringTools.logInfoWithCorrelationIds({
         ...buildLogBody({ event, eventHandlerName, duration: this._duration(loggingContext) }),
@@ -26,7 +30,7 @@ class EventDispatcherLogger {
     }
   }
 
-  onEventDispatchFailure(event, eventHandlerName, error) {
+  onEventDispatchFailure(event: any, eventHandlerName: any, error: any) {
     if (this._settings?.logging?.enableLogEndingEventDispatch) {
       this._monitoringTools.logInfoWithCorrelationIds({
         ...buildLogBody({ event, eventHandlerName, error }),
@@ -35,12 +39,17 @@ class EventDispatcherLogger {
     }
   }
 
-  _duration(context) {
+  _duration(context: any) {
     return context?.startedAt ? this._performance.now() - context.startedAt : undefined;
   }
 }
 
-function buildLogBody({ event, eventHandlerName, error, duration }) {
+function buildLogBody({
+  event,
+  eventHandlerName,
+  error,
+  duration
+}: any) {
   return {
     metrics: {
       event_name: event.constructor.name,
@@ -52,4 +61,5 @@ function buildLogBody({ event, eventHandlerName, error, duration }) {
   };
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = EventDispatcherLogger;

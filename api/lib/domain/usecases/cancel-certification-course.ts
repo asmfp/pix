@@ -1,4 +1,8 @@
-module.exports = async function cancelCertificationCourse({ certificationCourseId, certificationCourseRepository }) {
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
+module.exports = async function cancelCertificationCourse({
+  certificationCourseId,
+  certificationCourseRepository
+}: any) {
   const certificationCourse = await certificationCourseRepository.get(certificationCourseId);
   certificationCourse.cancel();
   await certificationCourseRepository.update(certificationCourse);

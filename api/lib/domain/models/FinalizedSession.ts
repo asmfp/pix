@@ -1,7 +1,18 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'some'.
 const some = require('lodash/some');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'every'.
 const every = require('lodash/every');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = class FinalizedSession {
+  assignedCertificationOfficerName: any;
+  certificationCenterName: any;
+  finalizedAt: any;
+  isPublishable: any;
+  publishedAt: any;
+  sessionDate: any;
+  sessionId: any;
+  sessionTime: any;
   constructor({
     sessionId,
     finalizedAt,
@@ -10,8 +21,8 @@ module.exports = class FinalizedSession {
     sessionTime,
     isPublishable,
     publishedAt,
-    assignedCertificationOfficerName,
-  } = {}) {
+    assignedCertificationOfficerName
+  }: any = {}) {
     this.sessionId = sessionId;
     this.finalizedAt = finalizedAt;
     this.certificationCenterName = certificationCenterName;
@@ -30,8 +41,8 @@ module.exports = class FinalizedSession {
     sessionTime,
     hasExaminerGlobalComment,
     juryCertificationSummaries,
-    hasSupervisorAccess,
-  }) {
+    hasSupervisorAccess
+  }: any) {
     return new FinalizedSession({
       sessionId,
       finalizedAt,
@@ -48,7 +59,7 @@ module.exports = class FinalizedSession {
     });
   }
 
-  publish(now) {
+  publish(now: any) {
     this.publishedAt = now;
   }
 
@@ -56,26 +67,28 @@ module.exports = class FinalizedSession {
     this.publishedAt = null;
   }
 
-  assignCertificationOfficer({ certificationOfficerName }) {
+  assignCertificationOfficer({
+    certificationOfficerName
+  }: any) {
     this.isPublishable = false;
     this.assignedCertificationOfficerName = certificationOfficerName;
   }
 };
 
-function _hasNoIssueReportsWithRequiredAction(juryCertificationSummaries) {
-  return !juryCertificationSummaries.some((summary) => summary.isActionRequired());
+function _hasNoIssueReportsWithRequiredAction(juryCertificationSummaries: any) {
+  return !juryCertificationSummaries.some((summary: any) => summary.isActionRequired());
 }
 
-function _isNotFlaggedAsAborted(juryCertificationSummaries) {
-  return !juryCertificationSummaries.some((summary) => summary.isFlaggedAborted);
+function _isNotFlaggedAsAborted(juryCertificationSummaries: any) {
+  return !juryCertificationSummaries.some((summary: any) => summary.isFlaggedAborted);
 }
 
-function _hasNoScoringErrorOrUncompletedAssessmentResults(juryCertificationSummaries) {
-  return !some(juryCertificationSummaries, (summary) => {
+function _hasNoScoringErrorOrUncompletedAssessmentResults(juryCertificationSummaries: any) {
+  return !some(juryCertificationSummaries, (summary: any) => {
     return summary.hasScoringError() || !summary.hasCompletedAssessment();
   });
 }
 
-function _hasExaminerSeenAllEndScreens(juryCertificationSummaries) {
-  return every(juryCertificationSummaries.map((summary) => summary.hasSeenEndTestScreen));
+function _hasExaminerSeenAllEndScreens(juryCertificationSummaries: any) {
+  return every(juryCertificationSummaries.map((summary: any) => summary.hasSeenEndTestScreen));
 }

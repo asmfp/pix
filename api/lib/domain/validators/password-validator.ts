@@ -1,7 +1,11 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Joi'.
 const Joi = require('joi');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'XRegExp'.
 const XRegExp = require('xregexp');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'passwordVa... Remove this comment to see the full error message
 const { passwordValidationPattern } = require('../../config').account;
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'EntityVali... Remove this comment to see the full error message
 const { EntityValidationError } = require('../errors');
 
 const pattern = XRegExp(passwordValidationPattern);
@@ -16,8 +20,9 @@ const passwordValidationJoiSchema = Joi.object({
   }),
 });
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
-  validate(password) {
+  validate(password: any) {
     const { error } = passwordValidationJoiSchema.validate({ password });
     if (error) {
       throw EntityValidationError.fromJoiErrors(error.details);

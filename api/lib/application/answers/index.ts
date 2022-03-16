@@ -1,10 +1,16 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Joi'.
 const Joi = require('joi');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const answerController = require('./answer-controller');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'identifier... Remove this comment to see the full error message
 const identifiersType = require('../../domain/types/identifiers-type');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'NotFoundEr... Remove this comment to see the full error message
 const { NotFoundError } = require('../../domain/errors');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'features'.
 const { features } = require('../../config');
 
-exports.register = async (server) => {
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
+exports.register = async (server: any) => {
   server.route([
     {
       method: 'POST',
@@ -94,7 +100,8 @@ exports.register = async (server) => {
           params: Joi.object({
             id: identifiersType.answerId,
           }),
-          failAction: (request) => {
+          failAction: (request: any) => {
+            // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
             throw new NotFoundError(`Not found correction for answer of ID ${request.params.id}`);
           },
         },
@@ -109,4 +116,5 @@ exports.register = async (server) => {
   ]);
 };
 
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.name = 'answers-api';

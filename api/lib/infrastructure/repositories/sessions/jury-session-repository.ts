@@ -1,11 +1,19 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'knex'.
 const { knex } = require('../../bookshelf');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'fetchPage'... Remove this comment to see the full error message
 const { fetchPage } = require('../../utils/knex-utils');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'NotFoundEr... Remove this comment to see the full error message
 const { NotFoundError } = require('../../../domain/errors');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'JurySessio... Remove this comment to see the full error message
 const JurySession = require('../../../domain/models/JurySession');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'statuses'.
 const { statuses } = require('../../../domain/models/JurySession');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Certificat... Remove this comment to see the full error message
 const CertificationOfficer = require('../../../domain/models/CertificationOfficer');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PGSQL_UNIQ... Remove this comment to see the full error message
 const { PGSQL_UNIQUE_CONSTRAINT_VIOLATION_ERROR } = require('../../../../db/pgsql-errors');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'COLUMNS'.
 const COLUMNS = Object.freeze([
   'sessions.*',
   'certification-centers.type',
@@ -13,13 +21,15 @@ const COLUMNS = Object.freeze([
   'users.firstName',
   'users.lastName',
 ]);
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Object'.
 const ALIASED_COLUMNS = Object.freeze({
   juryCommentAuthorFirstName: 'jury-comment-authors.firstName',
   juryCommentAuthorLastName: 'jury-comment-authors.lastName',
 });
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
-  async get(id) {
+  async get(id: any) {
     const jurySessionDTO = await knex
       .select(COLUMNS)
       .select(ALIASED_COLUMNS)
@@ -30,12 +40,16 @@ module.exports = {
       .where('sessions.id', '=', id)
       .first();
     if (!jurySessionDTO) {
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
       throw new NotFoundError("La session n'existe pas ou son accès est restreint");
     }
     return _toDomain(jurySessionDTO);
   },
 
-  async findPaginatedFiltered({ filters, page }) {
+  async findPaginatedFiltered({
+    filters,
+    page
+  }: any) {
     const query = knex
       .select(COLUMNS)
       .select(ALIASED_COLUMNS)
@@ -57,20 +71,26 @@ module.exports = {
     };
   },
 
-  async assignCertificationOfficer({ id, assignedCertificationOfficerId }) {
+  async assignCertificationOfficer({
+    id,
+    assignedCertificationOfficerId
+  }: any) {
     try {
       await knex('sessions').where({ id }).update({ assignedCertificationOfficerId }).returning('*');
       return this.get(id);
     } catch (error) {
       if (error.code === PGSQL_UNIQUE_CONSTRAINT_VIOLATION_ERROR) {
+        // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
         throw new NotFoundError(`L'utilisateur d'id ${assignedCertificationOfficerId} n'existe pas`);
       }
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
       throw new NotFoundError(`La session d'id ${id} n'existe pas.`);
     }
   },
 };
 
-function _toDomain(jurySessionFromDB) {
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_toDomain'... Remove this comment to see the full error message
+function _toDomain(jurySessionFromDB: any) {
   let assignedCertificationOfficer = null;
   if (jurySessionFromDB.assignedCertificationOfficerId) {
     assignedCertificationOfficer = new CertificationOfficer({
@@ -101,7 +121,7 @@ function _toDomain(jurySessionFromDB) {
   return jurySession;
 }
 
-function _setupFilters(query, filters) {
+function _setupFilters(query: any, filters: any) {
   const {
     id,
     certificationCenterName,
@@ -136,20 +156,24 @@ function _setupFilters(query, filters) {
   if (resultsSentToPrescriberAt === false) {
     query.whereNull('resultsSentToPrescriberAt');
   }
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'CREATED' does not exist on type '{ DOWNG... Remove this comment to see the full error message
   if (status === statuses.CREATED) {
     query.whereNull('finalizedAt');
     query.whereNull('publishedAt');
   }
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'FINALIZED' does not exist on type '{ DOW... Remove this comment to see the full error message
   if (status === statuses.FINALIZED) {
     query.whereNotNull('finalizedAt');
     query.whereNull('assignedCertificationOfficerId');
     query.whereNull('publishedAt');
   }
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'IN_PROCESS' does not exist on type '{ DO... Remove this comment to see the full error message
   if (status === statuses.IN_PROCESS) {
     query.whereNotNull('finalizedAt');
     query.whereNotNull('assignedCertificationOfficerId');
     query.whereNull('publishedAt');
   }
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'PROCESSED' does not exist on type '{ DOW... Remove this comment to see the full error message
   if (status === statuses.PROCESSED) {
     query.whereNotNull('publishedAt');
   }

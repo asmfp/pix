@@ -1,10 +1,20 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'csvSeriali... Remove this comment to see the full error message
 const csvSerializer = require('../../serializers/csv/csv-serializer');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
 const moment = require('moment');
 
-const EMPTY_ARRAY = [];
+const EMPTY_ARRAY: any = [];
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'CampaignPr... Remove this comment to see the full error message
 class CampaignProfilesCollectionResultLine {
-  constructor(campaign, organization, campaignParticipationResult, competences, placementProfile, translate) {
+  campaign: any;
+  campaignParticipationResult: any;
+  competences: any;
+  notShared: any;
+  organization: any;
+  placementProfile: any;
+  translate: any;
+  constructor(campaign: any, organization: any, campaignParticipationResult: any, competences: any, placementProfile: any, translate: any) {
     this.organization = organization;
     this.campaign = campaign;
     this.campaignParticipationResult = campaignParticipationResult;
@@ -84,14 +94,16 @@ class CampaignProfilesCollectionResultLine {
     return totalEarnedPix;
   }
 
-  _yesOrNo(value) {
+  _yesOrNo(value: any) {
     return this.translate(`campaign-export.common.${value ? 'yes' : 'no'}`);
   }
 
   _competenceColumns() {
-    const columns = [];
-    this.competences.forEach((competence) => {
-      const { estimatedLevel, pixScore } = this.placementProfile.userCompetences.find(({ id }) => id === competence.id);
+    const columns: any = [];
+    this.competences.forEach((competence: any) => {
+      const { estimatedLevel, pixScore } = this.placementProfile.userCompetences.find(({
+        id
+      }: any) => id === competence.id);
 
       if (this.campaignParticipationResult.isShared) {
         columns.push(estimatedLevel, pixScore);
@@ -112,4 +124,5 @@ class CampaignProfilesCollectionResultLine {
   }
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = CampaignProfilesCollectionResultLine;

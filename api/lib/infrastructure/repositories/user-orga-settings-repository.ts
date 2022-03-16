@@ -1,18 +1,24 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'bookshelfT... Remove this comment to see the full error message
 const bookshelfToDomainConverter = require('../utils/bookshelf-to-domain-converter');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'BookshelfU... Remove this comment to see the full error message
 const BookshelfUserOrgaSettings = require('../orm-models/UserOrgaSettings');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'bookshelfU... Remove this comment to see the full error message
 const bookshelfUtils = require('../utils/knex-utils');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'UserOrgaSe... Remove this comment to see the full error message
 const { UserOrgaSettingsCreationError } = require('../../domain/errors');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'knex'.
 const { knex } = require('../bookshelf');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'UserOrgaSe... Remove this comment to see the full error message
 const UserOrgaSettings = require('../../domain/models/UserOrgaSettings');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
-  findOneByUserId(userId) {
+  findOneByUserId(userId: any) {
     return BookshelfUserOrgaSettings.where({ userId })
       .fetch({ require: true, withRelated: ['user', 'currentOrganization'] })
-      .then((userOrgaSettings) =>
-        bookshelfToDomainConverter.buildDomainObject(BookshelfUserOrgaSettings, userOrgaSettings)
+      .then((userOrgaSettings: any) => bookshelfToDomainConverter.buildDomainObject(BookshelfUserOrgaSettings, userOrgaSettings)
       )
-      .catch((err) => {
+      .catch((err: any) => {
         if (err instanceof BookshelfUserOrgaSettings.NotFoundError) {
           return {};
         }
@@ -20,14 +26,13 @@ module.exports = {
       });
   },
 
-  create(userId, currentOrganizationId) {
+  create(userId: any, currentOrganizationId: any) {
     return new BookshelfUserOrgaSettings({ userId, currentOrganizationId })
       .save()
-      .then((bookshelfUserOrgaSettings) => bookshelfUserOrgaSettings.load(['user', 'currentOrganization']))
-      .then((userOrgaSettings) =>
-        bookshelfToDomainConverter.buildDomainObject(BookshelfUserOrgaSettings, userOrgaSettings)
+      .then((bookshelfUserOrgaSettings: any) => bookshelfUserOrgaSettings.load(['user', 'currentOrganization']))
+      .then((userOrgaSettings: any) => bookshelfToDomainConverter.buildDomainObject(BookshelfUserOrgaSettings, userOrgaSettings)
       )
-      .catch((err) => {
+      .catch((err: any) => {
         if (bookshelfUtils.isUniqConstraintViolated(err)) {
           throw new UserOrgaSettingsCreationError(err.message);
         }
@@ -35,7 +40,7 @@ module.exports = {
       });
   },
 
-  async update(userId, organizationId) {
+  async update(userId: any, organizationId: any) {
     const bookshelfUserOrgaSettings = await BookshelfUserOrgaSettings.where({ userId }).save(
       { currentOrganizationId: organizationId },
       { patch: true, method: 'update' }
@@ -45,7 +50,10 @@ module.exports = {
     return bookshelfToDomainConverter.buildDomainObject(BookshelfUserOrgaSettings, bookshelfUserOrgaSettings);
   },
 
-  async createOrUpdate({ userId, organizationId }) {
+  async createOrUpdate({
+    userId,
+    organizationId
+  }: any) {
     const knexUserOrgaSetting = (
       await knex('user-orga-settings')
         .insert({ userId, currentOrganizationId: organizationId })

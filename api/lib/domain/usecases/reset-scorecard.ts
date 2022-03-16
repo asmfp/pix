@@ -1,7 +1,11 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Scorecard'... Remove this comment to see the full error message
 const Scorecard = require('../models/Scorecard');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Competence... Remove this comment to see the full error message
 const { CompetenceResetError } = require('../errors');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_'.
 const _ = require('lodash');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = async function resetScorecard({
   userId,
   competenceId,
@@ -12,8 +16,8 @@ module.exports = async function resetScorecard({
   assessmentRepository,
   campaignParticipationRepository,
   targetProfileRepository,
-  locale,
-}) {
+  locale
+}: any) {
   const knowledgeElements = await knowledgeElementRepository.findUniqByUserIdAndCompetenceId({
     userId,
     competenceId,

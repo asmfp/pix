@@ -1,19 +1,34 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'knex'.
 const { knex } = require('../../../db/knex-database-connection');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Certificat... Remove this comment to see the full error message
 const CertificationResult = require('../../domain/models/CertificationResult');
 const {
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PIX_EMPLOI... Remove this comment to see the full error message
   PIX_EMPLOI_CLEA,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PIX_EMPLOI... Remove this comment to see the full error message
   PIX_EMPLOI_CLEA_V2,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PIX_DROIT_... Remove this comment to see the full error message
   PIX_DROIT_MAITRE_CERTIF,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PIX_DROIT_... Remove this comment to see the full error message
   PIX_DROIT_EXPERT_CERTIF,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PIX_EDU_FO... Remove this comment to see the full error message
   PIX_EDU_FORMATION_INITIALE_2ND_DEGRE_INITIE,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PIX_EDU_FO... Remove this comment to see the full error message
   PIX_EDU_FORMATION_INITIALE_2ND_DEGRE_CONFIRME,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PIX_EDU_FO... Remove this comment to see the full error message
   PIX_EDU_FORMATION_CONTINUE_2ND_DEGRE_CONFIRME,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PIX_EDU_FO... Remove this comment to see the full error message
   PIX_EDU_FORMATION_CONTINUE_2ND_DEGRE_AVANCE,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PIX_EDU_FO... Remove this comment to see the full error message
   PIX_EDU_FORMATION_CONTINUE_2ND_DEGRE_EXPERT,
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 } = require('../../domain/models/Badge').keys;
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
-  async findBySessionId({ sessionId }) {
+  async findBySessionId({
+    sessionId
+  }: any) {
     const certificationResultDTOs = await _selectCertificationResults()
       .where('certification-courses.sessionId', sessionId)
       .orderBy('certification-courses.lastName', 'ASC')
@@ -22,7 +37,9 @@ module.exports = {
     return certificationResultDTOs.map(_toDomain);
   },
 
-  async findByCertificationCandidateIds({ certificationCandidateIds }) {
+  async findByCertificationCandidateIds({
+    certificationCandidateIds
+  }: any) {
     const certificationResultDTOs = await _selectCertificationResults()
       .join('certification-candidates', function () {
         this.on({ 'certification-candidates.sessionId': 'certification-courses.sessionId' }).andOn({
@@ -86,7 +103,8 @@ function _selectCertificationResults() {
     .where('certification-courses.isPublished', true);
 }
 
-function _filterMostRecentAssessmentResult(qb) {
+// @ts-expect-error ts-migrate(2393) FIXME: Duplicate function implementation.
+function _filterMostRecentAssessmentResult(qb: any) {
   return qb.whereNotExists(
     knex
       .select(1)
@@ -96,7 +114,8 @@ function _filterMostRecentAssessmentResult(qb) {
   );
 }
 
-function _toDomain(certificationResultDTO) {
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_toDomain'... Remove this comment to see the full error message
+function _toDomain(certificationResultDTO: any) {
   return CertificationResult.from({
     certificationResultDTO,
   });

@@ -1,4 +1,6 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Joi'.
 const Joi = require('joi').extend(require('@joi/date'));
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'validateEn... Remove this comment to see the full error message
 const { validateEntity } = require('../validators/entity-validator');
 
 const identityProviders = {
@@ -8,7 +10,12 @@ const identityProviders = {
 };
 
 class PixAuthenticationComplement {
-  constructor({ password, shouldChangePassword } = {}) {
+  password: any;
+  shouldChangePassword: any;
+  constructor({
+    password,
+    shouldChangePassword
+  }: any = {}) {
     this.password = password;
     this.shouldChangePassword = shouldChangePassword;
 
@@ -23,7 +30,14 @@ class PixAuthenticationComplement {
 }
 
 class PoleEmploiAuthenticationComplement {
-  constructor({ accessToken, refreshToken, expiredDate } = {}) {
+  accessToken: any;
+  expiredDate: any;
+  refreshToken: any;
+  constructor({
+    accessToken,
+    refreshToken,
+    expiredDate
+  }: any = {}) {
     this.accessToken = accessToken;
     this.refreshToken = refreshToken;
     this.expiredDate = expiredDate;
@@ -39,9 +53,11 @@ class PoleEmploiAuthenticationComplement {
   }
 }
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'validation... Remove this comment to see the full error message
 const validationSchema = Joi.object({
   id: Joi.number().optional(),
   identityProvider: Joi.string()
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Object'.
     .valid(...Object.values(identityProviders))
     .required(),
   authenticationComplement: Joi.when('identityProvider', [
@@ -59,7 +75,15 @@ const validationSchema = Joi.object({
   updatedAt: Joi.date().optional(),
 });
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Authentica... Remove this comment to see the full error message
 class AuthenticationMethod {
+  authenticationComplement: any;
+  createdAt: any;
+  externalIdentifier: any;
+  id: any;
+  identityProvider: any;
+  updatedAt: any;
+  userId: any;
   constructor({
     id,
     identityProvider,
@@ -67,8 +91,8 @@ class AuthenticationMethod {
     externalIdentifier,
     createdAt,
     updatedAt,
-    userId,
-  } = {}) {
+    userId
+  }: any = {}) {
     this.id = id;
     this.identityProvider = identityProvider;
     this.authenticationComplement = authenticationComplement;
@@ -80,7 +104,14 @@ class AuthenticationMethod {
     validateEntity(validationSchema, this);
   }
 
-  static buildPixAuthenticationMethod({ id, password, shouldChangePassword = false, createdAt, updatedAt, userId }) {
+  static buildPixAuthenticationMethod({
+    id,
+    password,
+    shouldChangePassword = false,
+    createdAt,
+    updatedAt,
+    userId
+  }: any) {
     const authenticationComplement = new PixAuthenticationComplement({ password, shouldChangePassword });
     return new AuthenticationMethod({
       id,
@@ -94,7 +125,11 @@ class AuthenticationMethod {
   }
 }
 
+// @ts-expect-error ts-migrate(2339) FIXME: Property 'identityProviders' does not exist on typ... Remove this comment to see the full error message
 AuthenticationMethod.identityProviders = identityProviders;
+// @ts-expect-error ts-migrate(2339) FIXME: Property 'PixAuthenticationComplement' does not ex... Remove this comment to see the full error message
 AuthenticationMethod.PixAuthenticationComplement = PixAuthenticationComplement;
+// @ts-expect-error ts-migrate(2339) FIXME: Property 'PoleEmploiAuthenticationComplement' does... Remove this comment to see the full error message
 AuthenticationMethod.PoleEmploiAuthenticationComplement = PoleEmploiAuthenticationComplement;
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = AuthenticationMethod;

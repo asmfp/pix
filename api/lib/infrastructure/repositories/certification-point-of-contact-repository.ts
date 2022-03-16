@@ -1,11 +1,17 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_'.
 const _ = require('lodash');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'knex'.
 const { knex } = require('../bookshelf');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'NotFoundEr... Remove this comment to see the full error message
 const { NotFoundError } = require('../../domain/errors');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Certificat... Remove this comment to see the full error message
 const CertificationPointOfContact = require('../../domain/read-models/CertificationPointOfContact');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'AllowedCer... Remove this comment to see the full error message
 const AllowedCertificationCenterAccess = require('../../domain/read-models/AllowedCertificationCenterAccess');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
-  async get(userId) {
+  async get(userId: any) {
     const certificationPointOfContactDTO = await knex
       .select({
         id: 'users.id',
@@ -25,6 +31,7 @@ module.exports = {
       .first();
 
     if (!certificationPointOfContactDTO) {
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
       throw new NotFoundError(`Le référent de certification ${userId} n'existe pas.`);
     }
 
@@ -42,7 +49,9 @@ module.exports = {
   },
 };
 
-async function _removeDisabledCertificationCenterAccesses({ certificationPointOfContactDTO }) {
+async function _removeDisabledCertificationCenterAccesses({
+  certificationPointOfContactDTO
+}: any) {
   const certificationCenters = await knex
     .select('certificationCenterId')
     .from('certification-center-memberships')
@@ -54,13 +63,13 @@ async function _removeDisabledCertificationCenterAccesses({ certificationPointOf
     .where('certification-center-memberships.disabledAt', null);
 
   const certificationCenterIds = _.chain(certificationCenters)
-    .map((certificationCenter) => certificationCenter.certificationCenterId)
+    .map((certificationCenter: any) => certificationCenter.certificationCenterId)
     .compact()
     .value();
   return certificationCenterIds;
 }
 
-async function _findAllowedCertificationCenterAccesses(certificationCenterIds) {
+async function _findAllowedCertificationCenterAccesses(certificationCenterIds: any) {
   const allowedCertificationCenterAccessDTOs = await knex
     .select({
       id: 'certification-centers.id',
@@ -92,9 +101,10 @@ async function _findAllowedCertificationCenterAccesses(certificationCenterIds) {
     .orderBy('certification-centers.id')
     .groupByRaw('1, 2, 3, 4, 5');
 
-  return _.map(allowedCertificationCenterAccessDTOs, (allowedCertificationCenterAccessDTO) => {
+  return _.map(allowedCertificationCenterAccessDTOs, (allowedCertificationCenterAccessDTO: any) => {
     return new AllowedCertificationCenterAccess({
       ...allowedCertificationCenterAccessDTO,
+      // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Boolean'.
       isRelatedToManagingStudentsOrganization: Boolean(
         allowedCertificationCenterAccessDTO.isRelatedToManagingStudentsOrganization
       ),
@@ -103,11 +113,12 @@ async function _findAllowedCertificationCenterAccesses(certificationCenterIds) {
     });
   });
 
-  function _cleanEmptyTags(allowedCertificationCenterAccessDTO) {
+  function _cleanEmptyTags(allowedCertificationCenterAccessDTO: any) {
     return _.compact(allowedCertificationCenterAccessDTO.tags);
   }
 
-  function _cleanEmptyHabilitations(allowedCertificationCenterAccessDTO) {
-    return allowedCertificationCenterAccessDTO.habilitations.filter((habilitation) => Boolean(habilitation.id));
+  function _cleanEmptyHabilitations(allowedCertificationCenterAccessDTO: any) {
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Boolean'.
+    return allowedCertificationCenterAccessDTO.habilitations.filter((habilitation: any) => Boolean(habilitation.id));
   }
 }

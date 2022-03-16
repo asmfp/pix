@@ -1,5 +1,11 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Tag'.
 class Tag {
-  constructor({ id, name } = {}) {
+  id: any;
+  name: any;
+  constructor({
+    id,
+    name
+  }: any = {}) {
     this.id = id;
     this.name = name;
   }
@@ -10,4 +16,5 @@ Tag.MEDIATION_NUMERIQUE = 'MEDNUM';
 Tag.CFA = 'CFA';
 Tag.AEFE = 'AEFE';
 Tag.MLF = 'MLF';
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = Tag;

@@ -1,12 +1,14 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'CampaignPa... Remove this comment to see the full error message
 const CampaignParticipationStarted = require('../events/CampaignParticipationStarted');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = async function startCampaignParticipation({
   campaignParticipation,
   userId,
   campaignParticipantRepository,
   campaignParticipationRepository,
-  domainTransaction,
-}) {
+  domainTransaction
+}: any) {
   const campaignParticipant = await campaignParticipantRepository.get({
     userId,
     campaignId: campaignParticipation.campaignId,

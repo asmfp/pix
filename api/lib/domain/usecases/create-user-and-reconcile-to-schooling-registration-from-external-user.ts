@@ -1,8 +1,13 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'CampaignCo... Remove this comment to see the full error message
 const { CampaignCodeError, ObjectValidationError } = require('../errors');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'User'.
 const User = require('../models/User');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Authentica... Remove this comment to see the full error message
 const AuthenticationMethod = require('../models/AuthenticationMethod');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'STUDENT_RE... Remove this comment to see the full error message
 const { STUDENT_RECONCILIATION_ERRORS } = require('../constants');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = async function createUserAndReconcileToSchoolingRegistrationFromExternalUser({
   birthdate,
   campaignCode,
@@ -15,8 +20,8 @@ module.exports = async function createUserAndReconcileToSchoolingRegistrationFro
   campaignRepository,
   userRepository,
   schoolingRegistrationRepository,
-  studentRepository,
-}) {
+  studentRepository
+}: any) {
   const campaign = await campaignRepository.getByCode(campaignCode);
   if (!campaign) {
     throw new CampaignCodeError();
@@ -75,10 +80,12 @@ module.exports = async function createUserAndReconcileToSchoolingRegistrationFro
       });
     }
   } catch (error) {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'includes' does not exist on type '{}'.
     if (reconciliationErrors.includes(error.code)) {
       await authenticationMethodRepository.updateExternalIdentifierByUserIdAndIdentityProvider({
         externalIdentifier: externalUser.samlId,
         userId: error.meta.userId,
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'identityProviders' does not exist on typ... Remove this comment to see the full error message
         identityProvider: AuthenticationMethod.identityProviders.GAR,
       });
       const schoolingRegistration = await schoolingRegistrationRepository.reconcileUserToSchoolingRegistration({

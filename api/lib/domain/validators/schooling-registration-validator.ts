@@ -1,14 +1,20 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Joi'.
 const Joi = require('joi').extend(require('@joi/date'));
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'EntityVali... Remove this comment to see the full error message
 const { EntityValidationError } = require('../errors');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'SchoolingR... Remove this comment to see the full error message
 const SchoolingRegistration = require('../models/SchoolingRegistration');
 
 const { STUDENT, APPRENTICE } = SchoolingRegistration.STATUS;
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'validation... Remove this comment to see the full error message
 const validationConfiguration = { allowUnknown: true };
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'MAX_LENGTH... Remove this comment to see the full error message
 const MAX_LENGTH = 255;
 const CITY_CODE_LENGTH = 5;
 const PROVINCE_CODE_MIN_LENGTH = 2;
 const PROVINCE_CODE_MAX_LENGTH = 3;
 const COUNTRY_CODE_LENGTH = 5;
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'FRANCE_COU... Remove this comment to see the full error message
 const FRANCE_COUNTRY_CODE = '99100';
 
 const INSEE_REGEX = {
@@ -16,6 +22,7 @@ const INSEE_REGEX = {
   FRANCE_CITY_CODE: /[0-9]{5}|[0-9]{1}[a,b,A,B]{1}[0-9]{3}/,
 };
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'validation... Remove this comment to see the full error message
 const validationSchema = Joi.object({
   nationalIdentifier: Joi.string().max(MAX_LENGTH).required(),
   firstName: Joi.string().max(MAX_LENGTH).required(),
@@ -42,9 +49,10 @@ const validationSchema = Joi.object({
   }),
 });
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
   FRANCE_COUNTRY_CODE,
-  checkValidation(registration) {
+  checkValidation(registration: any) {
     const { error } = validationSchema.validate(registration, validationConfiguration);
 
     if (error) {
@@ -65,6 +73,7 @@ module.exports = {
         err.why = 'min_length';
         err.limit = context.limit;
       }
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'includes' does not exist on type '{}'.
       if (type === 'string.pattern.base' && ['birthCountryCode', 'birthCityCode'].includes(context.key)) {
         err.why = 'not_valid_insee_code';
       }

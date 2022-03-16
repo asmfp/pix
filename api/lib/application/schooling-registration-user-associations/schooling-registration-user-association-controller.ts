@@ -1,8 +1,11 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'usecases'.
 const usecases = require('../../domain/usecases');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const schoolingRegistrationSerializer = require('../../infrastructure/serializers/jsonapi/schooling-registration-user-association-serializer');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
-  async reconcileSchoolingRegistrationAutomatically(request) {
+  async reconcileSchoolingRegistrationAutomatically(request: any) {
     const authenticatedUserId = request.auth.credentials.userId;
     const payload = request.payload.data.attributes;
     const campaignCode = payload['campaign-code'];
@@ -13,7 +16,7 @@ module.exports = {
     return schoolingRegistrationSerializer.serialize(schoolingRegistration);
   },
 
-  async reconcileSchoolingRegistrationManually(request, h) {
+  async reconcileSchoolingRegistrationManually(request: any, h: any) {
     const authenticatedUserId = request.auth.credentials.userId;
     const payload = request.payload.data.attributes;
     const campaignCode = payload['campaign-code'];
@@ -39,7 +42,7 @@ module.exports = {
     return h.response().code(204);
   },
 
-  async reconcileHigherSchoolingRegistration(request, h) {
+  async reconcileHigherSchoolingRegistration(request: any, h: any) {
     const userId = request.auth.credentials.userId;
     const payload = request.payload.data.attributes;
 
@@ -58,8 +61,9 @@ module.exports = {
     return h.response(null).code(204);
   },
 
-  async findAssociation(request) {
+  async findAssociation(request: any) {
     const authenticatedUserId = request.auth.credentials.userId;
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'parseInt'.
     // eslint-disable-next-line no-restricted-syntax
     const requestedUserId = parseInt(request.query.userId);
     const campaignCode = request.query.campaignCode;
@@ -73,7 +77,7 @@ module.exports = {
     return schoolingRegistrationSerializer.serialize(schoolingRegistration);
   },
 
-  async generateUsername(request, h) {
+  async generateUsername(request: any, h: any) {
     const payload = request.payload.data.attributes;
     const { 'campaign-code': campaignCode } = payload;
 
@@ -101,13 +105,13 @@ module.exports = {
     return h.response(schoolingRegistrationWithUsernameResponse).code(200);
   },
 
-  async dissociate(request, h) {
+  async dissociate(request: any, h: any) {
     const schoolingRegistrationId = request.params.id;
     await usecases.dissociateUserFromSchoolingRegistration({ schoolingRegistrationId });
     return h.response().code(204);
   },
 
-  async updateStudentNumber(request, h) {
+  async updateStudentNumber(request: any, h: any) {
     const payload = request.payload.data.attributes;
     const organizationId = request.params.id;
     const studentNumber = payload['student-number'];

@@ -1,7 +1,10 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'isEmpty'.
 const isEmpty = require('lodash/isEmpty');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'UserNotAut... Remove this comment to see the full error message
 const { UserNotAuthorizedToUpdatePasswordError } = require('../errors');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = async function updateSchoolingRegistrationDependentUserPassword({
   organizationId,
   schoolingRegistrationId,
@@ -10,8 +13,8 @@ module.exports = async function updateSchoolingRegistrationDependentUserPassword
   passwordGenerator,
   authenticationMethodRepository,
   schoolingRegistrationRepository,
-  userRepository,
-}) {
+  userRepository
+}: any) {
   const userWithMemberships = await userRepository.getWithMemberships(userId);
   const schoolingRegistration = await schoolingRegistrationRepository.get(schoolingRegistrationId);
 

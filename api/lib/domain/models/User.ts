@@ -1,7 +1,37 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_'.
 const _ = require('lodash');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Authentica... Remove this comment to see the full error message
 const AuthenticationMethod = require('./AuthenticationMethod');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'User'.
 class User {
+  authenticationMethods: any;
+  campaignParticipations: any;
+  certificationCenterMemberships: any;
+  cgu: any;
+  email: any;
+  emailConfirmedAt: any;
+  firstName: any;
+  hasSeenAssessmentInstructions: any;
+  hasSeenFocusedChallengeTooltip: any;
+  hasSeenNewDashboardInfo: any;
+  hasSeenOtherChallengesTooltip: any;
+  id: any;
+  isAnonymous: any;
+  knowledgeElements: any;
+  lang: any;
+  lastName: any;
+  lastPixCertifTermsOfServiceValidatedAt: any;
+  lastPixOrgaTermsOfServiceValidatedAt: any;
+  lastTermsOfServiceValidatedAt: any;
+  memberships: any;
+  mustValidateTermsOfService: any;
+  pixCertifTermsOfServiceAccepted: any;
+  pixOrgaTermsOfServiceAccepted: any;
+  pixRoles: any;
+  pixScore: any;
+  scorecards: any;
+  username: any;
   constructor({
     id,
     cgu,
@@ -29,8 +59,8 @@ class User {
     pixScore,
     scorecards = [],
     campaignParticipations = [],
-    authenticationMethods = [],
-  } = {}) {
+    authenticationMethods = []
+  }: any = {}) {
     this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
@@ -60,13 +90,16 @@ class User {
     this.authenticationMethods = authenticationMethods;
   }
 
+  // @ts-expect-error ts-migrate(1056) FIXME: Accessors are only available when targeting ECMASc... Remove this comment to see the full error message
   get hasRolePixMaster() {
-    return !!this.pixRoles.find((pixRole) => pixRole.name === 'PIX_MASTER');
+    return !!this.pixRoles.find((pixRole: any) => pixRole.name === 'PIX_MASTER');
   }
 
+  // @ts-expect-error ts-migrate(1056) FIXME: Accessors are only available when targeting ECMASc... Remove this comment to see the full error message
   get shouldChangePassword() {
     const pixAuthenticationMethod = this.authenticationMethods.find(
-      (authenticationMethod) => authenticationMethod.identityProvider === AuthenticationMethod.identityProviders.PIX
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'identityProviders' does not exist on typ... Remove this comment to see the full error message
+      (authenticationMethod: any) => authenticationMethod.identityProvider === AuthenticationMethod.identityProviders.PIX
     );
 
     return pixAuthenticationMethod ? pixAuthenticationMethod.authenticationComplement.shouldChangePassword : null;
@@ -80,17 +113,17 @@ class User {
     return this.certificationCenterMemberships.length > 0;
   }
 
-  hasAccessToOrganization(organizationId) {
-    return this.memberships.some((membership) => membership.organization.id === organizationId);
+  hasAccessToOrganization(organizationId: any) {
+    return this.memberships.some((membership: any) => membership.organization.id === organizationId);
   }
 
-  hasAccessToCertificationCenter(certificationCenterId) {
+  hasAccessToCertificationCenter(certificationCenterId: any) {
     return this.certificationCenterMemberships.some(
-      (certificationCenterMembership) =>
-        certificationCenterMembership.certificationCenter.id === certificationCenterId &&
-        _.isNil(certificationCenterMembership.disabledAt)
+      (certificationCenterMembership: any) => certificationCenterMembership.certificationCenter.id === certificationCenterId &&
+      _.isNil(certificationCenterMembership.disabledAt)
     );
   }
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = User;

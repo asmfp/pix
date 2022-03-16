@@ -1,8 +1,16 @@
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const { UNCERTIFIED_LEVEL } = require('../constants');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'DomainErro... Remove this comment to see the full error message
 const { DomainError } = require('../errors');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'CertifiedL... Remove this comment to see the full error message
 class CertifiedLevel {
-  constructor({ value, status }) {
+  status: any;
+  value: any;
+  constructor({
+    value,
+    status
+  }: any) {
     this.value = value;
     this.status = status;
   }
@@ -12,8 +20,8 @@ class CertifiedLevel {
     numberOfNeutralizedAnswers,
     numberOfCorrectAnswers,
     estimatedLevel,
-    reproducibilityRate,
-  }) {
+    reproducibilityRate
+  }: any) {
     const rule = _rules.findRuleFor({
       numberOfChallenges,
       numberOfCorrectAnswers,
@@ -34,11 +42,11 @@ class CertifiedLevel {
     return new CertifiedLevel({ value: UNCERTIFIED_LEVEL, status: statuses.UNCERTIFIED });
   }
 
-  static downgrade(estimatedLevel) {
+  static downgrade(estimatedLevel: any) {
     return new CertifiedLevel({ value: estimatedLevel - 1, status: statuses.DOWNGRADED });
   }
 
-  static validate(estimatedLevel) {
+  static validate(estimatedLevel: any) {
     return new CertifiedLevel({ value: estimatedLevel, status: statuses.VALIDATED });
   }
 
@@ -51,25 +59,33 @@ class CertifiedLevel {
   }
 }
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'statuses'.
 const statuses = {
   DOWNGRADED: 'DOWNGRADED',
   UNCERTIFIED: 'UNCERTIFIED',
   VALIDATED: 'VALIDATED',
 };
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
   CertifiedLevel,
 };
 
 class Rule {
+  actionWhenReproducibilityBelow70: any;
+  actionWhenReproducibilityBetween70And80: any;
+  actionWhenReproducibilityRateEqualOrAbove80: any;
+  numberOfChallenges: any;
+  numberOfCorrectAnswers: any;
+  numberOfNeutralizedAnswers: any;
   constructor({
     numberOfChallenges,
     numberOfCorrectAnswers,
     numberOfNeutralizedAnswers,
     actionWhenReproducibilityRateEqualOrAbove80,
     actionWhenReproducibilityBetween70And80,
-    actionWhenReproducibilityBelow70,
-  }) {
+    actionWhenReproducibilityBelow70
+  }: any) {
     this.numberOfChallenges = numberOfChallenges;
     this.numberOfCorrectAnswers = numberOfCorrectAnswers;
     this.numberOfNeutralizedAnswers = numberOfNeutralizedAnswers;
@@ -78,7 +94,11 @@ class Rule {
     this.actionWhenReproducibilityBelow70 = actionWhenReproducibilityBelow70;
   }
 
-  isApplicable({ numberOfChallenges, numberOfCorrectAnswers, numberOfNeutralizedAnswers }) {
+  isApplicable({
+    numberOfChallenges,
+    numberOfCorrectAnswers,
+    numberOfNeutralizedAnswers
+  }: any) {
     return (
       numberOfChallenges === this.numberOfChallenges &&
       numberOfCorrectAnswers === this.numberOfCorrectAnswers &&
@@ -86,7 +106,10 @@ class Rule {
     );
   }
 
-  apply({ reproducibilityRate, estimatedLevel }) {
+  apply({
+    reproducibilityRate,
+    estimatedLevel
+  }: any) {
     if (reproducibilityRate >= 80) {
       return this.actionWhenReproducibilityRateEqualOrAbove80(estimatedLevel);
     } else if (reproducibilityRate >= 70) {
@@ -366,19 +389,26 @@ const _rules = {
     new Rule18(),
     new Rule19(),
   ],
-  findRuleFor({ numberOfChallenges, numberOfCorrectAnswers, numberOfNeutralizedAnswers }) {
-    return this.rules.find((rule) =>
-      rule.isApplicable({
-        numberOfChallenges,
-        numberOfCorrectAnswers,
-        numberOfNeutralizedAnswers,
-      })
+  findRuleFor({
+    numberOfChallenges,
+    numberOfCorrectAnswers,
+    numberOfNeutralizedAnswers
+  }: any) {
+    return this.rules.find((rule: any) => rule.isApplicable({
+      numberOfChallenges,
+      numberOfCorrectAnswers,
+      numberOfNeutralizedAnswers,
+    })
     );
   },
 };
 
 class MissingCertifiedLevelRuleError extends DomainError {
-  constructor({ numberOfChallenges, numberOfCorrectAnswers, numberOfNeutralizedAnswers }) {
+  constructor({
+    numberOfChallenges,
+    numberOfCorrectAnswers,
+    numberOfNeutralizedAnswers
+  }: any) {
     const message =
       'Règle de calcul de niveau certifié manquante pour ' +
       `${numberOfChallenges} épreuves proposées ` +

@@ -1,8 +1,13 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Joi'.
 const Joi = require('joi');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'first'.
 const { first } = require('lodash');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'EntityVali... Remove this comment to see the full error message
 const { EntityValidationError } = require('../errors');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Campaign'.
 const Campaign = require('../models/Campaign');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'validation... Remove this comment to see the full error message
 const validationConfiguration = { abortEarly: false, allowUnknown: true };
 
 const campaignValidationJoiSchema = Joi.object({
@@ -14,7 +19,7 @@ const campaignValidationJoiSchema = Joi.object({
   type: Joi.string()
     .valid(Campaign.types.ASSESSMENT, Campaign.types.PROFILES_COLLECTION)
     .required()
-    .error((errors) => first(errors))
+    .error((errors: any) => first(errors))
     .messages({
       'any.required': 'CAMPAIGN_PURPOSE_IS_REQUIRED',
       'string.base': 'CAMPAIGN_PURPOSE_IS_REQUIRED',
@@ -117,8 +122,9 @@ const campaignValidationJoiSchema = Joi.object({
   }),
 });
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
-  validate(campaign) {
+  validate(campaign: any) {
     const { error } = campaignValidationJoiSchema.validate(campaign, validationConfiguration);
     if (error) {
       throw EntityValidationError.fromJoiErrors(error.details);

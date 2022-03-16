@@ -1,12 +1,29 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'EntityVali... Remove this comment to see the full error message
 const { EntityValidationError, ForbiddenAccess, AlreadyExistingCampaignParticipationError } = require('../errors');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'CampaignPa... Remove this comment to see the full error message
 const CampaignParticipation = require('./CampaignParticipation');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Assessment... Remove this comment to see the full error message
 const Assessment = require('./Assessment');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'SchoolingR... Remove this comment to see the full error message
 const SchoolingRegistration = require('./SchoolingRegistration');
 const couldNotJoinCampaignErrorMessage = "Vous n'êtes pas autorisé à rejoindre la campagne";
 const couldNotImproveCampaignErrorMessage = 'Vous ne pouvez pas repasser la campagne';
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'CampaignPa... Remove this comment to see the full error message
 class CampaignParticipant {
-  constructor({ campaignToStartParticipation, schoolingRegistrationId, userIdentity, previousCampaignParticipation }) {
+  assessment: any;
+  campaignParticipation: any;
+  campaignToStartParticipation: any;
+  previousCampaignParticipation: any;
+  schoolingRegistration: any;
+  schoolingRegistrationId: any;
+  userIdentity: any;
+  constructor({
+    campaignToStartParticipation,
+    schoolingRegistrationId,
+    userIdentity,
+    previousCampaignParticipation
+  }: any) {
     this.campaignToStartParticipation = campaignToStartParticipation;
     this.schoolingRegistrationId = schoolingRegistrationId;
     this.userIdentity = userIdentity;
@@ -14,7 +31,9 @@ class CampaignParticipant {
     this.schoolingRegistration = null;
   }
 
-  start({ participantExternalId }) {
+  start({
+    participantExternalId
+  }: any) {
     this._checkCanParticipateToCampaign(participantExternalId);
 
     const participantExternalIdToUse =
@@ -55,7 +74,7 @@ class CampaignParticipant {
     return !this.campaignToStartParticipation.isRestricted && !this.schoolingRegistrationId;
   }
 
-  _checkCanParticipateToCampaign(participantExternalId) {
+  _checkCanParticipateToCampaign(participantExternalId: any) {
     if (this.campaignToStartParticipation.isArchived) {
       throw new ForbiddenAccess(couldNotJoinCampaignErrorMessage);
     }
@@ -74,6 +93,7 @@ class CampaignParticipant {
       throw new ForbiddenAccess(couldNotImproveCampaignErrorMessage);
     }
 
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'includes' does not exist on type '{}'.
     if (['STARTED', 'TO_SHARE'].includes(this.previousCampaignParticipation?.status)) {
       throw new ForbiddenAccess(couldNotImproveCampaignErrorMessage);
     }
@@ -101,11 +121,12 @@ class CampaignParticipant {
     );
   }
 
-  _isMissingParticipantExternalId(participantExternalId) {
+  _isMissingParticipantExternalId(participantExternalId: any) {
     return (
       this.campaignToStartParticipation.idPixLabel && !participantExternalId && !this.previousCampaignParticipation
     );
   }
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = CampaignParticipant;

@@ -1,17 +1,29 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'writeOdsUt... Remove this comment to see the full error message
 const writeOdsUtils = require('../../utils/ods/write-ods-utils');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'readOdsUti... Remove this comment to see the full error message
 const readOdsUtils = require('../../utils/ods/read-ods-utils');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'featureTog... Remove this comment to see the full error message
 const { featureToggles } = require('../../../../lib/config');
 const {
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'EXTRA_EMPT... Remove this comment to see the full error message
   EXTRA_EMPTY_CANDIDATE_ROWS,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'IMPORT_CAN... Remove this comment to see the full error message
   IMPORT_CANDIDATES_TEMPLATE_VALUES,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'IMPORT_CAN... Remove this comment to see the full error message
   IMPORT_CANDIDATES_SESSION_TEMPLATE_VALUES,
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 } = require('./candidates-import-placeholders');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Certificat... Remove this comment to see the full error message
 const CertificationCandidate = require('../../../domain/models/CertificationCandidate');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_'.
 const _ = require('lodash');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const CandidateData = require('./CandidateData');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const SessionData = require('./SessionData');
 
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Object'.
 const billingValidatorList = Object.values(CertificationCandidate.BILLING_MODES).map(
   CertificationCandidate.translateBillingMode
 );
@@ -21,11 +33,12 @@ const HEADER_ROW_SPAN = 3;
 const CANDIDATE_TABLE_HEADER_ROW = 11;
 const CANDIDATE_TABLE_FIRST_ROW = 12;
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = async function fillCandidatesImportSheet({
   session,
   certificationCenterHabilitations,
-  isScoCertificationCenter,
-}) {
+  isScoCertificationCenter
+}: any) {
   const template = await _getCandidatesImportTemplate();
 
   const odsBuilder = new writeOdsUtils.OdsUtilsBuilder(template);
@@ -41,16 +54,21 @@ module.exports = async function fillCandidatesImportSheet({
 };
 
 async function _getCandidatesImportTemplate() {
+  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name '__dirname'.
   const templatePath = __dirname + '/1.5/candidates_import_template.ods';
   return readOdsUtils.getContentXml({ odsFilePath: templatePath });
 }
 
-function _addSession(odsBuilder, session) {
+function _addSession(odsBuilder: any, session: any) {
   const sessionData = SessionData.fromSession(session);
   return odsBuilder.withData(sessionData, IMPORT_CANDIDATES_SESSION_TEMPLATE_VALUES);
 }
 
-function _addColumns({ odsBuilder, certificationCenterHabilitations, isScoCertificationCenter }) {
+function _addColumns({
+  odsBuilder,
+  certificationCenterHabilitations,
+  isScoCertificationCenter
+}: any) {
   if (featureToggles.isCertificationBillingEnabled && !isScoCertificationCenter) {
     odsBuilder
       .withTooltipOnCell({
@@ -68,7 +86,7 @@ function _addColumns({ odsBuilder, certificationCenterHabilitations, isScoCertif
         restrictedList: billingValidatorList,
         allowEmptyCell: false,
         tooltipTitle: 'Tarification part Pix',
-        tooltipContentLines: ['Options possibles :', ...billingValidatorList.map((option) => `- ${option}`)],
+        tooltipContentLines: ['Options possibles :', ...billingValidatorList.map((option: any) => `- ${option}`)],
       })
       .withColumnGroup({
         groupHeaderLabel: 'Tarification',
@@ -95,9 +113,14 @@ function _addColumns({ odsBuilder, certificationCenterHabilitations, isScoCertif
   return odsBuilder;
 }
 
-function _addComplementaryCertificationColumns({ odsBuilder, certificationCenterHabilitations }) {
+function _addComplementaryCertificationColumns({
+  odsBuilder,
+  certificationCenterHabilitations
+}: any) {
   if (!_.isEmpty(certificationCenterHabilitations)) {
-    const habilitationColumns = certificationCenterHabilitations.map(({ name }) => ({
+    const habilitationColumns = certificationCenterHabilitations.map(({
+      name
+    }: any) => ({
       headerLabel: [name, '("oui" ou laisser vide)'],
       placeholder: [name],
     }));
@@ -113,7 +136,7 @@ function _addComplementaryCertificationColumns({ odsBuilder, certificationCenter
   return odsBuilder;
 }
 
-function _addCandidateRows(odsBuilder, certificationCandidates) {
+function _addCandidateRows(odsBuilder: any, certificationCandidates: any) {
   const CANDIDATE_ROW_MARKER_PLACEHOLDER = 'COUNT';
   const candidatesData = _getCandidatesData(certificationCandidates);
   return odsBuilder.updateXmlRows({
@@ -123,7 +146,7 @@ function _addCandidateRows(odsBuilder, certificationCandidates) {
   });
 }
 
-function _getCandidatesData(certificationCandidates) {
+function _getCandidatesData(certificationCandidates: any) {
   const enrolledCandidatesData = _certificationCandidatesToCandidatesData(certificationCandidates);
 
   const emptyCandidatesData = _emptyCandidatesData(enrolledCandidatesData.length);
@@ -132,18 +155,19 @@ function _getCandidatesData(certificationCandidates) {
 }
 
 function _getCandidatesImportTemplatePath() {
+  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name '__dirname'.
   return __dirname + '/1.5/candidates_import_template.ods';
 }
 
-function _certificationCandidatesToCandidatesData(certificationCandidates) {
-  return _.map(certificationCandidates, (candidate, index) => {
+function _certificationCandidatesToCandidatesData(certificationCandidates: any) {
+  return _.map(certificationCandidates, (candidate: any, index: any) => {
     return CandidateData.fromCertificationCandidateAndCandidateNumber(candidate, index + 1);
   });
 }
 
-function _emptyCandidatesData(numberOfEnrolledCandidates) {
-  const emptyCandidates = [];
-  _.times(EXTRA_EMPTY_CANDIDATE_ROWS, (index) => {
+function _emptyCandidatesData(numberOfEnrolledCandidates: any) {
+  const emptyCandidates: any = [];
+  _.times(EXTRA_EMPTY_CANDIDATE_ROWS, (index: any) => {
     const emptyCandidateData = CandidateData.empty(numberOfEnrolledCandidates + (index + 1));
 
     emptyCandidates.push(emptyCandidateData);

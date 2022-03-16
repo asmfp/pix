@@ -1,7 +1,11 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'CsvColumn'... Remove this comment to see the full error message
 const { CsvColumn } = require('./csv-registration-parser');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'SchoolingR... Remove this comment to see the full error message
 class SchoolingRegistrationColumns {
-  constructor(i18n) {
+  columns: any;
+  translate: any;
+  constructor(i18n: any) {
     this.translate = i18n.__;
     this.columns = this.setColumns();
   }
@@ -75,4 +79,5 @@ class SchoolingRegistrationColumns {
   }
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = SchoolingRegistrationColumns;

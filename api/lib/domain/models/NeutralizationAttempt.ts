@@ -1,18 +1,21 @@
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = class NeutralizationAttempt {
-  constructor(questionNumber, status) {
+  questionNumber: any;
+  status: any;
+  constructor(questionNumber: any, status: any) {
     this.questionNumber = questionNumber;
     this.status = status;
   }
 
-  static neutralized(questionNumber) {
+  static neutralized(questionNumber: any) {
     return new NeutralizationAttempt(questionNumber, NeutralizationStatus.NEUTRALIZED);
   }
 
-  static failure(questionNumber) {
+  static failure(questionNumber: any) {
     return new NeutralizationAttempt(questionNumber, NeutralizationStatus.FAILURE);
   }
 
-  static skipped(questionNumber) {
+  static skipped(questionNumber: any) {
     return new NeutralizationAttempt(questionNumber, NeutralizationStatus.SKIPPED);
   }
 

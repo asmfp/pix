@@ -1,10 +1,15 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'knex'.
 const { knex } = require('../../../../db/knex-database-connection');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'NotFoundEr... Remove this comment to see the full error message
 const { NotFoundError } = require('../../../domain/errors');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Certificat... Remove this comment to see the full error message
 const CertificationCandidateForSupervising = require('../../../domain/models/CertificationCandidateForSupervising');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'SessionFor... Remove this comment to see the full error message
 const SessionForSupervising = require('../../../domain/read-models/SessionForSupervising');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
-  async get(idSession) {
+  async get(idSession: any) {
     const results = await knex
       .select({
         id: 'sessions.id',
@@ -37,16 +42,18 @@ module.exports = {
       .where({ 'sessions.id': idSession })
       .first();
     if (!results) {
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
       throw new NotFoundError("La session n'existe pas");
     }
     return _toDomain(results);
   },
 };
 
-function _toDomain(results) {
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_toDomain'... Remove this comment to see the full error message
+function _toDomain(results: any) {
   const certificationCandidates = results.certificationCandidates
-    .filter((candidate) => candidate?.id !== null)
-    .map((candidate) => new CertificationCandidateForSupervising({ ...candidate }));
+    .filter((candidate: any) => candidate?.id !== null)
+    .map((candidate: any) => new CertificationCandidateForSupervising({ ...candidate }));
 
   return new SessionForSupervising({
     ...results,

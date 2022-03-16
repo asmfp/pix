@@ -1,12 +1,14 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Certificat... Remove this comment to see the full error message
 const CertificationIssueReportResolutionAttempt = require('./CertificationIssueReportResolutionAttempt');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Certificat... Remove this comment to see the full error message
 const { CertificationIssueReportSubcategories } = require('./CertificationIssueReportCategory');
 
 async function neutralizeIfTimedChallengeStrategy({
   certificationIssueReport,
   certificationAssessment,
   certificationIssueReportRepository,
-  challengeRepository,
-}) {
+  challengeRepository
+}: any) {
   const questionNumber = certificationIssueReport.questionNumber;
   const recId = certificationAssessment.getChallengeRecIdByQuestionNumber(questionNumber);
 
@@ -30,8 +32,8 @@ async function neutralizeIfEmbedStrategy({
   certificationIssueReport,
   certificationAssessment,
   certificationIssueReportRepository,
-  challengeRepository,
-}) {
+  challengeRepository
+}: any) {
   const questionNumber = certificationIssueReport.questionNumber;
   const recId = certificationAssessment.getChallengeRecIdByQuestionNumber(questionNumber);
 
@@ -56,8 +58,8 @@ async function neutralizeIfImageStrategy({
   certificationIssueReport,
   certificationAssessment,
   certificationIssueReportRepository,
-  challengeRepository,
-}) {
+  challengeRepository
+}: any) {
   const questionNumber = certificationIssueReport.questionNumber;
   const recId = certificationAssessment.getChallengeRecIdByQuestionNumber(questionNumber);
 
@@ -82,8 +84,8 @@ async function neutralizeIfAttachmentStrategy({
   certificationIssueReport,
   certificationAssessment,
   certificationIssueReportRepository,
-  challengeRepository,
-}) {
+  challengeRepository
+}: any) {
   const questionNumber = certificationIssueReport.questionNumber;
   const recId = certificationAssessment.getChallengeRecIdByQuestionNumber(questionNumber);
 
@@ -107,8 +109,8 @@ async function neutralizeIfAttachmentStrategy({
 async function neutralizeWithoutCheckingStrategy({
   certificationIssueReport,
   certificationAssessment,
-  certificationIssueReportRepository,
-}) {
+  certificationIssueReportRepository
+}: any) {
   return _neutralizeAndResolve(certificationAssessment, certificationIssueReportRepository, certificationIssueReport);
 }
 
@@ -116,7 +118,16 @@ async function doNotResolveStrategy() {
   return CertificationIssueReportResolutionAttempt.unresolved();
 }
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Certificat... Remove this comment to see the full error message
 class CertificationIssueReportResolutionStrategies {
+  _certificationIssueReportRepository: any;
+  _challengeRepository: any;
+  _doNotResolve: any;
+  _neutralizeIfAttachment: any;
+  _neutralizeIfEmbed: any;
+  _neutralizeIfImage: any;
+  _neutralizeIfTimedChallenge: any;
+  _neutralizeWithoutChecking: any;
   constructor({
     neutralizeWithoutChecking = neutralizeWithoutCheckingStrategy,
     neutralizeIfImage = neutralizeIfImageStrategy,
@@ -125,8 +136,8 @@ class CertificationIssueReportResolutionStrategies {
     doNotResolve = doNotResolveStrategy,
     neutralizeIfTimedChallenge = neutralizeIfTimedChallengeStrategy,
     certificationIssueReportRepository,
-    challengeRepository,
-  }) {
+    challengeRepository
+  }: any) {
     this._neutralizeWithoutChecking = neutralizeWithoutChecking;
     this._neutralizeIfImage = neutralizeIfImage;
     this._neutralizeIfEmbed = neutralizeIfEmbed;
@@ -137,7 +148,10 @@ class CertificationIssueReportResolutionStrategies {
     this._challengeRepository = challengeRepository;
   }
 
-  async resolve({ certificationIssueReport, certificationAssessment }) {
+  async resolve({
+    certificationIssueReport,
+    certificationAssessment
+  }: any) {
     const strategyParameters = {
       certificationIssueReport,
       certificationAssessment,
@@ -164,6 +178,7 @@ class CertificationIssueReportResolutionStrategies {
   }
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
   neutralizeWithoutCheckingStrategy,
   neutralizeIfImageStrategy,
@@ -174,7 +189,7 @@ module.exports = {
   CertificationIssueReportResolutionStrategies,
 };
 
-function _neutralizeAndResolve(certificationAssessment, certificationIssueReportRepository, certificationIssueReport) {
+function _neutralizeAndResolve(certificationAssessment: any, certificationIssueReportRepository: any, certificationIssueReport: any) {
   const questionNumber = certificationIssueReport.questionNumber;
   const neutralizationAttempt =
     certificationAssessment.neutralizeChallengeByNumberIfKoOrSkippedOrPartially(questionNumber);
@@ -192,28 +207,28 @@ function _neutralizeAndResolve(certificationAssessment, certificationIssueReport
 }
 
 async function _resolveWithNoQuestionFoundWithQuestionNumber(
-  certificationIssueReportRepository,
-  certificationIssueReport,
-  questionNumber
+  certificationIssueReportRepository: any,
+  certificationIssueReport: any,
+  questionNumber: any
 ) {
   certificationIssueReport.resolve(`Aucune question ne correspond au numéro ${questionNumber}`);
   await certificationIssueReportRepository.save(certificationIssueReport);
   return CertificationIssueReportResolutionAttempt.resolvedWithoutEffect();
 }
 
-async function _resolveWithQuestionNeutralized(certificationIssueReportRepository, certificationIssueReport) {
+async function _resolveWithQuestionNeutralized(certificationIssueReportRepository: any, certificationIssueReport: any) {
   certificationIssueReport.resolve('Cette question a été neutralisée automatiquement');
   await certificationIssueReportRepository.save(certificationIssueReport);
   return CertificationIssueReportResolutionAttempt.resolvedWithEffect();
 }
 
-async function _resolveWithNoImageInChallenge(certificationIssueReportRepository, certificationIssueReport) {
+async function _resolveWithNoImageInChallenge(certificationIssueReportRepository: any, certificationIssueReport: any) {
   certificationIssueReport.resolve("Cette question n' a pas été neutralisée car elle ne contient pas d'image");
   await certificationIssueReportRepository.save(certificationIssueReport);
   return CertificationIssueReportResolutionAttempt.resolvedWithoutEffect();
 }
 
-async function _resolveWithNoAttachmentInChallenge(certificationIssueReportRepository, certificationIssueReport) {
+async function _resolveWithNoAttachmentInChallenge(certificationIssueReportRepository: any, certificationIssueReport: any) {
   certificationIssueReport.resolve(
     "Cette question n' a pas été neutralisée car elle ne contient pas de fichier à télécharger"
   );
@@ -221,7 +236,7 @@ async function _resolveWithNoAttachmentInChallenge(certificationIssueReportRepos
   return CertificationIssueReportResolutionAttempt.resolvedWithoutEffect();
 }
 
-async function _resolveWithNoEmbedInChallenge(certificationIssueReportRepository, certificationIssueReport) {
+async function _resolveWithNoEmbedInChallenge(certificationIssueReportRepository: any, certificationIssueReport: any) {
   certificationIssueReport.resolve(
     "Cette question n' a pas été neutralisée car elle ne contient pas d'application/simulateur"
   );
@@ -229,13 +244,13 @@ async function _resolveWithNoEmbedInChallenge(certificationIssueReportRepository
   return CertificationIssueReportResolutionAttempt.resolvedWithoutEffect();
 }
 
-async function _resolveWithChallengeNotTimed(certificationIssueReportRepository, certificationIssueReport) {
+async function _resolveWithChallengeNotTimed(certificationIssueReportRepository: any, certificationIssueReport: any) {
   certificationIssueReport.resolve("Cette question n' a pas été neutralisée car elle n'est pas chronométrée");
   await certificationIssueReportRepository.save(certificationIssueReport);
   return CertificationIssueReportResolutionAttempt.resolvedWithoutEffect();
 }
 
-async function _resolveWithAnswerIsCorrect(certificationIssueReportRepository, certificationIssueReport) {
+async function _resolveWithAnswerIsCorrect(certificationIssueReportRepository: any, certificationIssueReport: any) {
   certificationIssueReport.resolve("Cette question n'a pas été neutralisée car la réponse est correcte");
   await certificationIssueReportRepository.save(certificationIssueReport);
   return CertificationIssueReportResolutionAttempt.resolvedWithoutEffect();

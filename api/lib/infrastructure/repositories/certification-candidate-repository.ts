@@ -1,20 +1,38 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_'.
 const _ = require('lodash');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'normalize'... Remove this comment to see the full error message
 const { normalize } = require('../utils/string-utils');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const CertificationCandidateBookshelf = require('../orm-models/CertificationCandidate');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'bookshelfT... Remove this comment to see the full error message
 const bookshelfToDomainConverter = require('../../infrastructure/utils/bookshelf-to-domain-converter');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PGSQL_UNIQ... Remove this comment to see the full error message
 const { PGSQL_UNIQUE_CONSTRAINT_VIOLATION_ERROR } = require('../../../db/pgsql-errors');
 const {
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'NotFoundEr... Remove this comment to see the full error message
   NotFoundError,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Certificat... Remove this comment to see the full error message
   CertificationCandidateCreationOrUpdateError,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Certificat... Remove this comment to see the full error message
   CertificationCandidateMultipleUserLinksWithinSessionError,
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 } = require('../../domain/errors');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'knex'.
 const { knex } = require('../../../db/knex-database-connection');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Certificat... Remove this comment to see the full error message
 const CertificationCandidate = require('../../domain/models/CertificationCandidate');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Complement... Remove this comment to see the full error message
 const ComplementaryCertification = require('../../domain/models/ComplementaryCertification');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'DomainTran... Remove this comment to see the full error message
 const DomainTransaction = require('../DomainTransaction');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
-  async linkToUser({ id, userId }) {
+  // @ts-expect-error ts-migrate(2697) FIXME: An async function or method must return a 'Promise... Remove this comment to see the full error message
+  async linkToUser({
+    id,
+    userId
+  }: any) {
     try {
       const certificationCandidateBookshelf = new CertificationCandidateBookshelf({ id });
       await certificationCandidateBookshelf.save({ userId }, { patch: true, method: 'update' });
@@ -30,7 +48,11 @@ module.exports = {
     }
   },
 
-  async saveInSession({ certificationCandidate, sessionId, domainTransaction = DomainTransaction.emptyTransaction() }) {
+  async saveInSession({
+    certificationCandidate,
+    sessionId,
+    domainTransaction = DomainTransaction.emptyTransaction()
+  }: any) {
     const certificationCandidateDataToSave = _adaptModelToDb(certificationCandidate);
 
     try {
@@ -46,7 +68,7 @@ module.exports = {
 
       if (!_.isEmpty(certificationCandidate.complementaryCertifications)) {
         const complementaryCertificationSubscriptionsToSave = certificationCandidate.complementaryCertifications.map(
-          (complementaryCertification) => {
+          (complementaryCertification: any) => {
             return {
               complementaryCertificationId: complementaryCertification.id,
               certificationCandidateId: addedCertificationCandidate.id,
@@ -73,8 +95,8 @@ module.exports = {
     }
   },
 
-  async delete(certificationCandidateId) {
-    await knex.transaction(async (trx) => {
+  async delete(certificationCandidateId: any) {
+    await knex.transaction(async (trx: any) => {
       await trx('complementary-certification-subscriptions').where({ certificationCandidateId }).del();
       return trx('certification-candidates').where({ id: certificationCandidateId }).del();
     });
@@ -82,7 +104,7 @@ module.exports = {
     return true;
   },
 
-  async isNotLinked(certificationCandidateId) {
+  async isNotLinked(certificationCandidateId: any) {
     const notLinkedCandidate = await CertificationCandidateBookshelf.where({
       id: certificationCandidateId,
       userId: null,
@@ -91,7 +113,10 @@ module.exports = {
     return !!notLinkedCandidate;
   },
 
-  async getBySessionIdAndUserId({ sessionId, userId }) {
+  async getBySessionIdAndUserId({
+    sessionId,
+    userId
+  }: any) {
     const certificationCandidate = await knex
       .select('certification-candidates.*')
       .select({ complementaryCertifications: knex.raw(`json_agg("complementary-certifications".*)`) })
@@ -112,7 +137,7 @@ module.exports = {
     return certificationCandidate ? _toDomain(certificationCandidate) : undefined;
   },
 
-  async findBySessionId(sessionId) {
+  async findBySessionId(sessionId: any) {
     const results = await knex
       .select('certification-candidates.*')
       .select({ complementaryCertifications: knex.raw(`json_agg("complementary-certifications".*)`) })
@@ -134,7 +159,12 @@ module.exports = {
     return results.map(_toDomain);
   },
 
-  async findBySessionIdAndPersonalInfo({ sessionId, firstName, lastName, birthdate }) {
+  async findBySessionIdAndPersonalInfo({
+    sessionId,
+    firstName,
+    lastName,
+    birthdate
+  }: any) {
     const results = await CertificationCandidateBookshelf.where({ sessionId, birthdate }).fetchAll();
     const certificationCandidates = bookshelfToDomainConverter.buildDomainObjects(
       CertificationCandidateBookshelf,
@@ -144,7 +174,7 @@ module.exports = {
       lastName: normalize(lastName),
       firstName: normalize(firstName),
     };
-    return _.filter(certificationCandidates, (certificationCandidate) => {
+    return _.filter(certificationCandidates, (certificationCandidate: any) => {
       const certificationCandidateNormalizedNames = {
         lastName: normalize(certificationCandidate.lastName),
         firstName: normalize(certificationCandidate.firstName),
@@ -153,13 +183,18 @@ module.exports = {
     });
   },
 
-  findOneBySessionIdAndUserId({ sessionId, userId }) {
+  findOneBySessionIdAndUserId({
+    sessionId,
+    userId
+  }: any) {
     return CertificationCandidateBookshelf.where({ sessionId, userId })
       .fetchAll()
-      .then((results) => bookshelfToDomainConverter.buildDomainObjects(CertificationCandidateBookshelf, results)[0]);
+      .then((results: any) => bookshelfToDomainConverter.buildDomainObjects(CertificationCandidateBookshelf, results)[0]);
   },
 
-  async doesLinkedCertificationCandidateInSessionExist({ sessionId }) {
+  async doesLinkedCertificationCandidateInSessionExist({
+    sessionId
+  }: any) {
     const anyLinkedCandidateInSession = await CertificationCandidateBookshelf.query({
       where: { sessionId },
       whereNotNull: 'userId',
@@ -168,17 +203,22 @@ module.exports = {
     return anyLinkedCandidateInSession !== null;
   },
 
-  async update(certificationCandidate) {
+  // @ts-expect-error ts-migrate(2697) FIXME: An async function or method must return a 'Promise... Remove this comment to see the full error message
+  async update(certificationCandidate: any) {
     const result = await knex('certification-candidates')
       .where({ id: certificationCandidate.id })
       .update({ authorizedToStart: certificationCandidate.authorizedToStart });
 
     if (result === 0) {
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
       throw new NotFoundError('Aucun candidat trouvé');
     }
   },
 
-  async deleteBySessionId({ sessionId }) {
+  // @ts-expect-error ts-migrate(2697) FIXME: An async function or method must return a 'Promise... Remove this comment to see the full error message
+  async deleteBySessionId({
+    sessionId
+  }: any) {
     await knex('complementary-certification-subscriptions')
       .whereIn('certificationCandidateId', knex.select('id').from('certification-candidates').where({ sessionId }))
       .del();
@@ -186,7 +226,7 @@ module.exports = {
     await knex('certification-candidates').where({ sessionId }).del();
   },
 
-  async getWithComplementaryCertifications(id) {
+  async getWithComplementaryCertifications(id: any) {
     const candidateData = await knex('certification-candidates')
       .select('certification-candidates.*')
       .select({ complementaryCertifications: knex.raw('json_agg("complementary-certifications".*)') })
@@ -207,7 +247,7 @@ module.exports = {
   },
 };
 
-function _adaptModelToDb(certificationCandidateToSave) {
+function _adaptModelToDb(certificationCandidateToSave: any) {
   return _.omit(certificationCandidateToSave, [
     'createdAt',
     'certificationCourse',
@@ -216,10 +256,11 @@ function _adaptModelToDb(certificationCandidateToSave) {
   ]);
 }
 
-function _toDomain(candidateData) {
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_toDomain'... Remove this comment to see the full error message
+function _toDomain(candidateData: any) {
   const complementaryCertifications = candidateData.complementaryCertifications
-    .filter((certificationData) => certificationData !== null)
-    .map((certification) => new ComplementaryCertification(certification));
+    .filter((certificationData: any) => certificationData !== null)
+    .map((certification: any) => new ComplementaryCertification(certification));
 
   return new CertificationCandidate({ ...candidateData, complementaryCertifications });
 }

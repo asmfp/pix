@@ -1,18 +1,33 @@
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 // eslint-disable-next-line no-restricted-modules
 const axios = require('axios');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'performanc... Remove this comment to see the full error message
 const { performance } = require('perf_hooks');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'logInfoWit... Remove this comment to see the full error message
 const { logInfoWithCorrelationIds, logErrorWithCorrelationIds } = require('../monitoring-tools');
 
 class HttpResponse {
-  constructor({ code, data, isSuccessful }) {
+  code: any;
+  data: any;
+  isSuccessful: any;
+  constructor({
+    code,
+    data,
+    isSuccessful
+  }: any) {
     this.code = code;
     this.data = data;
     this.isSuccessful = isSuccessful;
   }
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
-  async post({ url, payload, headers }) {
+  async post({
+    url,
+    payload,
+    headers
+  }: any) {
     const startTime = performance.now();
     let duration = null;
     try {
@@ -54,7 +69,11 @@ module.exports = {
       });
     }
   },
-  async get({ url, payload, headers }) {
+  async get({
+    url,
+    payload,
+    headers
+  }: any) {
     const startTime = performance.now();
     let duration = null;
     try {

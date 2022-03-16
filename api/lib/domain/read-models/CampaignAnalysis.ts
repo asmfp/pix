@@ -1,16 +1,27 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_'.
 const _ = require('lodash');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const recommendationService = require('../services/recommendation-service');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'CampaignAn... Remove this comment to see the full error message
 class CampaignAnalysis {
-  constructor({ campaignId, targetProfileWithLearningContent, tutorials, participantCount = 0 } = {}) {
+  campaignTubeRecommendations: any;
+  id: any;
+  participantCount: any;
+  constructor({
+    campaignId,
+    targetProfileWithLearningContent,
+    tutorials,
+    participantCount = 0
+  }: any = {}) {
     this.id = campaignId;
     this.participantCount = participantCount;
     const maxSkillLevelInTargetProfile = targetProfileWithLearningContent.maxSkillDifficulty;
-    this.campaignTubeRecommendations = targetProfileWithLearningContent.tubes.map((tube) => {
+    this.campaignTubeRecommendations = targetProfileWithLearningContent.tubes.map((tube: any) => {
       const competence = targetProfileWithLearningContent.getCompetence(tube.competenceId);
       const area = targetProfileWithLearningContent.getArea(competence.areaId);
       const tutorialIds = _.uniq(_.flatMap(tube.skills, 'tutorialIds'));
-      const tubeTutorials = _.filter(tutorials, (tutorial) => tutorialIds.includes(tutorial.id));
+      const tubeTutorials = _.filter(tutorials, (tutorial: any) => tutorialIds.includes(tutorial.id));
       return new CampaignTubeRecommendation({
         campaignId: campaignId,
         area,
@@ -24,22 +35,34 @@ class CampaignAnalysis {
   }
 
   addToTubeRecommendations({ knowledgeElementsByTube = {} }) {
-    this.campaignTubeRecommendations.forEach((campaignTubeRecommendation) => {
+    this.campaignTubeRecommendations.forEach((campaignTubeRecommendation: any) => {
       const tubeId = campaignTubeRecommendation.tubeId;
       if (tubeId in knowledgeElementsByTube) {
+        // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
         campaignTubeRecommendation.add({ knowledgeElements: knowledgeElementsByTube[tubeId] });
       }
     });
   }
 
   finalize() {
-    this.campaignTubeRecommendations.forEach((campaignTubeRecommendation) => {
+    this.campaignTubeRecommendations.forEach((campaignTubeRecommendation: any) => {
       campaignTubeRecommendation.finalize();
     });
   }
 }
 
 class CampaignTubeRecommendation {
+  areaColor: any;
+  averageScore: any;
+  campaignId: any;
+  competenceId: any;
+  competenceName: any;
+  cumulativeParticipantCount: any;
+  cumulativeScore: any;
+  maxSkillLevelInTargetProfile: any;
+  participantCount: any;
+  tube: any;
+  tutorials: any;
   constructor({
     campaignId,
     area,
@@ -47,8 +70,8 @@ class CampaignTubeRecommendation {
     competence,
     maxSkillLevelInTargetProfile,
     tutorials,
-    participantCount = 0,
-  } = {}) {
+    participantCount = 0
+  }: any = {}) {
     this.campaignId = campaignId;
     this.tube = tube;
     this.competenceId = competence.id;
@@ -62,18 +85,22 @@ class CampaignTubeRecommendation {
     this.averageScore = null;
   }
 
+  // @ts-expect-error ts-migrate(1056) FIXME: Accessors are only available when targeting ECMASc... Remove this comment to see the full error message
   get tubeId() {
     return this.tube.id;
   }
 
+  // @ts-expect-error ts-migrate(1056) FIXME: Accessors are only available when targeting ECMASc... Remove this comment to see the full error message
   get tubePracticalTitle() {
     return this.tube.practicalTitle;
   }
 
+  // @ts-expect-error ts-migrate(1056) FIXME: Accessors are only available when targeting ECMASc... Remove this comment to see the full error message
   get tubeDescription() {
     return this.tube.description;
   }
 
+  // @ts-expect-error ts-migrate(1056) FIXME: Accessors are only available when targeting ECMASc... Remove this comment to see the full error message
   get id() {
     return `${this.campaignId}_${this.tubeId}`;
   }
@@ -93,15 +120,15 @@ class CampaignTubeRecommendation {
     }
   }
 
-  _computeCumulativeScore(knowledgeElementsByParticipant) {
-    this.cumulativeScore += _(knowledgeElementsByParticipant).sumBy((knowledgeElements) =>
-      recommendationService.computeRecommendationScore(
-        this.tube.skills,
-        this.maxSkillLevelInTargetProfile,
-        knowledgeElements
-      )
+  _computeCumulativeScore(knowledgeElementsByParticipant: any) {
+    this.cumulativeScore += _(knowledgeElementsByParticipant).sumBy((knowledgeElements: any) => recommendationService.computeRecommendationScore(
+      this.tube.skills,
+      this.maxSkillLevelInTargetProfile,
+      knowledgeElements
+    )
     );
   }
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = CampaignAnalysis;

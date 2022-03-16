@@ -1,5 +1,7 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'StudentInf... Remove this comment to see the full error message
 const StudentInformationForAccountRecovery = require('../read-models/StudentInformationForAccountRecovery');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = async function checkScoAccountRecovery({
   studentInformation,
   schoolingRegistrationRepository,
@@ -7,8 +9,8 @@ module.exports = async function checkScoAccountRecovery({
   accountRecoveryDemandRepository,
   userRepository,
   scoAccountRecoveryService,
-  userReconciliationService,
-}) {
+  userReconciliationService
+}: any) {
   const { firstName, lastName, username, organizationId, email } =
     await scoAccountRecoveryService.retrieveSchoolingRegistration({
       studentInformation,

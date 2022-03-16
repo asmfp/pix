@@ -1,14 +1,26 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_'.
 const _ = require('lodash');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const BookshelfAssessmentResult = require('../orm-models/AssessmentResult');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'bookshelfT... Remove this comment to see the full error message
 const bookshelfToDomainConverter = require('../utils/bookshelf-to-domain-converter');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'knex'.
 const { knex } = require('../bookshelf');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'MissingAss... Remove this comment to see the full error message
 const { MissingAssessmentId, AssessmentResultNotCreatedError } = require('../../domain/errors');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'DomainTran... Remove this comment to see the full error message
 const DomainTransaction = require('../DomainTransaction');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Assessment... Remove this comment to see the full error message
 const AssessmentResult = require('../../domain/models/AssessmentResult');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Competence... Remove this comment to see the full error message
 const CompetenceMark = require('../../domain/models/CompetenceMark');
 
-function _toDomain({ assessmentResultDTO, competencesMarksDTO }) {
-  const competenceMarks = competencesMarksDTO.map((competenceMark) => new CompetenceMark(competenceMark));
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_toDomain'... Remove this comment to see the full error message
+function _toDomain({
+  assessmentResultDTO,
+  competencesMarksDTO
+}: any) {
+  const competenceMarks = competencesMarksDTO.map((competenceMark: any) => new CompetenceMark(competenceMark));
 
   return new AssessmentResult({
     id: assessmentResultDTO.id,
@@ -25,6 +37,7 @@ function _toDomain({ assessmentResultDTO, competencesMarksDTO }) {
   });
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
   async save(
     {
@@ -36,8 +49,8 @@ module.exports = {
       commentForOrganization,
       id,
       juryId,
-      assessmentId,
-    },
+      assessmentId
+    }: any,
     domainTransaction = DomainTransaction.emptyTransaction()
   ) {
     if (_.isNil(assessmentId)) {
@@ -62,10 +75,13 @@ module.exports = {
     }
   },
 
-  async findLatestLevelAndPixScoreByAssessmentId({ assessmentId, limitDate }) {
+  async findLatestLevelAndPixScoreByAssessmentId({
+    assessmentId,
+    limitDate
+  }: any) {
     const result = await knex('assessment-results')
       .select('level', 'pixScore')
-      .where((qb) => {
+      .where((qb: any) => {
         qb.where({ assessmentId });
         if (limitDate) {
           qb.where('createdAt', '<', limitDate);
@@ -80,7 +96,9 @@ module.exports = {
     };
   },
 
-  async getByCertificationCourseId({ certificationCourseId }) {
+  async getByCertificationCourseId({
+    certificationCourseId
+  }: any) {
     const assessment = await knex('assessments')
       .select('id')
       .where({ certificationCourseId })

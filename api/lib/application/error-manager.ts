@@ -1,21 +1,33 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_'.
 const _ = require('lodash');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'JSONAPIErr... Remove this comment to see the full error message
 const JSONAPIError = require('jsonapi-serializer').Error;
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const HttpErrors = require('./http-errors');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const DomainErrors = require('../domain/errors');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'errorSeria... Remove this comment to see the full error message
 const errorSerializer = require('../infrastructure/serializers/jsonapi/error-serializer');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'extractLoc... Remove this comment to see the full error message
 const { extractLocaleFromRequest } = require('../infrastructure/utils/request-response-utils');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const translations = require('../../translations');
 
 const NOT_VALID_RELATIONSHIPS = ['externalId', 'participantExternalId'];
 
-function translateMessage(locale, key) {
+function translateMessage(locale: any, key: any) {
   if (translations[locale]['entity-validation-errors'][key]) {
     return translations[locale]['entity-validation-errors'][key];
   }
   return key;
 }
 
-function _formatAttribute({ attribute, message, locale }) {
+// @ts-expect-error ts-migrate(2393) FIXME: Duplicate function implementation.
+function _formatAttribute({
+  attribute,
+  message,
+  locale
+}: any) {
   return {
     status: '422',
     source: {
@@ -26,7 +38,12 @@ function _formatAttribute({ attribute, message, locale }) {
   };
 }
 
-function _formatRelationship({ attribute, message, locale }) {
+// @ts-expect-error ts-migrate(2393) FIXME: Duplicate function implementation.
+function _formatRelationship({
+  attribute,
+  message,
+  locale
+}: any) {
   const relationship = attribute.replace('Id', '');
   return {
     status: '422',
@@ -38,7 +55,11 @@ function _formatRelationship({ attribute, message, locale }) {
   };
 }
 
-function _formatUndefinedAttribute({ message, locale }) {
+// @ts-expect-error ts-migrate(2393) FIXME: Duplicate function implementation.
+function _formatUndefinedAttribute({
+  message,
+  locale
+}: any) {
   return {
     status: '422',
     title: 'Invalid data attributes',
@@ -46,17 +67,22 @@ function _formatUndefinedAttribute({ message, locale }) {
   };
 }
 
-function _formatInvalidAttribute(locale, { attribute, message }) {
+// @ts-expect-error ts-migrate(2393) FIXME: Duplicate function implementation.
+function _formatInvalidAttribute(locale: any, {
+  attribute,
+  message
+}: any) {
   if (!attribute) {
     return _formatUndefinedAttribute({ message, locale });
   }
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'includes' does not exist on type '{}'.
   if (attribute.endsWith('Id') && !NOT_VALID_RELATIONSHIPS.includes(attribute)) {
     return _formatRelationship({ attribute, message, locale });
   }
   return _formatAttribute({ attribute, message, locale });
 }
 
-function _mapToHttpError(error) {
+function _mapToHttpError(error: any) {
   if (error instanceof HttpErrors.BaseHttpError) {
     return error;
   }
@@ -422,11 +448,12 @@ function _mapToHttpError(error) {
   return new HttpErrors.BaseHttpError(error.message);
 }
 
-function handle(request, h, error) {
+function handle(request: any, h: any, error: any) {
   if (error instanceof DomainErrors.EntityValidationError) {
     const locale = extractLocaleFromRequest(request).split('-')[0];
 
     const jsonApiError = new JSONAPIError(
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'bind' does not exist on type '{ (locale:... Remove this comment to see the full error message
       error.invalidAttributes?.map(_formatInvalidAttribute.bind(_formatInvalidAttribute, locale))
     );
     return h.response(jsonApiError).code(422);
@@ -437,4 +464,5 @@ function handle(request, h, error) {
   return h.response(errorSerializer.serialize(httpError)).code(httpError.status);
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = { handle };

@@ -1,10 +1,15 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'knex'.
 const { knex } = require('../../../../db/knex-database-connection');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'NotFoundEr... Remove this comment to see the full error message
 const { NotFoundError } = require('../../../domain/errors');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'SessionFor... Remove this comment to see the full error message
 const SessionForAttendanceSheet = require('../../../domain/read-models/SessionForAttendanceSheet');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Certificat... Remove this comment to see the full error message
 const CertificationCandidateForAttendanceSheet = require('../../../domain/read-models/CertificationCandidateForAttendanceSheet');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
-  async getWithCertificationCandidates(idSession) {
+  async getWithCertificationCandidates(idSession: any) {
     const results = await knex
       .select(
         'sessions.id',
@@ -43,6 +48,7 @@ module.exports = {
       .first();
 
     if (!results) {
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
       throw new NotFoundError("La session n'existe pas");
     }
 
@@ -50,8 +56,9 @@ module.exports = {
   },
 };
 
-function _toDomain(results) {
-  const toDomainCertificationCandidates = results.certificationCandidates.map((candidate) => {
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_toDomain'... Remove this comment to see the full error message
+function _toDomain(results: any) {
+  const toDomainCertificationCandidates = results.certificationCandidates.map((candidate: any) => {
     return new CertificationCandidateForAttendanceSheet({ ...candidate });
   });
 

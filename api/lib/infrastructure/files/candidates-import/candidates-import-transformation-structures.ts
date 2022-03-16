@@ -1,6 +1,10 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_'.
 const _ = require('lodash');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'convertDat... Remove this comment to see the full error message
 const { convertDateValue } = require('../../utils/date-utils');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'CLEA'.
 const { CLEA, PIX_PLUS_DROIT } = require('../../../domain/models/ComplementaryCertification');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'featureTog... Remove this comment to see the full error message
 const { featureToggles } = require('../../../config');
 
 // These are transformation structures. They provide all the necessary info
@@ -35,7 +39,7 @@ const _TRANSFORMATION_STRUCT_FOR_PIX_CERTIF_CANDIDATES_IMPORT = [
   {
     header: '* Date de naissance (format : jj/mm/aaaa)',
     property: 'birthdate',
-    transformFn: (cellVal) => {
+    transformFn: (cellVal: any) => {
       return convertDateValue({ dateString: cellVal, inputFormat: 'DD/MM/YYYY', outputFormat: 'YYYY-MM-DD' });
     },
   },
@@ -77,7 +81,11 @@ const _TRANSFORMATION_STRUCT_FOR_PIX_CERTIF_CANDIDATES_IMPORT = [
 ];
 
 // ALL
-function getTransformationStructsForPixCertifCandidatesImport({ complementaryCertifications, isSco }) {
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'getTransfo... Remove this comment to see the full error message
+function getTransformationStructsForPixCertifCandidatesImport({
+  complementaryCertifications,
+  isSco
+}: any) {
   const transformationStruct = [..._TRANSFORMATION_STRUCT_FOR_PIX_CERTIF_CANDIDATES_IMPORT];
 
   if (featureToggles.isComplementaryCertificationSubscriptionEnabled) {
@@ -94,12 +102,12 @@ function getTransformationStructsForPixCertifCandidatesImport({ complementaryCer
   };
 }
 
-function _includeComplementaryCertificationColumns(complementaryCertifications, transformationStruct) {
+function _includeComplementaryCertificationColumns(complementaryCertifications: any, transformationStruct: any) {
   const containsClea = complementaryCertifications.some(
-    (complementaryCertification) => complementaryCertification.name === CLEA
+    (complementaryCertification: any) => complementaryCertification.name === CLEA
   );
   const containsPixPlusDroit = complementaryCertifications.some(
-    (complementaryCertification) => complementaryCertification.name === PIX_PLUS_DROIT
+    (complementaryCertification: any) => complementaryCertification.name === PIX_PLUS_DROIT
   );
 
   if (containsClea) {
@@ -119,7 +127,7 @@ function _includeComplementaryCertificationColumns(complementaryCertifications, 
   }
 }
 
-function _includeBillingColumns(transformationStruct) {
+function _includeBillingColumns(transformationStruct: any) {
   transformationStruct.push({
     header: 'Tarification part Pix',
     property: 'billingMode',
@@ -132,25 +140,26 @@ function _includeBillingColumns(transformationStruct) {
   });
 }
 
-function _toNotEmptyTrimmedStringOrNull(val) {
+function _toNotEmptyTrimmedStringOrNull(val: any) {
   const value = _.toString(val);
   const trimmedValue = _.trim(value);
   return _.isEmpty(trimmedValue) ? null : trimmedValue;
 }
 
-function _toNonZeroValueOrNull(val) {
+function _toNonZeroValueOrNull(val: any) {
   const value = _.toNumber(val);
   return _.isNaN(value) ? null : value === 0 ? null : value;
 }
 
-function _getHeadersFromTransformationStruct(transformationStruct) {
+function _getHeadersFromTransformationStruct(transformationStruct: any) {
   return _.map(transformationStruct, 'header');
 }
 
-function _toBooleanIfValueEqualsOuiOrNull(val) {
+function _toBooleanIfValueEqualsOuiOrNull(val: any) {
   return _.toUpper(val) === 'OUI' ? true : null;
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
   getTransformationStructsForPixCertifCandidatesImport,
 };

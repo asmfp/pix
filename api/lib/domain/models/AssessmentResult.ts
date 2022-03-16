@@ -1,5 +1,7 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Assessment... Remove this comment to see the full error message
 const Assessment = require('./Assessment');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'status'.
 const status = {
   REJECTED: 'rejected',
   VALIDATED: 'validated',
@@ -7,7 +9,19 @@ const status = {
   CANCELLED: 'cancelled',
 };
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Assessment... Remove this comment to see the full error message
 class AssessmentResult {
+  assessmentId: any;
+  commentForCandidate: any;
+  commentForJury: any;
+  commentForOrganization: any;
+  competenceMarks: any;
+  createdAt: any;
+  emitter: any;
+  id: any;
+  juryId: any;
+  pixScore: any;
+  status: any;
   // FIXME: assessmentId && juryId to replace by assessment && jury domain objects
   constructor({
     id,
@@ -20,8 +34,8 @@ class AssessmentResult {
     status,
     competenceMarks = [],
     assessmentId,
-    juryId,
-  } = {}) {
+    juryId
+  }: any = {}) {
     this.id = id;
     this.commentForCandidate = commentForCandidate;
     this.commentForJury = commentForJury;
@@ -35,7 +49,12 @@ class AssessmentResult {
     this.juryId = juryId;
   }
 
-  static buildAlgoErrorResult({ error, assessmentId, juryId, emitter }) {
+  static buildAlgoErrorResult({
+    error,
+    assessmentId,
+    juryId,
+    emitter
+  }: any) {
     return new AssessmentResult({
       emitter,
       commentForJury: error.message,
@@ -46,7 +65,13 @@ class AssessmentResult {
     });
   }
 
-  static buildStandardAssessmentResult({ pixScore, status, assessmentId, juryId, emitter }) {
+  static buildStandardAssessmentResult({
+    pixScore,
+    status,
+    assessmentId,
+    juryId,
+    emitter
+  }: any) {
     return new AssessmentResult({
       emitter,
       commentForJury: 'Computed',
@@ -57,14 +82,23 @@ class AssessmentResult {
     });
   }
 
-  static buildStartedAssessmentResult({ assessmentId }) {
+  static buildStartedAssessmentResult({
+    assessmentId
+  }: any) {
     return new AssessmentResult({
       assessmentId,
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'states' does not exist on type 'typeof A... Remove this comment to see the full error message
       status: Assessment.states.STARTED,
     });
   }
 
-  static buildNotTrustableAssessmentResult({ pixScore, status, assessmentId, juryId, emitter }) {
+  static buildNotTrustableAssessmentResult({
+    pixScore,
+    status,
+    assessmentId,
+    juryId,
+    emitter
+  }: any) {
     return new AssessmentResult({
       emitter,
       commentForCandidate:
@@ -92,4 +126,5 @@ class AssessmentResult {
 }
 
 AssessmentResult.status = status;
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = AssessmentResult;

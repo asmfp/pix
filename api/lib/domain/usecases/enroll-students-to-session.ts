@@ -1,8 +1,12 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'SCOCertifi... Remove this comment to see the full error message
 const SCOCertificationCandidate = require('../models/SCOCertificationCandidate');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_'.
 const _ = require('lodash');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'ForbiddenA... Remove this comment to see the full error message
 const { ForbiddenAccess, UnknownCountryForStudentEnrollmentError } = require('../errors');
 const INSEE_PREFIX_CODE = '99';
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = async function enrollStudentsToSession({
   sessionId,
   referentId,
@@ -12,8 +16,8 @@ module.exports = async function enrollStudentsToSession({
   organizationRepository,
   certificationCenterMembershipRepository,
   countryRepository,
-  sessionRepository,
-} = {}) {
+  sessionRepository
+}: any = {}) {
   const session = await sessionRepository.get(sessionId);
   const referentCertificationCenterMemberships = await certificationCenterMembershipRepository.findByUserId(referentId);
 
@@ -31,10 +35,10 @@ module.exports = async function enrollStudentsToSession({
 
   const countries = await countryRepository.findAll();
 
-  const scoCertificationCandidates = students.map((student) => {
+  const scoCertificationCandidates = students.map((student: any) => {
     const studentInseeCountryCode = INSEE_PREFIX_CODE + student.birthCountryCode;
 
-    const studentCountry = countries.find((country) => country.code === studentInseeCountryCode);
+    const studentCountry = countries.find((country: any) => country.code === studentInseeCountryCode);
 
     if (!studentCountry)
       throw new UnknownCountryForStudentEnrollmentError({
@@ -61,15 +65,19 @@ module.exports = async function enrollStudentsToSession({
   });
 };
 
-function _doesSessionBelongToSameCertificationCenterAsReferent(referentCertificationCenterMemberships, session) {
+function _doesSessionBelongToSameCertificationCenterAsReferent(referentCertificationCenterMemberships: any, session: any) {
   return referentCertificationCenterMemberships.some(
-    (membership) => membership.certificationCenter.id === session.certificationCenterId
+    (membership: any) => membership.certificationCenter.id === session.certificationCenterId
   );
 }
 
-async function _doAllStudentsBelongToSameCertificationCenterAsSession({ students, session, organizationRepository }) {
+async function _doAllStudentsBelongToSameCertificationCenterAsSession({
+  students,
+  session,
+  organizationRepository
+}: any) {
   const certificationCenterId = session.certificationCenterId;
   const organizationId = await organizationRepository.getIdByCertificationCenterId(certificationCenterId);
 
-  return _.every(students, (student) => organizationId === student.organizationId);
+  return _.every(students, (student: any) => organizationId === student.organizationId);
 }

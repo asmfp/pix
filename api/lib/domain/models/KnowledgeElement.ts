@@ -1,7 +1,11 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Skill'.
 const Skill = require('../models/Skill');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_'.
 const _ = require('lodash');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
 const moment = require('moment');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'statuses'.
 const statuses = {
   VALIDATED: 'validated',
   INVALIDATED: 'invalidated',
@@ -17,7 +21,18 @@ const sources = {
   INFERRED: 'inferred',
 };
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'KnowledgeE... Remove this comment to see the full error message
 class KnowledgeElement {
+  answerId: any;
+  assessmentId: any;
+  competenceId: any;
+  createdAt: any;
+  earnedPix: any;
+  id: any;
+  skillId: any;
+  source: any;
+  status: any;
+  userId: any;
   constructor({
     id,
     createdAt,
@@ -28,8 +43,8 @@ class KnowledgeElement {
     assessmentId,
     skillId,
     userId,
-    competenceId,
-  } = {}) {
+    competenceId
+  }: any = {}) {
     this.id = id;
     this.createdAt = createdAt;
     this.source = source;
@@ -42,11 +57,14 @@ class KnowledgeElement {
     this.competenceId = competenceId;
   }
 
+  // @ts-expect-error ts-migrate(1056) FIXME: Accessors are only available when targeting ECMASc... Remove this comment to see the full error message
   get isValidated() {
     return this.status === statuses.VALIDATED;
   }
 
+  // @ts-expect-error ts-migrate(1056) FIXME: Accessors are only available when targeting ECMASc... Remove this comment to see the full error message
   get isInvalidated() {
+    // @ts-expect-error ts-migrate(2551) FIXME: Property 'INVALIDATED' does not exist on type '{ D... Remove this comment to see the full error message
     return this.status === statuses.INVALIDATED;
   }
 
@@ -60,8 +78,8 @@ class KnowledgeElement {
     previouslyFailedSkills,
     previouslyValidatedSkills,
     targetSkills,
-    userId,
-  }) {
+    userId
+  }: any) {
     const directKnowledgeElement = _createDirectKnowledgeElement({
       answer,
       challenge,
@@ -81,13 +99,13 @@ class KnowledgeElement {
     });
   }
 
-  static computeDaysSinceLastKnowledgeElement(knowledgeElements) {
+  static computeDaysSinceLastKnowledgeElement(knowledgeElements: any) {
     const lastCreatedAt = _(knowledgeElements).map('createdAt').max();
     const precise = true;
     return moment().diff(lastCreatedAt, 'days', precise);
   }
 
-  static findDirectlyValidatedFromGroups(knowledgeElementsByCompetence) {
+  static findDirectlyValidatedFromGroups(knowledgeElementsByCompetence: any) {
     return _(knowledgeElementsByCompetence)
       .values()
       .flatten()
@@ -106,28 +124,35 @@ function _createDirectKnowledgeElement({
   previouslyFailedSkills,
   previouslyValidatedSkills,
   targetSkills,
-  userId,
-}) {
+  userId
+}: any) {
+  // @ts-expect-error ts-migrate(2551) FIXME: Property 'INVALIDATED' does not exist on type '{ D... Remove this comment to see the full error message
   const status = answer.isOk() ? statuses.VALIDATED : statuses.INVALIDATED;
 
   const filters = [
     _skillIsInTargetedSkills({ targetSkills }),
     _skillIsNotAlreadyAssessed({ previouslyFailedSkills, previouslyValidatedSkills }),
   ];
-  if (filters.every((filter) => filter(challenge.skill))) {
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'every' does not exist on type '{}'.
+  if (filters.every((filter: any) => filter(challenge.skill))) {
     const source = sources.DIRECT;
     const skill = challenge.skill;
     return _createKnowledgeElement({ skill, source, status, answer, userId });
   }
 }
 
-function _skillIsInTargetedSkills({ targetSkills }) {
-  return (skill) => !_(targetSkills).intersectionWith([skill], Skill.areEqualById).isEmpty();
+function _skillIsInTargetedSkills({
+  targetSkills
+}: any) {
+  return (skill: any) => !_(targetSkills).intersectionWith([skill], Skill.areEqualById).isEmpty();
 }
 
-function _skillIsNotAlreadyAssessed({ previouslyFailedSkills, previouslyValidatedSkills }) {
+function _skillIsNotAlreadyAssessed({
+  previouslyFailedSkills,
+  previouslyValidatedSkills
+}: any) {
   const alreadyAssessedSkills = previouslyValidatedSkills.concat(previouslyFailedSkills);
-  return (skill) => _(alreadyAssessedSkills).intersectionWith([skill], Skill.areEqualById).isEmpty();
+  return (skill: any) => _(alreadyAssessedSkills).intersectionWith([skill], Skill.areEqualById).isEmpty();
 }
 
 function _enrichDirectKnowledgeElementWithInferredKnowledgeElements({
@@ -136,9 +161,10 @@ function _enrichDirectKnowledgeElementWithInferredKnowledgeElements({
   previouslyFailedSkills,
   previouslyValidatedSkills,
   targetSkills,
-  userId,
-}) {
-  const targetSkillsGroupedByTubeName = _.groupBy(targetSkills, (skill) => skill.tubeNameWithoutPrefix);
+  userId
+}: any) {
+  const targetSkillsGroupedByTubeName = _.groupBy(targetSkills, (skill: any) => skill.tubeNameWithoutPrefix);
+  // @ts-expect-error ts-migrate(2551) FIXME: Property 'INVALIDATED' does not exist on type '{ D... Remove this comment to see the full error message
   const status = answer.isOk() ? statuses.VALIDATED : statuses.INVALIDATED;
 
   if (directKnowledgeElement) {
@@ -146,7 +172,7 @@ function _enrichDirectKnowledgeElementWithInferredKnowledgeElements({
 
     const newKnowledgeElements = targetSkillsGroupedByTubeName[directSkill.tubeNameWithoutPrefix]
       .filter(_skillIsNotAlreadyAssessed({ previouslyFailedSkills, previouslyValidatedSkills }))
-      .flatMap((skillToInfer) => {
+      .flatMap((skillToInfer: any) => {
         const newKnowledgeElements = _createInferredKnowledgeElements({
           answer,
           status,
@@ -161,12 +187,18 @@ function _enrichDirectKnowledgeElementWithInferredKnowledgeElements({
   return [];
 }
 
-function _findSkillByIdFromTargetSkills(skillId, targetSkills) {
-  const skillToCopy = targetSkills.find((skill) => skill.id === skillId);
+function _findSkillByIdFromTargetSkills(skillId: any, targetSkills: any) {
+  const skillToCopy = targetSkills.find((skill: any) => skill.id === skillId);
   return new Skill({ id: skillToCopy.id, name: skillToCopy.name });
 }
 
-function _createInferredKnowledgeElements({ answer, status, directSkill, skillToInfer, userId }) {
+function _createInferredKnowledgeElements({
+  answer,
+  status,
+  directSkill,
+  skillToInfer,
+  userId
+}: any) {
   const newInferredKnowledgeElements = [];
   if (status === statuses.VALIDATED && skillToInfer.difficulty < directSkill.difficulty) {
     const newKnowledgeElement = _createKnowledgeElement({
@@ -176,22 +208,32 @@ function _createInferredKnowledgeElements({ answer, status, directSkill, skillTo
       status: statuses.VALIDATED,
       source: sources.INFERRED,
     });
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'push' does not exist on type '{}'.
     newInferredKnowledgeElements.push(newKnowledgeElement);
   }
+  // @ts-expect-error ts-migrate(2551) FIXME: Property 'INVALIDATED' does not exist on type '{ D... Remove this comment to see the full error message
   if (status === statuses.INVALIDATED && skillToInfer.difficulty > directSkill.difficulty) {
     const newKnowledgeElement = _createKnowledgeElement({
       answer,
       skill: skillToInfer,
       userId,
+      // @ts-expect-error ts-migrate(2551) FIXME: Property 'INVALIDATED' does not exist on type '{ D... Remove this comment to see the full error message
       status: statuses.INVALIDATED,
       source: sources.INFERRED,
     });
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'push' does not exist on type '{}'.
     newInferredKnowledgeElements.push(newKnowledgeElement);
   }
   return newInferredKnowledgeElements;
 }
 
-function _createKnowledgeElement({ answer, skill, userId, status, source }) {
+function _createKnowledgeElement({
+  answer,
+  skill,
+  userId,
+  status,
+  source
+}: any) {
   const pixValue = status === statuses.VALIDATED ? skill.pixValue : 0;
 
   return new KnowledgeElement({
@@ -206,4 +248,5 @@ function _createKnowledgeElement({ answer, skill, userId, status, source }) {
   });
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = KnowledgeElement;

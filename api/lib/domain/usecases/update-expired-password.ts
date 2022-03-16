@@ -1,7 +1,10 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'get'.
 const get = require('lodash/get');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'ForbiddenA... Remove this comment to see the full error message
 const { ForbiddenAccess } = require('../../domain/errors');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = async function updateExpiredPassword({
   expiredPassword,
   newPassword,
@@ -9,8 +12,8 @@ module.exports = async function updateExpiredPassword({
   authenticationService,
   encryptionService,
   authenticationMethodRepository,
-  userRepository,
-}) {
+  userRepository
+}: any) {
   const foundUser = await authenticationService.getUserByUsernameAndPassword({
     username,
     password: expiredPassword,

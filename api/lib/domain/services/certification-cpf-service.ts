@@ -1,4 +1,6 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'normalizeA... Remove this comment to see the full error message
 const { normalizeAndSortChars } = require('../../infrastructure/utils/string-utils');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'isEmpty'.
 const isEmpty = require('lodash/isEmpty');
 
 const CpfValidationStatus = {
@@ -7,7 +9,20 @@ const CpfValidationStatus = {
 };
 
 class CpfBirthInformationValidation {
-  constructor({ message, status, birthCountry, birthINSEECode, birthPostalCode, birthCity }) {
+  birthCity: any;
+  birthCountry: any;
+  birthINSEECode: any;
+  birthPostalCode: any;
+  message: any;
+  status: any;
+  constructor({
+    message,
+    status,
+    birthCountry,
+    birthINSEECode,
+    birthPostalCode,
+    birthCity
+  }: any) {
     this.message = message;
     this.status = status;
     this.birthCountry = birthCountry;
@@ -16,11 +31,16 @@ class CpfBirthInformationValidation {
     this.birthCity = birthCity;
   }
 
-  static failure(message) {
+  static failure(message: any) {
     return new CpfBirthInformationValidation({ message, status: CpfValidationStatus.FAILURE });
   }
 
-  static success({ birthCountry, birthINSEECode, birthPostalCode, birthCity }) {
+  static success({
+    birthCountry,
+    birthINSEECode,
+    birthPostalCode,
+    birthCity
+  }: any) {
     return new CpfBirthInformationValidation({
       birthCountry,
       birthINSEECode,
@@ -35,7 +55,7 @@ class CpfBirthInformationValidation {
   }
 }
 
-function getForeignCountryBirthInformation(birthCity, birthINSEECode, birthPostalCode, country) {
+function getForeignCountryBirthInformation(birthCity: any, birthINSEECode: any, birthPostalCode: any, country: any) {
   if (!birthCity) {
     return CpfBirthInformationValidation.failure('Le champ ville est obligatoire.');
   }
@@ -58,7 +78,7 @@ function getForeignCountryBirthInformation(birthCity, birthINSEECode, birthPosta
   });
 }
 
-async function getBirthInformationByINSEECode(birthCity, birthINSEECode, country, certificationCpfCityRepository) {
+async function getBirthInformationByINSEECode(birthCity: any, birthINSEECode: any, country: any, certificationCpfCityRepository: any) {
   if (birthCity) {
     return CpfBirthInformationValidation.failure(
       "Le champ commune de naissance ne doit pas être renseigné lorsqu'un code INSEE est renseigné."
@@ -79,7 +99,7 @@ async function getBirthInformationByINSEECode(birthCity, birthINSEECode, country
   });
 }
 
-async function getBirthInformationByPostalCode(birthCity, birthPostalCode, country, certificationCpfCityRepository) {
+async function getBirthInformationByPostalCode(birthCity: any, birthPostalCode: any, country: any, certificationCpfCityRepository: any) {
   if (!birthCity) {
     return CpfBirthInformationValidation.failure('Le champ ville est obligatoire.');
   }
@@ -91,7 +111,7 @@ async function getBirthInformationByPostalCode(birthCity, birthPostalCode, count
   }
 
   const normalizedAndSortedCity = normalizeAndSortChars(birthCity);
-  const matchedCity = cities.find((city) => normalizeAndSortChars(city.name) === normalizedAndSortedCity);
+  const matchedCity = cities.find((city: any) => normalizeAndSortChars(city.name) === normalizedAndSortedCity);
 
   if (!matchedCity) {
     return CpfBirthInformationValidation.failure(
@@ -113,8 +133,8 @@ async function getBirthInformation({
   birthPostalCode,
   birthINSEECode,
   certificationCpfCountryRepository,
-  certificationCpfCityRepository,
-}) {
+  certificationCpfCityRepository
+}: any) {
   if (!birthCountry) {
     return CpfBirthInformationValidation.failure('Le champ pays est obligatoire.');
   }
@@ -148,11 +168,12 @@ async function getBirthInformation({
   }
 }
 
-function _getActualCity(cities) {
-  const actualCity = cities.find((city) => city.isActualName);
+function _getActualCity(cities: any) {
+  const actualCity = cities.find((city: any) => city.isActualName);
   return actualCity.name;
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
   getBirthInformation,
   CpfBirthInformationValidation,

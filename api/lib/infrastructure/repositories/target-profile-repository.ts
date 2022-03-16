@@ -1,22 +1,37 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_'.
 const _ = require('lodash');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'bluebird'.
 const bluebird = require('bluebird');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const BookshelfTargetProfile = require('../orm-models/TargetProfile');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'skillDatas... Remove this comment to see the full error message
 const skillDatasource = require('../datasources/learning-content/skill-datasource');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const targetProfileAdapter = require('../adapters/target-profile-adapter');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'bookshelfT... Remove this comment to see the full error message
 const bookshelfToDomainConverter = require('../utils/bookshelf-to-domain-converter');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'knex'.
 const { knex } = require('../bookshelf');
 const {
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'TargetProf... Remove this comment to see the full error message
   TargetProfileCannotBeCreated,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'NotFoundEr... Remove this comment to see the full error message
   NotFoundError,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'ObjectVali... Remove this comment to see the full error message
   ObjectValidationError,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'InvalidSki... Remove this comment to see the full error message
   InvalidSkillSetError,
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 } = require('../../domain/errors');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'DomainTran... Remove this comment to see the full error message
 const DomainTransaction = require('../../infrastructure/DomainTransaction');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'TargetProf... Remove this comment to see the full error message
 const TargetProfile = require('../../domain/models/TargetProfile');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
-  async create(targetProfileData) {
+  async create(targetProfileData: any) {
     const targetProfileRawData = _.pick(targetProfileData, [
       'name',
       'isPublic',
@@ -34,7 +49,7 @@ module.exports = {
 
       const skillsIdList = _.uniq(targetProfileData.skillIds);
 
-      const skillToAdd = skillsIdList.map((skillId) => {
+      const skillToAdd = skillsIdList.map((skillId: any) => {
         return { targetProfileId, skillId };
       });
 
@@ -50,7 +65,7 @@ module.exports = {
     }
   },
 
-  async get(id, domainTransaction = DomainTransaction.emptyTransaction()) {
+  async get(id: any, domainTransaction = DomainTransaction.emptyTransaction()) {
     const targetProfileBookshelf = await BookshelfTargetProfile.where({ id }).fetch({
       require: false,
       withRelated: ['skillIds'],
@@ -58,14 +73,15 @@ module.exports = {
     });
 
     if (!targetProfileBookshelf) {
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
       throw new NotFoundError(`Le profil cible avec l'id ${id} n'existe pas`);
     }
 
     return _getWithLearningContentSkills(targetProfileBookshelf);
   },
 
-  async getByCampaignId(campaignId) {
-    const targetProfileBookshelf = await BookshelfTargetProfile.query((qb) => {
+  async getByCampaignId(campaignId: any) {
+    const targetProfileBookshelf = await BookshelfTargetProfile.query((qb: any) => {
       qb.innerJoin('campaigns', 'campaigns.targetProfileId', 'target-profiles.id');
       qb.innerJoin('target-profiles_skills', 'target-profiles_skills.targetProfileId', 'target-profiles.id');
     })
@@ -74,7 +90,7 @@ module.exports = {
         withRelated: [
           'skillIds',
           {
-            stages: function (query) {
+            stages: function (query: any) {
               query.orderBy('threshold', 'ASC');
             },
           },
@@ -84,8 +100,8 @@ module.exports = {
     return _getWithLearningContentSkills(targetProfileBookshelf);
   },
 
-  async getByCampaignParticipationId(campaignParticipationId) {
-    const targetProfileBookshelf = await BookshelfTargetProfile.query((qb) => {
+  async getByCampaignParticipationId(campaignParticipationId: any) {
+    const targetProfileBookshelf = await BookshelfTargetProfile.query((qb: any) => {
       qb.innerJoin('campaigns', 'campaigns.targetProfileId', 'target-profiles.id');
       qb.innerJoin('campaign-participations', 'campaign-participations.campaignId', 'campaigns.id');
       qb.innerJoin('target-profiles_skills', 'target-profiles_skills.targetProfileId', 'target-profiles.id');
@@ -95,7 +111,7 @@ module.exports = {
         withRelated: [
           'skillIds',
           {
-            stages: function (query) {
+            stages: function (query: any) {
               query.orderBy('threshold', 'ASC');
             },
           },
@@ -105,8 +121,8 @@ module.exports = {
     return _getWithLearningContentSkills(targetProfileBookshelf);
   },
 
-  async findAllTargetProfilesOrganizationCanUse(ownerOrganizationId) {
-    const targetProfilesBookshelf = await BookshelfTargetProfile.query((qb) => {
+  async findAllTargetProfilesOrganizationCanUse(ownerOrganizationId: any) {
+    const targetProfilesBookshelf = await BookshelfTargetProfile.query((qb: any) => {
       qb.where({ ownerOrganizationId, outdated: false });
       qb.orWhere({ isPublic: true, outdated: false });
     }).fetchAll({ withRelated: ['skillIds'] });
@@ -114,27 +130,33 @@ module.exports = {
     return bluebird.mapSeries(targetProfilesBookshelf, _getWithLearningContentSkills);
   },
 
-  async findByIds(targetProfileIds) {
-    const targetProfilesBookshelf = await BookshelfTargetProfile.query((qb) => {
+  async findByIds(targetProfileIds: any) {
+    const targetProfilesBookshelf = await BookshelfTargetProfile.query((qb: any) => {
       qb.whereIn('id', targetProfileIds);
     }).fetchAll();
 
     return bookshelfToDomainConverter.buildDomainObjects(BookshelfTargetProfile, targetProfilesBookshelf);
   },
 
-  findPaginatedFiltered({ filter, page }) {
-    return BookshelfTargetProfile.query((qb) => _setSearchFiltersForQueryBuilder(filter, qb))
+  findPaginatedFiltered({
+    filter,
+    page
+  }: any) {
+    return BookshelfTargetProfile.query((qb: any) => _setSearchFiltersForQueryBuilder(filter, qb))
       .fetchPage({
         page: page.number,
         pageSize: page.size,
       })
-      .then(({ models, pagination }) => {
+      .then(({
+      models,
+      pagination
+    }: any) => {
         const targetProfiles = bookshelfToDomainConverter.buildDomainObjects(BookshelfTargetProfile, models);
         return { models: targetProfiles, pagination };
       });
   },
 
-  async update(targetProfile) {
+  async update(targetProfile: any) {
     let results;
     const editedAttributes = _.pick(targetProfile, [
       'name',
@@ -154,25 +176,30 @@ module.exports = {
     }
 
     if (!results.length) {
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
       throw new NotFoundError(`Le profil cible avec l'id ${targetProfile.id} n'existe pas`);
     }
 
     return new TargetProfile(results[0]);
   },
 
-  async findOrganizationIds(targetProfileId) {
+  async findOrganizationIds(targetProfileId: any) {
     const targetProfile = await knex('target-profiles').select('id').where({ id: targetProfileId }).first();
     if (!targetProfile) {
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
       throw new NotFoundError(`No target profile for ID ${targetProfileId}`);
     }
 
     const targetProfileShares = await knex('target-profile-shares')
       .select('organizationId')
       .where({ 'target-profile-shares.targetProfileId': targetProfileId });
-    return targetProfileShares.map((targetProfileShare) => targetProfileShare.organizationId);
+    return targetProfileShares.map((targetProfileShare: any) => targetProfileShare.organizationId);
   },
 
-  async hasSkills({ targetProfileId, skillIds }, { knexTransaction } = DomainTransaction.emptyTransaction()) {
+  async hasSkills({
+    targetProfileId,
+    skillIds
+  }: any, { knexTransaction } = DomainTransaction.emptyTransaction()) {
     const result = await (knexTransaction ?? knex)('target-profiles_skills')
       .select('skillId')
       .whereIn('skillId', skillIds)
@@ -187,7 +214,7 @@ module.exports = {
   },
 };
 
-async function _getWithLearningContentSkills(targetProfile) {
+async function _getWithLearningContentSkills(targetProfile: any) {
   const associatedSkillDatasourceObjects = await _getLearningContentDataObjectsSkills(targetProfile);
 
   return targetProfileAdapter.fromDatasourceObjects({
@@ -196,14 +223,14 @@ async function _getWithLearningContentSkills(targetProfile) {
   });
 }
 
-function _getLearningContentDataObjectsSkills(bookshelfTargetProfile) {
+function _getLearningContentDataObjectsSkills(bookshelfTargetProfile: any) {
   const skillRecordIds = bookshelfTargetProfile
     .related('skillIds')
-    .map((BookshelfSkillId) => BookshelfSkillId.get('skillId'));
+    .map((BookshelfSkillId: any) => BookshelfSkillId.get('skillId'));
   return skillDatasource.findOperativeByRecordIds(skillRecordIds);
 }
 
-function _setSearchFiltersForQueryBuilder(filter, qb) {
+function _setSearchFiltersForQueryBuilder(filter: any, qb: any) {
   const { name, id } = filter;
   if (name) {
     qb.whereRaw('LOWER("name") LIKE ?', `%${name.toLowerCase()}%`);

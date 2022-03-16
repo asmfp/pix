@@ -1,13 +1,22 @@
 const {
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'MissingOrI... Remove this comment to see the full error message
   MissingOrInvalidCredentialsError,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'UserNotFou... Remove this comment to see the full error message
   UserNotFoundError,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PasswordNo... Remove this comment to see the full error message
   PasswordNotMatching,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'UserShould... Remove this comment to see the full error message
   UserShouldChangePasswordError,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Unexpected... Remove this comment to see the full error message
   UnexpectedUserAccountError,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'InvalidExt... Remove this comment to see the full error message
   InvalidExternalUserTokenError,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'UserAlread... Remove this comment to see the full error message
   UserAlreadyExistsWithAuthenticationMethodError,
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 } = require('../errors');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Authentica... Remove this comment to see the full error message
 const AuthenticationMethod = require('../models/AuthenticationMethod');
 
 async function authenticateExternalUser({
@@ -19,8 +28,8 @@ async function authenticateExternalUser({
   authenticationService,
   obfuscationService,
   authenticationMethodRepository,
-  userRepository,
-}) {
+  userRepository
+}: any) {
   try {
     const userFromCredentials = await authenticationService.getUserByUsernameAndPassword({
       username,
@@ -63,13 +72,14 @@ async function authenticateExternalUser({
   }
 }
 
+// @ts-expect-error ts-migrate(2697) FIXME: An async function or method must return a 'Promise... Remove this comment to see the full error message
 async function _addGarAuthenticationMethod({
   userId,
   externalUserToken,
   tokenService,
   authenticationMethodRepository,
-  userRepository,
-}) {
+  userRepository
+}: any) {
   const samlId = tokenService.extractSamlId(externalUserToken);
   if (!samlId) {
     throw new InvalidExternalUserTokenError(
@@ -80,6 +90,7 @@ async function _addGarAuthenticationMethod({
   await _checkIfSamlIdIsNotReconciledWithAnotherUser({ samlId, userId, userRepository });
 
   const garAuthenticationMethod = new AuthenticationMethod({
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'identityProviders' does not exist on typ... Remove this comment to see the full error message
     identityProvider: AuthenticationMethod.identityProviders.GAR,
     externalIdentifier: samlId,
     userId,
@@ -87,11 +98,17 @@ async function _addGarAuthenticationMethod({
   await authenticationMethodRepository.create({ authenticationMethod: garAuthenticationMethod });
 }
 
-const _checkIfSamlIdIsNotReconciledWithAnotherUser = async ({ samlId, userId, userRepository }) => {
+// @ts-expect-error ts-migrate(2697) FIXME: An async function or method must return a 'Promise... Remove this comment to see the full error message
+const _checkIfSamlIdIsNotReconciledWithAnotherUser = async ({
+  samlId,
+  userId,
+  userRepository
+}: any) => {
   const userFromCredentialsBySamlId = await userRepository.getBySamlId(samlId);
   if (userFromCredentialsBySamlId && userFromCredentialsBySamlId.id !== userId) {
     throw new UserAlreadyExistsWithAuthenticationMethodError();
   }
 };
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = authenticateExternalUser;

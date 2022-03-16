@@ -1,19 +1,36 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_'.
 const { _ } = require('lodash');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'knex'.
 const { knex } = require('../bookshelf');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'bluebird'.
 const bluebird = require('bluebird');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Certificat... Remove this comment to see the full error message
 const CertificationCourseBookshelf = require('../orm-models/CertificationCourse');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const AssessmentBookshelf = require('../orm-models/Assessment');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'bookshelfT... Remove this comment to see the full error message
 const bookshelfToDomainConverter = require('../utils/bookshelf-to-domain-converter');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'DomainTran... Remove this comment to see the full error message
 const DomainTransaction = require('../DomainTransaction');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Certificat... Remove this comment to see the full error message
 const CertificationCourse = require('../../domain/models/CertificationCourse');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'NotFoundEr... Remove this comment to see the full error message
 const { NotFoundError } = require('../../domain/errors');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const certificationChallengeRepository = require('./certification-challenge-repository');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Certificat... Remove this comment to see the full error message
 const CertificationIssueReport = require('../../domain/models/CertificationIssueReport');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Complement... Remove this comment to see the full error message
 const ComplementaryCertificationCourse = require('../../domain/models/ComplementaryCertificationCourse');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Bookshelf'... Remove this comment to see the full error message
 const Bookshelf = require('../bookshelf');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
-  async save({ certificationCourse, domainTransaction = DomainTransaction.emptyTransaction() }) {
+  async save({
+    certificationCourse,
+    domainTransaction = DomainTransaction.emptyTransaction()
+  }: any) {
     const knexConn = domainTransaction.knexTransaction || Bookshelf.knex;
     const certificationCourseToSaveDTO = _adaptModelToDb(certificationCourse);
     const options = { transacting: domainTransaction.knexTransaction };
@@ -24,7 +41,9 @@ module.exports = {
 
     const complementaryCertificationCourses = certificationCourse
       .toDTO()
-      .complementaryCertificationCourses.map(({ complementaryCertificationId }) => ({
+      .complementaryCertificationCourses.map(({
+      complementaryCertificationId
+    }: any) => ({
         complementaryCertificationId,
         certificationCourseId: savedCertificationCourseDTO.id,
       }));
@@ -35,7 +54,7 @@ module.exports = {
 
     const savedChallenges = await bluebird.mapSeries(
       certificationCourse.toDTO().challenges,
-      (certificationChallenge) => {
+      (certificationChallenge: any) => {
         const certificationChallengeWithCourseId = {
           ...certificationChallenge,
           courseId: savedCertificationCourseDTO.id,
@@ -53,7 +72,8 @@ module.exports = {
   },
 
   async changeCompletionDate(
-    certificationCourseId,
+    certificationCourseId: any,
+    // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'completedAt' implicitly has an 'any' ty... Remove this comment to see the full error message
     completedAt = null,
     domainTransaction = DomainTransaction.emptyTransaction()
   ) {
@@ -64,7 +84,7 @@ module.exports = {
     return toDomain(savedCertificationCourse);
   },
 
-  async get(id) {
+  async get(id: any) {
     try {
       const certificationCourseBookshelf = await CertificationCourseBookshelf.where({ id }).fetch({
         withRelated: ['assessment', 'challenges', 'certificationIssueReports', 'complementaryCertificationCourses'],
@@ -72,15 +92,17 @@ module.exports = {
       return toDomain(certificationCourseBookshelf);
     } catch (bookshelfError) {
       if (bookshelfError instanceof CertificationCourseBookshelf.NotFoundError) {
+        // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
         throw new NotFoundError(`Certification course of id ${id} does not exist.`);
       }
       throw bookshelfError;
     }
   },
 
-  async getCreationDate(id) {
+  async getCreationDate(id: any) {
     const row = await knex('certification-courses').select('createdAt').where({ id }).first();
     if (!row) {
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
       throw new NotFoundError(`Certification course of id ${id} does not exist.`);
     }
 
@@ -90,8 +112,8 @@ module.exports = {
   async findOneCertificationCourseByUserIdAndSessionId({
     userId,
     sessionId,
-    domainTransaction = DomainTransaction.emptyTransaction(),
-  }) {
+    domainTransaction = DomainTransaction.emptyTransaction()
+  }: any) {
     const certificationCourse = await CertificationCourseBookshelf.where({ userId, sessionId })
       .orderBy('createdAt', 'desc')
       .fetch({
@@ -102,7 +124,7 @@ module.exports = {
     return toDomain(certificationCourse);
   },
 
-  async update(certificationCourse) {
+  async update(certificationCourse: any) {
     const certificationCourseData = _pickUpdatableProperties(certificationCourse);
     const certificationCourseBookshelf = new CertificationCourseBookshelf(certificationCourseData);
     try {
@@ -110,13 +132,14 @@ module.exports = {
       return toDomain(certificationCourse);
     } catch (err) {
       if (err instanceof CertificationCourseBookshelf.NoRowsUpdatedError) {
+        // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
         throw new NotFoundError(`No rows updated for certification course of id ${certificationCourse.getId()}.`);
       }
       throw err;
     }
   },
 
-  async isVerificationCodeAvailable(verificationCode) {
+  async isVerificationCodeAvailable(verificationCode: any) {
     const exist = await knex('certification-courses')
       .select('id')
       .whereRaw('UPPER(??)=?', ['verificationCode', verificationCode.toUpperCase()])
@@ -125,7 +148,9 @@ module.exports = {
     return !exist;
   },
 
-  async findCertificationCoursesBySessionId({ sessionId }) {
+  async findCertificationCoursesBySessionId({
+    sessionId
+  }: any) {
     const bookshelfCertificationCourses = await CertificationCourseBookshelf.where({ sessionId }).fetchAll();
     return bookshelfCertificationCourses.map(toDomain);
   },
@@ -133,7 +158,8 @@ module.exports = {
   toDomain,
 };
 
-function toDomain(bookshelfCertificationCourse) {
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'toDomain'.
+function toDomain(bookshelfCertificationCourse: any) {
   if (!bookshelfCertificationCourse) {
     return null;
   }
@@ -149,11 +175,11 @@ function toDomain(bookshelfCertificationCourse) {
     certificationIssueReports: bookshelfCertificationCourse
       .related('certificationIssueReports')
       .toJSON()
-      .map((json) => new CertificationIssueReport(json)),
+      .map((json: any) => new CertificationIssueReport(json)),
     complementaryCertificationCourses: bookshelfCertificationCourse
       .related('complementaryCertificationCourses')
       .toJSON()
-      .map((json) => new ComplementaryCertificationCourse(json)),
+      .map((json: any) => new ComplementaryCertificationCourse(json)),
     ..._.pick(dbCertificationCourse, [
       'id',
       'userId',
@@ -180,7 +206,7 @@ function toDomain(bookshelfCertificationCourse) {
   });
 }
 
-function _adaptModelToDb(certificationCourse) {
+function _adaptModelToDb(certificationCourse: any) {
   return _.omit(certificationCourse.toDTO(), [
     'complementaryCertificationCourses',
     'certificationIssueReports',
@@ -190,7 +216,7 @@ function _adaptModelToDb(certificationCourse) {
   ]);
 }
 
-function _pickUpdatableProperties(certificationCourse) {
+function _pickUpdatableProperties(certificationCourse: any) {
   return _.pick(certificationCourse.toDTO(), [
     'id',
     'isCancelled',

@@ -1,5 +1,8 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PDFDocumen... Remove this comment to see the full error message
 const { PDFDocument, rgb } = require('pdf-lib');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'readFile'.
 const { readFile } = require('fs/promises');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'pdfLibFont... Remove this comment to see the full error message
 const pdfLibFontkit = require('@pdf-lib/fontkit');
 const MAX_SESSION_DETAIL_WIDTH = 155;
 const SESSION_DETAIL_FONT_SIZE = 7;
@@ -7,10 +10,12 @@ const SESSION_DETAIL_LINE_HEIGHT = 8;
 
 async function getSupervisorKitPdfBuffer({
   sessionForSupervisorKit,
+  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name '__dirname'.
   dirname = __dirname,
   fontkit = pdfLibFontkit,
-  creationDate = new Date(),
-} = {}) {
+  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Date'.
+  creationDate = new Date()
+}: any = {}) {
   const fileBuffer = await readFile(`${dirname}/files/kit-surveillant_template.pdf`);
 
   const pdfDoc = await PDFDocument.load(fileBuffer);
@@ -45,11 +50,13 @@ async function getSupervisorKitPdfBuffer({
   };
 }
 
-function _drawSessionDate(sessionForSupervisorKit, page, font) {
+function _drawSessionDate(sessionForSupervisorKit: any, page: any, font: any) {
+  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Date'.
   const date = new Date(sessionForSupervisorKit.date);
   const day = date.getDate();
   const year = date.getFullYear();
   const options = { month: 'short' };
+  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Intl'.
   const month = new Intl.DateTimeFormat('fr-FR', options).format(date);
 
   const fullDate = day + ' ' + month + ' ' + year;
@@ -62,7 +69,7 @@ function _drawSessionDate(sessionForSupervisorKit, page, font) {
   });
 }
 
-function _drawSessionStartTime(sessionForSupervisorKit, page, font) {
+function _drawSessionStartTime(sessionForSupervisorKit: any, page: any, font: any) {
   const [hours, minutes] = sessionForSupervisorKit.time.split(':');
   const hour = `${hours}h${minutes}`;
   page.drawText(hour, {
@@ -74,13 +81,13 @@ function _drawSessionStartTime(sessionForSupervisorKit, page, font) {
   });
 }
 
-function _drawSessionAddress(sessionForSupervisorKit, page, font) {
+function _drawSessionAddress(sessionForSupervisorKit: any, page: any, font: any) {
   const addressArray = _toArrayOfFixedWidthConservingWords(
     sessionForSupervisorKit.address,
     font,
     MAX_SESSION_DETAIL_WIDTH
   );
-  addressArray.forEach((address, index) => {
+  addressArray.forEach((address: any, index: any) => {
     page.drawText(address, {
       x: 60,
       y: 616 - index * SESSION_DETAIL_LINE_HEIGHT,
@@ -91,9 +98,9 @@ function _drawSessionAddress(sessionForSupervisorKit, page, font) {
   });
 }
 
-function _drawSessionRoom(sessionForSupervisorKit, page, font) {
+function _drawSessionRoom(sessionForSupervisorKit: any, page: any, font: any) {
   const roomArray = _toArrayOfFixedWidthConservingWords(sessionForSupervisorKit.room, font, MAX_SESSION_DETAIL_WIDTH);
-  roomArray.forEach((room, index) => {
+  roomArray.forEach((room: any, index: any) => {
     page.drawText(room, {
       x: 60,
       y: 584 - index * SESSION_DETAIL_LINE_HEIGHT,
@@ -104,13 +111,13 @@ function _drawSessionRoom(sessionForSupervisorKit, page, font) {
   });
 }
 
-function _drawSessionExaminer(sessionForSupervisorKit, page, font) {
+function _drawSessionExaminer(sessionForSupervisorKit: any, page: any, font: any) {
   const examinerArray = _toArrayOfFixedWidthConservingWords(
     sessionForSupervisorKit.examiner,
     font,
     MAX_SESSION_DETAIL_WIDTH
   );
-  examinerArray.forEach((examiner, index) => {
+  examinerArray.forEach((examiner: any, index: any) => {
     page.drawText(examiner, {
       x: 60,
       y: 549 - index * SESSION_DETAIL_LINE_HEIGHT,
@@ -121,7 +128,8 @@ function _drawSessionExaminer(sessionForSupervisorKit, page, font) {
   });
 }
 
-function _drawSessionId(sessionForSupervisorKit, page, font) {
+function _drawSessionId(sessionForSupervisorKit: any, page: any, font: any) {
+  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'String'.
   const sessionId = String(sessionForSupervisorKit.id);
   const textWidth = font.widthOfTextAtSize(sessionId, 10);
   page.drawText(sessionId, {
@@ -133,7 +141,7 @@ function _drawSessionId(sessionForSupervisorKit, page, font) {
   });
 }
 
-function _drawSupervisorPassword(sessionForSupervisorKit, page, font) {
+function _drawSupervisorPassword(sessionForSupervisorKit: any, page: any, font: any) {
   const supervisorPassword = `C-${sessionForSupervisorKit.supervisorPassword}`;
   const textWidth = font.widthOfTextAtSize(supervisorPassword, 10);
   page.drawText(supervisorPassword, {
@@ -145,7 +153,7 @@ function _drawSupervisorPassword(sessionForSupervisorKit, page, font) {
   });
 }
 
-function _drawAccessCode(sessionForSupervisorKit, page, font) {
+function _drawAccessCode(sessionForSupervisorKit: any, page: any, font: any) {
   const accessCode = sessionForSupervisorKit.accessCode;
   const textWidth = font.widthOfTextAtSize(accessCode, 10);
   page.drawText(accessCode, {
@@ -157,11 +165,11 @@ function _drawAccessCode(sessionForSupervisorKit, page, font) {
   });
 }
 
-function _toArrayOfFixedWidthConservingWords(str, font, maxWidth) {
-  const result = [];
+function _toArrayOfFixedWidthConservingWords(str: any, font: any, maxWidth: any) {
+  const result: any = [];
   const words = str.split(' ');
   let index = 0;
-  words.forEach((word) => {
+  words.forEach((word: any) => {
     if (!result[index]) {
       result[index] = '';
     }
@@ -172,9 +180,10 @@ function _toArrayOfFixedWidthConservingWords(str, font, maxWidth) {
       result[index] = `${word} `;
     }
   });
-  return result.map((str) => str.trim());
+  return result.map((str: any) => str.trim());
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
   getSupervisorKitPdfBuffer,
 };

@@ -1,6 +1,9 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'isEmpty'.
 const isEmpty = require('lodash/isEmpty');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'UserNotAut... Remove this comment to see the full error message
 const { UserNotAuthorizedToGenerateUsernamePasswordError } = require('../errors');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = async function generateUsernameWithTemporaryPassword({
   schoolingRegistrationId,
   organizationId,
@@ -10,8 +13,8 @@ module.exports = async function generateUsernameWithTemporaryPassword({
   userService,
   authenticationMethodRepository,
   userRepository,
-  schoolingRegistrationRepository,
-}) {
+  schoolingRegistrationRepository
+}: any) {
   const schoolingRegistration = await schoolingRegistrationRepository.get(schoolingRegistrationId);
   _checkIfStudentHasAccessToOrganization(schoolingRegistration, organizationId);
 
@@ -47,7 +50,7 @@ module.exports = async function generateUsernameWithTemporaryPassword({
   }
 };
 
-function _checkIfStudentHasAccessToOrganization(schoolingRegistration, organizationId) {
+function _checkIfStudentHasAccessToOrganization(schoolingRegistration: any, organizationId: any) {
   if (schoolingRegistration.organizationId !== organizationId) {
     throw new UserNotAuthorizedToGenerateUsernamePasswordError(
       `L'élève avec l'INE ${schoolingRegistration.nationalStudentId} n'appartient pas à l'organisation.`
@@ -55,7 +58,7 @@ function _checkIfStudentHasAccessToOrganization(schoolingRegistration, organizat
   }
 }
 
-function _checkIfStudentAccountAlreadyHasUsername(studentAccount) {
+function _checkIfStudentAccountAlreadyHasUsername(studentAccount: any) {
   if (!isEmpty(studentAccount.username)) {
     throw new UserNotAuthorizedToGenerateUsernamePasswordError(
       `Ce compte utilisateur dispose déjà d'un identifiant: ${studentAccount.username}.`

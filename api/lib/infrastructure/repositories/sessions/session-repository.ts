@@ -1,51 +1,63 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_'.
 const _ = require('lodash');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'knex'.
 const { knex } = require('../../../../db/knex-database-connection');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const BookshelfSession = require('../../orm-models/Session');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'bookshelfT... Remove this comment to see the full error message
 const bookshelfToDomainConverter = require('../../utils/bookshelf-to-domain-converter');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'NotFoundEr... Remove this comment to see the full error message
 const { NotFoundError } = require('../../../domain/errors');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Session'.
 const Session = require('../../../domain/models/Session');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Certificat... Remove this comment to see the full error message
 const CertificationCenter = require('../../../domain/models/CertificationCenter');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Certificat... Remove this comment to see the full error message
 const CertificationCandidate = require('../../../domain/models/CertificationCandidate');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
-  async save(sessionData) {
+  async save(sessionData: any) {
     sessionData = _.omit(sessionData, ['certificationCandidates']);
 
     const newSession = await new BookshelfSession(sessionData).save();
     return bookshelfToDomainConverter.buildDomainObject(BookshelfSession, newSession);
   },
 
-  async isSessionCodeAvailable(accessCode) {
+  async isSessionCodeAvailable(accessCode: any) {
     const sessionWithAccessCode = await BookshelfSession.where({ accessCode }).fetch({ require: false });
 
     return !sessionWithAccessCode;
   },
 
-  async isFinalized(id) {
-    const session = await BookshelfSession.query((qb) => {
+  async isFinalized(id: any) {
+    const session = await BookshelfSession.query((qb: any) => {
       qb.where({ id });
       qb.whereRaw('?? IS NOT NULL', ['finalizedAt']);
     }).fetch({ require: false, columns: 'id' });
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Boolean'.
     return Boolean(session);
   },
 
-  async get(idSession) {
+  async get(idSession: any) {
     try {
       const session = await BookshelfSession.where({ id: idSession }).fetch();
       return bookshelfToDomainConverter.buildDomainObject(BookshelfSession, session);
     } catch (err) {
       if (err instanceof BookshelfSession.NotFoundError) {
+        // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
         throw new NotFoundError("La session n'existe pas ou son accès est restreint");
       }
       throw err;
     }
   },
 
-  async getWithCertificationCandidates(idSession) {
+  async getWithCertificationCandidates(idSession: any) {
     const session = await knex.from('sessions').where({ 'sessions.id': idSession }).first();
 
     if (!session) {
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
       throw new NotFoundError("La session n'existe pas ou son accès est restreint");
     }
 
@@ -74,7 +86,7 @@ module.exports = {
     return _toDomain({ ...session, certificationCandidates });
   },
 
-  async updateSessionInfo(session) {
+  async updateSessionInfo(session: any) {
     const sessionDataToUpdate = _.pick(session, [
       'address',
       'room',
@@ -93,13 +105,13 @@ module.exports = {
     return bookshelfToDomainConverter.buildDomainObject(BookshelfSession, updatedSession);
   },
 
-  async doesUserHaveCertificationCenterMembershipForSession(userId, sessionId) {
+  async doesUserHaveCertificationCenterMembershipForSession(userId: any, sessionId: any) {
     const session = await BookshelfSession.where({
       'sessions.id': sessionId,
       'certification-center-memberships.userId': userId,
       'certification-center-memberships.disabledAt': null,
     })
-      .query((qb) => {
+      .query((qb: any) => {
         qb.innerJoin('certification-centers', 'certification-centers.id', 'sessions.certificationCenterId');
         qb.innerJoin(
           'certification-center-memberships',
@@ -108,10 +120,15 @@ module.exports = {
         );
       })
       .fetch({ require: false, columns: 'sessions.id' });
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Boolean'.
     return Boolean(session);
   },
 
-  async finalize({ id, examinerGlobalComment, finalizedAt }) {
+  async finalize({
+    id,
+    examinerGlobalComment,
+    finalizedAt
+  }: any) {
     let updatedSession = await new BookshelfSession({ id }).save(
       { examinerGlobalComment, finalizedAt },
       { patch: true }
@@ -120,19 +137,27 @@ module.exports = {
     return bookshelfToDomainConverter.buildDomainObject(BookshelfSession, updatedSession);
   },
 
-  async flagResultsAsSentToPrescriber({ id, resultsSentToPrescriberAt }) {
+  async flagResultsAsSentToPrescriber({
+    id,
+    resultsSentToPrescriberAt
+  }: any) {
     let flaggedSession = await new BookshelfSession({ id }).save({ resultsSentToPrescriberAt }, { patch: true });
     flaggedSession = await flaggedSession.refresh();
     return bookshelfToDomainConverter.buildDomainObject(BookshelfSession, flaggedSession);
   },
 
-  async updatePublishedAt({ id, publishedAt }) {
+  async updatePublishedAt({
+    id,
+    publishedAt
+  }: any) {
     let publishedSession = await new BookshelfSession({ id }).save({ publishedAt }, { patch: true });
     publishedSession = await publishedSession.refresh();
     return bookshelfToDomainConverter.buildDomainObject(BookshelfSession, publishedSession);
   },
 
-  async isSco({ sessionId }) {
+  async isSco({
+    sessionId
+  }: any) {
     const result = await knex
       .select('certification-centers.type')
       .from('sessions')
@@ -140,21 +165,22 @@ module.exports = {
       .innerJoin('certification-centers', 'certification-centers.id', 'sessions.certificationCenterId')
       .first();
 
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'types' does not exist on type 'typeof Ce... Remove this comment to see the full error message
     return result.type === CertificationCenter.types.SCO;
   },
 };
 
-function _toDomain(results) {
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_toDomain'... Remove this comment to see the full error message
+function _toDomain(results: any) {
   const toDomainCertificationCandidates = results.certificationCandidates
-    .filter((candidateData) => candidateData != null)
+    .filter((candidateData: any) => candidateData != null)
     .map(
-      (candidateData) =>
-        new CertificationCandidate({
-          ...candidateData,
-          complementaryCertifications: candidateData.complementaryCertifications.filter(
-            (complementaryCertification) => complementaryCertification.id != null
-          ),
-        })
+      (candidateData: any) => new CertificationCandidate({
+        ...candidateData,
+        complementaryCertifications: candidateData.complementaryCertifications.filter(
+          (complementaryCertification: any) => complementaryCertification.id != null
+        ),
+      })
     );
 
   return new Session({

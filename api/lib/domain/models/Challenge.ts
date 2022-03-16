@@ -1,11 +1,19 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_'.
 const _ = require('lodash');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Validator'... Remove this comment to see the full error message
 const Validator = require('./Validator');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'ValidatorQ... Remove this comment to see the full error message
 const ValidatorQCM = require('./ValidatorQCM');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'ValidatorQ... Remove this comment to see the full error message
 const ValidatorQCU = require('./ValidatorQCU');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'ValidatorQ... Remove this comment to see the full error message
 const ValidatorQROC = require('./ValidatorQROC');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'ValidatorQ... Remove this comment to see the full error message
 const ValidatorQROCMDep = require('./ValidatorQROCMDep');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'ValidatorQ... Remove this comment to see the full error message
 const ValidatorQROCMInd = require('./ValidatorQROCMInd');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'ChallengeT... Remove this comment to see the full error message
 const ChallengeType = Object.freeze({
   QCU: 'QCU',
   QCM: 'QCM',
@@ -17,7 +25,33 @@ const ChallengeType = Object.freeze({
 /**
  * Traduction: Épreuve
  */
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Challenge'... Remove this comment to see the full error message
 class Challenge {
+  alternativeInstruction: any;
+  answer: any;
+  attachments: any;
+  autoReply: any;
+  competenceId: any;
+  difficulty: any;
+  discriminant: any;
+  embedHeight: any;
+  embedTitle: any;
+  embedUrl: any;
+  focused: any;
+  format: any;
+  genealogy: any;
+  id: any;
+  illustrationAlt: any;
+  illustrationUrl: any;
+  instruction: any;
+  locales: any;
+  proposals: any;
+  responsive: any;
+  skill: any;
+  status: any;
+  timer: any;
+  type: any;
+  validator: any;
   /**
    * Constructeur d'épreuve
    *
@@ -70,8 +104,8 @@ class Challenge {
     discriminant,
     difficulty,
     responsive,
-    genealogy,
-  } = {}) {
+    genealogy
+  }: any = {}) {
     this.id = id;
     this.answer = answer;
     this.attachments = attachments;
@@ -100,22 +134,29 @@ class Challenge {
   }
 
   isTimed() {
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Number'.
     return Number.isFinite(parseFloat(this.timer));
   }
 
   hasIllustration() {
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Boolean'.
     return Boolean(this.illustrationUrl);
   }
 
   hasEmbed() {
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Boolean'.
     return Boolean(this.embedUrl);
   }
 
   hasAtLeastOneAttachment() {
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Array'.
     return Array.isArray(this.attachments) && this.attachments.length > 0;
   }
 
-  static createValidatorForChallengeType({ challengeType, solution }) {
+  static createValidatorForChallengeType({
+    challengeType,
+    solution
+  }: any) {
     switch (challengeType) {
       case ChallengeType.QCU:
         return new ValidatorQCU({ solution });
@@ -137,11 +178,16 @@ class Challenge {
     }
   }
 
-  static findBySkill({ challenges, skill }) {
-    return _.filter(challenges, (challenge) => challenge.skill?.id === skill.id);
+  static findBySkill({
+    challenges,
+    skill
+  }: any) {
+    return _.filter(challenges, (challenge: any) => challenge.skill?.id === skill.id);
   }
 }
 
+// @ts-expect-error ts-migrate(2339) FIXME: Property 'Type' does not exist on type 'typeof Cha... Remove this comment to see the full error message
 Challenge.Type = ChallengeType;
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = Challenge;

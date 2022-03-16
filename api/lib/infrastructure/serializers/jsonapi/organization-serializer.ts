@@ -1,9 +1,13 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Serializer... Remove this comment to see the full error message
 const { Serializer } = require('jsonapi-serializer');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Organizati... Remove this comment to see the full error message
 const Organization = require('../../../domain/models/Organization');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Tag'.
 const Tag = require('../../../domain/models/Tag');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
-  serialize(organizations, meta) {
+  serialize(organizations: any, meta: any) {
     return new Serializer('organizations', {
       attributes: [
         'name',
@@ -29,7 +33,7 @@ module.exports = {
         ignoreRelationshipData: true,
         nullIfMissing: true,
         relationshipLinks: {
-          related(record, current, parent) {
+          related(record: any, current: any, parent: any) {
             return `/api/organizations/${parent.id}/memberships`;
           },
         },
@@ -38,7 +42,7 @@ module.exports = {
         ref: 'id',
         ignoreRelationshipData: true,
         relationshipLinks: {
-          related(record, current, parent) {
+          related(record: any, current: any, parent: any) {
             return `/api/organizations/${parent.id}/students`;
           },
         },
@@ -48,7 +52,7 @@ module.exports = {
         ignoreRelationshipData: true,
         nullIfMissing: true,
         relationshipLinks: {
-          related: function (record, current, parent) {
+          related: function (record: any, current: any, parent: any) {
             return `/api/organizations/${parent.id}/target-profiles`;
           },
         },
@@ -62,16 +66,18 @@ module.exports = {
     }).serialize(organizations);
   },
 
-  deserialize(json) {
+  deserialize(json: any) {
     const attributes = json.data.attributes;
     const relationships = json.data.relationships;
 
     let tags = [];
     if (relationships && relationships.tags) {
-      tags = relationships.tags.data.map((tag) => new Tag({ id: parseInt(tag.id) }));
+      // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'parseInt'.
+      tags = relationships.tags.data.map((tag: any) => new Tag({ id: parseInt(tag.id) }));
     }
 
     const organization = new Organization({
+      // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'parseInt'.
       id: parseInt(json.data.id),
       name: attributes.name,
       type: attributes.type,

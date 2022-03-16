@@ -1,4 +1,30 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'CampaignMa... Remove this comment to see the full error message
 class CampaignManagement {
+  archivedAt: any;
+  code: any;
+  createdAt: any;
+  creatorFirstName: any;
+  creatorId: any;
+  creatorLastName: any;
+  customLandingPageText: any;
+  customResultPageButtonText: any;
+  customResultPageButtonUrl: any;
+  customResultPageText: any;
+  id: any;
+  idPixLabel: any;
+  multipleSendings: any;
+  name: any;
+  organizationId: any;
+  organizationName: any;
+  ownerFirstName: any;
+  ownerId: any;
+  ownerLastName: any;
+  sharedParticipationsCount: any;
+  targetProfileId: any;
+  targetProfileName: any;
+  title: any;
+  totalParticipationsCount: any;
+  type: any;
   constructor({
     id,
     code,
@@ -25,8 +51,8 @@ class CampaignManagement {
     shared,
     started,
     completed,
-    multipleSendings,
-  } = {}) {
+    multipleSendings
+  }: any = {}) {
     this.id = id;
     this.code = code;
     this.name = name;
@@ -54,13 +80,16 @@ class CampaignManagement {
     this.multipleSendings = multipleSendings;
   }
 
+  // @ts-expect-error ts-migrate(1056) FIXME: Accessors are only available when targeting ECMASc... Remove this comment to see the full error message
   get isTypeProfilesCollection() {
     return this.type === 'PROFILES_COLLECTION';
   }
 
+  // @ts-expect-error ts-migrate(1056) FIXME: Accessors are only available when targeting ECMASc... Remove this comment to see the full error message
   get isTypeAssessment() {
     return this.type === 'ASSESSMENT';
   }
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = CampaignManagement;

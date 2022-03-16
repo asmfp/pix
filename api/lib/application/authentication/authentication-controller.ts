@@ -1,13 +1,18 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'get'.
 const get = require('lodash/get');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Unauthoriz... Remove this comment to see the full error message
 const { UnauthorizedError, BadRequestError } = require('../http-errors');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'tokenServi... Remove this comment to see the full error message
 const tokenService = require('../../domain/services/token-service');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'usecases'.
 const usecases = require('../../domain/usecases');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
   /**
    * @see https://tools.ietf.org/html/rfc6749#section-4.3
    */
-  async createToken(request, h) {
+  async createToken(request: any, h: any) {
     let accessToken, refreshToken;
     let expirationDelaySeconds;
 
@@ -42,7 +47,7 @@ module.exports = {
       .header('Pragma', 'no-cache');
   },
 
-  async authenticateExternalUser(request, h) {
+  async authenticateExternalUser(request: any, h: any) {
     const {
       username,
       password,
@@ -68,7 +73,7 @@ module.exports = {
     return h.response(response).code(200);
   },
 
-  async authenticatePoleEmploiUser(request) {
+  async authenticatePoleEmploiUser(request: any) {
     const authenticatedUserId = get(request.auth, 'credentials.userId');
     const {
       code,
@@ -100,7 +105,7 @@ module.exports = {
     }
   },
 
-  async authenticateAnonymousUser(request, h) {
+  async authenticateAnonymousUser(request: any, h: any) {
     const { campaign_code: campaignCode, lang } = request.payload;
     const accessToken = await usecases.authenticateAnonymousUser({ campaignCode, lang });
 
@@ -112,7 +117,7 @@ module.exports = {
     return h.response(response).code(200);
   },
 
-  async authenticateApplication(request, h) {
+  async authenticateApplication(request: any, h: any) {
     const { client_id: clientId, client_secret: clientSecret, scope } = request.payload;
 
     const accessToken = await usecases.authenticateApplication({ clientId, clientSecret, scope });
@@ -129,7 +134,7 @@ module.exports = {
       .header('Pragma', 'no-cache');
   },
 
-  async revokeToken(request, h) {
+  async revokeToken(request: any, h: any) {
     if (request.payload.token_type_hint === 'access_token') return null;
 
     await usecases.revokeRefreshToken({ refreshToken: request.payload.token });

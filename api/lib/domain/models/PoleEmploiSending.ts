@@ -4,8 +4,20 @@ const TYPES = {
   CAMPAIGN_PARTICIPATION_SHARING: 'CAMPAIGN_PARTICIPATION_SHARING',
 };
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PoleEmploi... Remove this comment to see the full error message
 class PoleEmploiSending {
-  constructor({ campaignParticipationId, type, payload, isSuccessful, responseCode }) {
+  campaignParticipationId: any;
+  isSuccessful: any;
+  payload: any;
+  responseCode: any;
+  type: any;
+  constructor({
+    campaignParticipationId,
+    type,
+    payload,
+    isSuccessful,
+    responseCode
+  }: any) {
     this.campaignParticipationId = campaignParticipationId;
     this.type = type;
     this.isSuccessful = isSuccessful;
@@ -13,7 +25,12 @@ class PoleEmploiSending {
     this.payload = payload;
   }
 
-  static buildForParticipationStarted({ campaignParticipationId, payload, isSuccessful, responseCode }) {
+  static buildForParticipationStarted({
+    campaignParticipationId,
+    payload,
+    isSuccessful,
+    responseCode
+  }: any) {
     return new PoleEmploiSending({
       campaignParticipationId,
       type: TYPES.CAMPAIGN_PARTICIPATION_START,
@@ -23,7 +40,12 @@ class PoleEmploiSending {
     });
   }
 
-  static buildForParticipationFinished({ campaignParticipationId, payload, isSuccessful, responseCode }) {
+  static buildForParticipationFinished({
+    campaignParticipationId,
+    payload,
+    isSuccessful,
+    responseCode
+  }: any) {
     return new PoleEmploiSending({
       campaignParticipationId,
       type: TYPES.CAMPAIGN_PARTICIPATION_COMPLETION,
@@ -33,7 +55,12 @@ class PoleEmploiSending {
     });
   }
 
-  static buildForParticipationShared({ campaignParticipationId, payload, isSuccessful, responseCode }) {
+  static buildForParticipationShared({
+    campaignParticipationId,
+    payload,
+    isSuccessful,
+    responseCode
+  }: any) {
     return new PoleEmploiSending({
       campaignParticipationId,
       type: TYPES.CAMPAIGN_PARTICIPATION_SHARING,
@@ -45,4 +72,5 @@ class PoleEmploiSending {
 }
 
 PoleEmploiSending.TYPES = TYPES;
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = PoleEmploiSending;

@@ -1,10 +1,15 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'knex'.
 const { knex } = require('../bookshelf');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'CampaignTo... Remove this comment to see the full error message
 const CampaignToJoin = require('../../domain/read-models/CampaignToJoin');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'NotFoundEr... Remove this comment to see the full error message
 const { NotFoundError } = require('../../domain/errors');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'DomainTran... Remove this comment to see the full error message
 const DomainTransaction = require('../DomainTransaction');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
-  async get(id, domainTransaction = DomainTransaction.emptyTransaction()) {
+  async get(id: any, domainTransaction = DomainTransaction.emptyTransaction()) {
     const knexConn = domainTransaction.knexTransaction || knex;
     const result = await knexConn('campaigns')
       .select('campaigns.*')
@@ -25,13 +30,14 @@ module.exports = {
       .first();
 
     if (!result) {
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
       throw new NotFoundError(`La campagne d'id ${id} n'existe pas ou son accès est restreint`);
     }
 
     return new CampaignToJoin(result);
   },
 
-  async getByCode(code) {
+  async getByCode(code: any) {
     const result = await knex('campaigns')
       .select('campaigns.*')
       .select({
@@ -59,6 +65,7 @@ module.exports = {
       .first();
 
     if (!result) {
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
       throw new NotFoundError(`La campagne au code ${code} n'existe pas ou son accès est restreint`);
     }
 

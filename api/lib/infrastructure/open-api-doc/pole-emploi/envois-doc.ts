@@ -1,8 +1,10 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Joi'.
 const Joi = require('joi');
 
 const CAMPAIGN_TYPES = ['EVALUATION', 'COLLECTE_PROFILS'];
 const TEST_STATUS = [2, 3, 4];
 const TEST_TYPES = ['DI', 'PC', 'CP'];
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'UNITS'.
 const UNITS = ['A', 'B'];
 
 const campagne = Joi.object({
@@ -139,6 +141,7 @@ const test = Joi.object({
   elementsEvalues: Joi.array().items(elementEvalue).description('Vide si pas de partage de résultats'),
 }).required();
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = Joi.array()
   .items(
     Joi.object({

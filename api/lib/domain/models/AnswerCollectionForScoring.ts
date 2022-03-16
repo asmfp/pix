@@ -1,14 +1,20 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_'.
 const _ = require('lodash');
 const qrocmDepChallenge = 'QROCM-dep';
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = class AnswerCollectionForScoring {
-  constructor(challengesWithAnswers) {
+  challengesWithAnswers: any;
+  constructor(challengesWithAnswers: any) {
     this.challengesWithAnswers = challengesWithAnswers;
   }
 
-  static from({ answers, challenges }) {
-    const challengesWithAnswers = challenges.map((challenge) => {
-      const answer = answers.find((answer) => answer.challengeId === challenge.challengeId);
+  static from({
+    answers,
+    challenges
+  }: any) {
+    const challengesWithAnswers = challenges.map((challenge: any) => {
+      const answer = answers.find((answer: any) => answer.challengeId === challenge.challengeId);
 
       return new ChallengeWithAnswer(answer, challenge);
     });
@@ -22,7 +28,7 @@ module.exports = class AnswerCollectionForScoring {
 
   numberOfCorrectAnswers() {
     let nbOfCorrectAnswers = 0;
-    this.challengesWithAnswers.forEach((challengeWithAnswer) => {
+    this.challengesWithAnswers.forEach((challengeWithAnswer: any) => {
       if (!challengeWithAnswer.isNeutralized() && challengeWithAnswer.isCorrect()) {
         nbOfCorrectAnswers++;
       }
@@ -33,7 +39,7 @@ module.exports = class AnswerCollectionForScoring {
 
   numberOfNonNeutralizedChallenges() {
     let numberOfNonNeutralizedChallenges = 0;
-    this.challengesWithAnswers.forEach((challengeWithAnswer) => {
+    this.challengesWithAnswers.forEach((challengeWithAnswer: any) => {
       if (!challengeWithAnswer.isNeutralized() && challengeWithAnswer.isAnswered()) {
         numberOfNonNeutralizedChallenges++;
       }
@@ -42,12 +48,12 @@ module.exports = class AnswerCollectionForScoring {
     return numberOfNonNeutralizedChallenges;
   }
 
-  numberOfChallengesForCompetence(competenceId) {
+  numberOfChallengesForCompetence(competenceId: any) {
     const challengesForCompetence = this.challengesWithAnswers.filter(
-      (challengeWithAnswer) => challengeWithAnswer.competenceId() === competenceId
+      (challengeWithAnswer: any) => challengeWithAnswer.competenceId() === competenceId
     );
     const numberOfChallenges = _(challengesForCompetence)
-      .map((challenge) => {
+      .map((challenge: any) => {
         if (challengesForCompetence.length < 3 && challenge.isQROCMdep()) {
           return 2;
         } else {
@@ -58,12 +64,12 @@ module.exports = class AnswerCollectionForScoring {
     return numberOfChallenges;
   }
 
-  numberOfCorrectAnswersForCompetence(competenceId) {
+  numberOfCorrectAnswersForCompetence(competenceId: any) {
     const challengesWithAnswersForCompetence = this.challengesWithAnswers.filter(
-      (challengeWithAnswer) => challengeWithAnswer.competenceId() === competenceId
+      (challengeWithAnswer: any) => challengeWithAnswer.competenceId() === competenceId
     );
     let nbOfCorrectAnswers = 0;
-    challengesWithAnswersForCompetence.forEach((challengeWithAnswer) => {
+    challengesWithAnswersForCompetence.forEach((challengeWithAnswer: any) => {
       if (!challengeWithAnswer.isNeutralized()) {
         if (challengesWithAnswersForCompetence.length < 3 && challengeWithAnswer.isAFullyCorrectQROCMdep()) {
           nbOfCorrectAnswers += 2;
@@ -78,12 +84,12 @@ module.exports = class AnswerCollectionForScoring {
     return _.min([nbOfCorrectAnswers, 3]);
   }
 
-  numberOfNeutralizedChallengesForCompetence(competenceId) {
+  numberOfNeutralizedChallengesForCompetence(competenceId: any) {
     const answersForCompetence = this.challengesWithAnswers.filter(
-      (challengeWithAnswer) => challengeWithAnswer.competenceId() === competenceId
+      (challengeWithAnswer: any) => challengeWithAnswer.competenceId() === competenceId
     );
     return _(answersForCompetence)
-      .map((answer) => {
+      .map((answer: any) => {
         if (answer.isNeutralized()) {
           if (answersForCompetence.length < 3 && answer.isQROCMdep()) {
             return 2;
@@ -99,7 +105,9 @@ module.exports = class AnswerCollectionForScoring {
 };
 
 class ChallengeWithAnswer {
-  constructor(answer, challenge) {
+  _answer: any;
+  _challenge: any;
+  constructor(answer: any, challenge: any) {
     this._answer = answer;
     this._challenge = challenge;
   }
@@ -114,6 +122,7 @@ class ChallengeWithAnswer {
   }
 
   isCorrect() {
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Boolean'.
     return Boolean(this._answer?.isOk());
   }
 
@@ -122,6 +131,7 @@ class ChallengeWithAnswer {
   }
 
   isAPartiallyCorrectQROCMdep() {
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Boolean'.
     return this.isQROCMdep() && Boolean(this._answer) && this._answer.isPartially();
   }
 

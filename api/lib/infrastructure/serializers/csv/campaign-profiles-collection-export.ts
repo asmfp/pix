@@ -1,10 +1,22 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_'.
 const _ = require('lodash');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'bluebird'.
 const bluebird = require('bluebird');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'csvSeriali... Remove this comment to see the full error message
 const csvSerializer = require('./csv-serializer');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'constants'... Remove this comment to see the full error message
 const constants = require('../../constants');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'CampaignPr... Remove this comment to see the full error message
 const CampaignProfilesCollectionResultLine = require('../../exports/campaigns/campaign-profiles-collection-result-line');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'CampaignPr... Remove this comment to see the full error message
 class CampaignProfilesCollectionExport {
-  constructor(outputStream, organization, campaign, competences, translate) {
+  campaign: any;
+  competences: any;
+  idPixLabel: any;
+  organization: any;
+  stream: any;
+  translate: any;
+  constructor(outputStream: any, organization: any, campaign: any, competences: any, translate: any) {
     this.stream = outputStream;
     this.organization = organization;
     this.campaign = campaign;
@@ -13,7 +25,7 @@ class CampaignProfilesCollectionExport {
     this.translate = translate;
   }
 
-  export(campaignParticipationResultDatas, placementProfileService) {
+  export(campaignParticipationResultDatas: any, placementProfileService: any) {
     // WHY: add \uFEFF the UTF-8 BOM at the start of the text, see:
     // - https://en.wikipedia.org/wiki/Byte_order_mark
     // - https://stackoverflow.com/a/38192870
@@ -24,7 +36,8 @@ class CampaignProfilesCollectionExport {
       constants.CHUNK_SIZE_CAMPAIGN_RESULT_PROCESSING
     );
 
-    return bluebird.map(campaignParticipationResultDataChunks, async (campaignParticipationResultDataChunk) => {
+    // @ts-expect-error ts-migrate(2697) FIXME: An async function or method must return a 'Promise... Remove this comment to see the full error message
+    return bluebird.map(campaignParticipationResultDataChunks, async (campaignParticipationResultDataChunk: any) => {
       const placementProfiles = await this._getUsersPlacementProfiles(
         campaignParticipationResultDataChunk,
         placementProfileService
@@ -61,9 +74,13 @@ class CampaignProfilesCollectionExport {
     return '\uFEFF' + csvSerializer.serializeLine(_.compact(header));
   }
 
-  async _getUsersPlacementProfiles(campaignParticipationResultDataChunk, placementProfileService) {
+  async _getUsersPlacementProfiles(campaignParticipationResultDataChunk: any, placementProfileService: any) {
     const userIdsAndDates = {};
-    campaignParticipationResultDataChunk.forEach(({ userId, sharedAt }) => (userIdsAndDates[userId] = sharedAt));
+    campaignParticipationResultDataChunk.forEach(({
+      userId,
+      sharedAt
+    // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
+    }: any) => (userIdsAndDates[userId] = sharedAt));
 
     const placementProfiles = await placementProfileService.getPlacementProfilesWithSnapshotting({
       userIdsAndDates,
@@ -74,11 +91,13 @@ class CampaignProfilesCollectionExport {
     return placementProfiles;
   }
 
-  _buildLines(placementProfiles, campaignParticipationResultDatas) {
+  _buildLines(placementProfiles: any, campaignParticipationResultDatas: any) {
     let csvLines = '';
     for (const placementProfile of placementProfiles) {
       const campaignParticipationResultData = campaignParticipationResultDatas.find(
-        ({ userId }) => userId === placementProfile.userId
+        ({
+          userId
+        }: any) => userId === placementProfile.userId
       );
 
       const line = new CampaignProfilesCollectionResultLine(
@@ -89,17 +108,19 @@ class CampaignProfilesCollectionExport {
         placementProfile,
         this.translate
       );
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'concat' does not exist on type 'string'.
       csvLines = csvLines.concat(line.toCsvLine());
     }
     return csvLines;
   }
 
   _competenceColumnHeaders() {
-    return _.flatMap(this.competences, (competence) => [
+    return _.flatMap(this.competences, (competence: any) => [
       this.translate('campaign-export.profiles-collection.skill-level', { name: competence.name }),
       this.translate('campaign-export.profiles-collection.skill-ranking', { name: competence.name }),
     ]);
   }
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = CampaignProfilesCollectionExport;

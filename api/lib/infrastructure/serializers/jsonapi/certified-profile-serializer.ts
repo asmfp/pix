@@ -1,12 +1,16 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Serializer... Remove this comment to see the full error message
 const { Serializer } = require('jsonapi-serializer');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const kebabCase = require('lodash/kebabCase');
 
-const typeForAttribute = (attribute) => {
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'typeForAtt... Remove this comment to see the full error message
+const typeForAttribute = (attribute: any) => {
   return kebabCase(attribute);
 };
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
-  serialize(certifiedProfile) {
+  serialize(certifiedProfile: any) {
     return new Serializer('certified-profiles', {
       typeForAttribute,
       attributes: ['userId', 'certifiedSkills', 'certifiedTubes', 'certifiedCompetences', 'certifiedAreas'],

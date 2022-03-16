@@ -1,4 +1,9 @@
-module.exports = async function updateBadge({ badgeId, badge, badgeRepository }) {
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
+module.exports = async function updateBadge({
+  badgeId,
+  badge,
+  badgeRepository
+}: any) {
   const existingBadge = await badgeRepository.get(badgeId);
 
   if (badge.message) existingBadge.message = badge.message;

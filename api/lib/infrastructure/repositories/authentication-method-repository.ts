@@ -1,13 +1,22 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_'.
 const _ = require('lodash');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'knex'.
 const { knex } = require('../bookshelf');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'bookshelfU... Remove this comment to see the full error message
 const bookshelfUtils = require('../utils/knex-utils');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'DomainTran... Remove this comment to see the full error message
 const DomainTransaction = require('../DomainTransaction');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'AlreadyExi... Remove this comment to see the full error message
 const { AlreadyExistingEntityError, AuthenticationMethodNotFoundError } = require('../../domain/errors');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Authentica... Remove this comment to see the full error message
 const AuthenticationMethod = require('../../domain/models/AuthenticationMethod');
 
-function _toDomain(authenticationMethodDTO) {
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_toDomain'... Remove this comment to see the full error message
+function _toDomain(authenticationMethodDTO: any) {
   const externalIdentifier =
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'identityProviders' does not exist on typ... Remove this comment to see the full error message
     authenticationMethodDTO.identityProvider === AuthenticationMethod.identityProviders.GAR ||
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'identityProviders' does not exist on typ... Remove this comment to see the full error message
     authenticationMethodDTO.identityProvider === AuthenticationMethod.identityProviders.POLE_EMPLOI
       ? authenticationMethodDTO.externalIdentifier
       : undefined;
@@ -22,12 +31,16 @@ function _toDomain(authenticationMethodDTO) {
   });
 }
 
-function _toAuthenticationComplement(identityProvider, bookshelfAuthenticationComplement) {
+function _toAuthenticationComplement(identityProvider: any, bookshelfAuthenticationComplement: any) {
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'identityProviders' does not exist on typ... Remove this comment to see the full error message
   if (identityProvider === AuthenticationMethod.identityProviders.PIX) {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'PixAuthenticationComplement' does not ex... Remove this comment to see the full error message
     return new AuthenticationMethod.PixAuthenticationComplement(bookshelfAuthenticationComplement);
   }
 
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'identityProviders' does not exist on typ... Remove this comment to see the full error message
   if (identityProvider === AuthenticationMethod.identityProviders.POLE_EMPLOI) {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'PoleEmploiAuthenticationComplement' does... Remove this comment to see the full error message
     return new AuthenticationMethod.PoleEmploiAuthenticationComplement(bookshelfAuthenticationComplement);
   }
 
@@ -35,6 +48,7 @@ function _toAuthenticationComplement(identityProvider, bookshelfAuthenticationCo
 }
 
 const AUTHENTICATION_METHODS_TABLE = 'authentication-methods';
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'COLUMNS'.
 const COLUMNS = Object.freeze([
   'id',
   'identityProvider',
@@ -45,8 +59,12 @@ const COLUMNS = Object.freeze([
   'updatedAt',
 ]);
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
-  async create({ authenticationMethod, domainTransaction = DomainTransaction.emptyTransaction() }) {
+  async create({
+    authenticationMethod,
+    domainTransaction = DomainTransaction.emptyTransaction()
+  }: any) {
     try {
       const knexConn = domainTransaction.knexTransaction ?? knex;
       const authenticationMethodForDB = _.pick(authenticationMethod, [
@@ -71,15 +89,17 @@ module.exports = {
   async createPasswordThatShouldBeChanged({
     userId,
     hashedPassword,
-    domainTransaction = DomainTransaction.emptyTransaction(),
-  }) {
+    domainTransaction = DomainTransaction.emptyTransaction()
+  }: any) {
     try {
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'PixAuthenticationComplement' does not ex... Remove this comment to see the full error message
       const authenticationComplement = new AuthenticationMethod.PixAuthenticationComplement({
         password: hashedPassword,
         shouldChangePassword: true,
       });
       const authenticationMethod = new AuthenticationMethod({
         authenticationComplement,
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'identityProviders' does not exist on typ... Remove this comment to see the full error message
         identityProvider: AuthenticationMethod.identityProviders.PIX,
         userId,
       });
@@ -101,7 +121,10 @@ module.exports = {
     }
   },
 
-  async findOneByUserIdAndIdentityProvider({ userId, identityProvider }) {
+  async findOneByUserIdAndIdentityProvider({
+    userId,
+    identityProvider
+  }: any) {
     const authenticationMethodDTO = await knex
       .select(COLUMNS)
       .from(AUTHENTICATION_METHODS_TABLE)
@@ -111,7 +134,10 @@ module.exports = {
     return authenticationMethodDTO ? _toDomain(authenticationMethodDTO) : null;
   },
 
-  async findOneByExternalIdentifierAndIdentityProvider({ externalIdentifier, identityProvider }) {
+  async findOneByExternalIdentifierAndIdentityProvider({
+    externalIdentifier,
+    identityProvider
+  }: any) {
     const authenticationMethodDTO = await knex
       .select(COLUMNS)
       .from(AUTHENTICATION_METHODS_TABLE)
@@ -121,7 +147,9 @@ module.exports = {
     return authenticationMethodDTO ? _toDomain(authenticationMethodDTO) : null;
   },
 
-  async findByUserId({ userId }) {
+  async findByUserId({
+    userId
+  }: any) {
     const authenticationMethodDTOs = await knex
       .select(COLUMNS)
       .from(AUTHENTICATION_METHODS_TABLE)
@@ -131,7 +159,10 @@ module.exports = {
     return authenticationMethodDTOs.map(_toDomain);
   },
 
-  async getByIdAndUserId({ id, userId }) {
+  async getByIdAndUserId({
+    id,
+    userId
+  }: any) {
     const authenticationMethod = await knex.from(AUTHENTICATION_METHODS_TABLE).where({ id, userId }).first();
     if (!authenticationMethod) {
       throw new AuthenticationMethodNotFoundError(`Authentication method of id ${id} and user id ${userId} not found.`);
@@ -139,28 +170,41 @@ module.exports = {
     return _toDomain(authenticationMethod);
   },
 
-  async hasIdentityProviderPIX({ userId }) {
+  async hasIdentityProviderPIX({
+    userId
+  }: any) {
     const authenticationMethodDTO = await knex
       .select(COLUMNS)
       .from(AUTHENTICATION_METHODS_TABLE)
       .where({
         userId,
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'identityProviders' does not exist on typ... Remove this comment to see the full error message
         identityProvider: AuthenticationMethod.identityProviders.PIX,
       })
       .first();
 
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Boolean'.
     return Boolean(authenticationMethodDTO);
   },
 
-  async removeByUserIdAndIdentityProvider({ userId, identityProvider }) {
+  async removeByUserIdAndIdentityProvider({
+    userId,
+    identityProvider
+  }: any) {
     return knex(AUTHENTICATION_METHODS_TABLE).where({ userId, identityProvider }).del();
   },
 
-  async removeAllAuthenticationMethodsByUserId({ userId }) {
+  async removeAllAuthenticationMethodsByUserId({
+    userId
+  }: any) {
     return knex(AUTHENTICATION_METHODS_TABLE).where({ userId }).del();
   },
 
-  async updateChangedPassword({ userId, hashedPassword }, domainTransaction = DomainTransaction.emptyTransaction()) {
+  async updateChangedPassword({
+    userId,
+    hashedPassword
+  }: any, domainTransaction = DomainTransaction.emptyTransaction()) {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'PixAuthenticationComplement' does not ex... Remove this comment to see the full error message
     const authenticationComplement = new AuthenticationMethod.PixAuthenticationComplement({
       password: hashedPassword,
       shouldChangePassword: false,
@@ -170,8 +214,10 @@ module.exports = {
     const [authenticationMethodDTO] = await knexConn(AUTHENTICATION_METHODS_TABLE)
       .where({
         userId,
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'identityProviders' does not exist on typ... Remove this comment to see the full error message
         identityProvider: AuthenticationMethod.identityProviders.PIX,
       })
+      // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Date'.
       .update({ authenticationComplement, updatedAt: new Date() })
       .returning(COLUMNS);
 
@@ -184,8 +230,9 @@ module.exports = {
   async updatePasswordThatShouldBeChanged({
     userId,
     hashedPassword,
-    domainTransaction = DomainTransaction.emptyTransaction(),
-  }) {
+    domainTransaction = DomainTransaction.emptyTransaction()
+  }: any) {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'PixAuthenticationComplement' does not ex... Remove this comment to see the full error message
     const authenticationComplement = new AuthenticationMethod.PixAuthenticationComplement({
       password: hashedPassword,
       shouldChangePassword: true,
@@ -195,8 +242,10 @@ module.exports = {
     const [authenticationMethodDTO] = await knexConn(AUTHENTICATION_METHODS_TABLE)
       .where({
         userId,
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'identityProviders' does not exist on typ... Remove this comment to see the full error message
         identityProvider: AuthenticationMethod.identityProviders.PIX,
       })
+      // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Date'.
       .update({ authenticationComplement, updatedAt: new Date() })
       .returning(COLUMNS);
 
@@ -206,7 +255,11 @@ module.exports = {
     return _toDomain(authenticationMethodDTO);
   },
 
-  async updateExpiredPassword({ userId, hashedPassword }) {
+  async updateExpiredPassword({
+    userId,
+    hashedPassword
+  }: any) {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'PixAuthenticationComplement' does not ex... Remove this comment to see the full error message
     const authenticationComplement = new AuthenticationMethod.PixAuthenticationComplement({
       password: hashedPassword,
       shouldChangePassword: false,
@@ -215,8 +268,10 @@ module.exports = {
     const [authenticationMethodDTO] = await knex(AUTHENTICATION_METHODS_TABLE)
       .where({
         userId,
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'identityProviders' does not exist on typ... Remove this comment to see the full error message
         identityProvider: AuthenticationMethod.identityProviders.PIX,
       })
+      // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Date'.
       .update({ authenticationComplement, updatedAt: new Date() })
       .returning(COLUMNS);
 
@@ -226,9 +281,14 @@ module.exports = {
     return _toDomain(authenticationMethodDTO);
   },
 
-  async updateExternalIdentifierByUserIdAndIdentityProvider({ externalIdentifier, userId, identityProvider }) {
+  async updateExternalIdentifierByUserIdAndIdentityProvider({
+    externalIdentifier,
+    userId,
+    identityProvider
+  }: any) {
     const [authenticationMethodDTO] = await knex(AUTHENTICATION_METHODS_TABLE)
       .where({ userId, identityProvider })
+      // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Date'.
       .update({ externalIdentifier, updatedAt: new Date() })
       .returning(COLUMNS);
 
@@ -240,23 +300,35 @@ module.exports = {
     return _toDomain(authenticationMethodDTO);
   },
 
-  async updatePoleEmploiAuthenticationComplementByUserId({ authenticationComplement, userId }) {
+  async updatePoleEmploiAuthenticationComplementByUserId({
+    authenticationComplement,
+    userId
+  }: any) {
     const [authenticationMethodDTO] = await knex(AUTHENTICATION_METHODS_TABLE)
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'identityProviders' does not exist on typ... Remove this comment to see the full error message
       .where({ userId, identityProvider: AuthenticationMethod.identityProviders.POLE_EMPLOI })
+      // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Date'.
       .update({ authenticationComplement, updatedAt: new Date() })
       .returning(COLUMNS);
 
     if (!authenticationMethodDTO) {
       throw new AuthenticationMethodNotFoundError(
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'identityProviders' does not exist on typ... Remove this comment to see the full error message
         `No rows updated for authentication method of type ${AuthenticationMethod.identityProviders.POLE_EMPLOI} for user ${userId}.`
       );
     }
     return _toDomain(authenticationMethodDTO);
   },
 
-  async updateAuthenticationMethodUserId({ originUserId, identityProvider, targetUserId }) {
+  // @ts-expect-error ts-migrate(2697) FIXME: An async function or method must return a 'Promise... Remove this comment to see the full error message
+  async updateAuthenticationMethodUserId({
+    originUserId,
+    identityProvider,
+    targetUserId
+  }: any) {
     await knex(AUTHENTICATION_METHODS_TABLE)
       .where({ userId: originUserId, identityProvider })
+      // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Date'.
       .update({ userId: targetUserId, updatedAt: new Date() });
   },
 };

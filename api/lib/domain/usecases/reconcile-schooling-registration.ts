@@ -1,6 +1,9 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'CampaignCo... Remove this comment to see the full error message
 const { CampaignCodeError, SchoolingRegistrationAlreadyLinkedToUserError } = require('../errors');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'STUDENT_RE... Remove this comment to see the full error message
 const { STUDENT_RECONCILIATION_ERRORS } = require('../constants');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = async function reconcileSchoolingRegistration({
   campaignCode,
   reconciliationInfo,
@@ -10,8 +13,8 @@ module.exports = async function reconcileSchoolingRegistration({
   studentRepository,
   userRepository,
   obfuscationService,
-  userReconciliationService,
-}) {
+  userReconciliationService
+}: any) {
   const campaign = await campaignRepository.getByCode(campaignCode);
   if (!campaign) {
     throw new CampaignCodeError();
@@ -45,10 +48,11 @@ module.exports = async function reconcileSchoolingRegistration({
   }
 };
 
+// @ts-expect-error ts-migrate(2697) FIXME: An async function or method must return a 'Promise... Remove this comment to see the full error message
 async function _checkIfAnotherStudentIsAlreadyReconciledWithTheSameOrganizationAndUser(
-  userId,
-  organizationId,
-  schoolingRegistrationRepository
+  userId: any,
+  organizationId: any,
+  schoolingRegistrationRepository: any
 ) {
   const schoolingRegistrationFound = await schoolingRegistrationRepository.findOneByUserIdAndOrganizationId({
     userId,

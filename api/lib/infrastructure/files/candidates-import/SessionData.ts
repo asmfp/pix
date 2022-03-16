@@ -1,6 +1,25 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
 const moment = require('moment');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = class SessionData {
+  accessCode: any;
+  address: any;
+  assignedCertificationOfficerId: any;
+  certificationCenter: any;
+  certificationCenterId: any;
+  date: any;
+  description: any;
+  endTime: any;
+  examiner: any;
+  examinerGlobalComment: any;
+  finalizedAt: any;
+  id: any;
+  publishedAt: any;
+  resultsSentToPrescriberAt: any;
+  room: any;
+  startTime: any;
+  time: any;
   constructor({
     id,
     accessCode,
@@ -16,8 +35,8 @@ module.exports = class SessionData {
     resultsSentToPrescriberAt,
     publishedAt,
     certificationCenterId,
-    assignedCertificationOfficerId,
-  }) {
+    assignedCertificationOfficerId
+  }: any) {
     this.id = id;
     this.accessCode = accessCode;
     this.address = address;
@@ -38,7 +57,7 @@ module.exports = class SessionData {
     this.date = moment(date, 'YYYY-MM-DD').format('DD/MM/YYYY');
   }
 
-  static fromSession(session) {
+  static fromSession(session: any) {
     return new SessionData(session);
   }
 };

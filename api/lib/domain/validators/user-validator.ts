@@ -1,6 +1,9 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Joi'.
 const Joi = require('joi');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'EntityVali... Remove this comment to see the full error message
 const { EntityValidationError } = require('../errors');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'validation... Remove this comment to see the full error message
 const validationConfiguration = { abortEarly: false, allowUnknown: true };
 
 const userValidationJoiSchema = Joi.object({
@@ -47,8 +50,12 @@ const userValidationJoiSchema = Joi.object({
     'object.missing': 'FILL_USERNAME_OR_EMAIL',
   });
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
-  validate({ user, cguRequired = true }) {
+  validate({
+    user,
+    cguRequired = true
+  }: any) {
     const { error } = userValidationJoiSchema.validate(user, { ...validationConfiguration, context: { cguRequired } });
     if (error) {
       throw EntityValidationError.fromJoiErrors(error.details);

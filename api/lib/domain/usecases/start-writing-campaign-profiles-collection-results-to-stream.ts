@@ -1,8 +1,12 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
 const moment = require('moment');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'UserNotAut... Remove this comment to see the full error message
 const { UserNotAuthorizedToGetCampaignResultsError } = require('../errors');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'CampaignPr... Remove this comment to see the full error message
 const CampaignProfilesCollectionExport = require('../../infrastructure/serializers/csv/campaign-profiles-collection-export');
 
-async function _checkCreatorHasAccessToCampaignOrganization(userId, organizationId, userRepository) {
+// @ts-expect-error ts-migrate(2697) FIXME: An async function or method must return a 'Promise... Remove this comment to see the full error message
+async function _checkCreatorHasAccessToCampaignOrganization(userId: any, organizationId: any, userRepository: any) {
   const user = await userRepository.getWithMemberships(userId);
 
   if (!user.hasAccessToOrganization(organizationId)) {
@@ -12,6 +16,7 @@ async function _checkCreatorHasAccessToCampaignOrganization(userId, organization
   }
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = async function startWritingCampaignProfilesCollectionResultsToStream({
   userId,
   campaignId,
@@ -22,13 +27,14 @@ module.exports = async function startWritingCampaignProfilesCollectionResultsToS
   competenceRepository,
   campaignParticipationRepository,
   organizationRepository,
-  placementProfileService,
-}) {
+  placementProfileService
+}: any) {
   const campaign = await campaignRepository.get(campaignId);
   const translate = i18n.__;
 
   await _checkCreatorHasAccessToCampaignOrganization(userId, campaign.organizationId, userRepository);
 
+  // @ts-expect-error ts-migrate(2583) FIXME: Cannot find name 'Promise'. Do you need to change ... Remove this comment to see the full error message
   const [allPixCompetences, organization, campaignParticipationResultDatas] = await Promise.all([
     competenceRepository.listPixCompetencesOnly({ locale: i18n.getLocale() }),
     organizationRepository.get(campaign.organizationId),
@@ -52,7 +58,7 @@ module.exports = async function startWritingCampaignProfilesCollectionResultsToS
     .then(() => {
       writableStream.end();
     })
-    .catch((error) => {
+    .catch((error: any) => {
       writableStream.emit('error', error);
       throw error;
     });

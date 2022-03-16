@@ -1,6 +1,9 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'NotFoundEr... Remove this comment to see the full error message
 const { NotFoundError } = require('../errors');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'StudentFor... Remove this comment to see the full error message
 const StudentForEnrollment = require('../read-models/StudentForEnrollment');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = async function findStudentsForEnrollment({
   certificationCenterId,
   sessionId,
@@ -8,8 +11,8 @@ module.exports = async function findStudentsForEnrollment({
   filter,
   organizationRepository,
   schoolingRegistrationRepository,
-  certificationCandidateRepository,
-}) {
+  certificationCandidateRepository
+}: any) {
   try {
     const organizationId = await organizationRepository.getIdByCertificationCenterId(certificationCenterId);
     const paginatedStudents = await schoolingRegistrationRepository.findByOrganizationIdAndUpdatedAtOrderByDivision({
@@ -32,13 +35,15 @@ module.exports = async function findStudentsForEnrollment({
   }
 };
 
-function _buildStudentsForEnrollment({ students, certificationCandidates }) {
-  return students.map((student) =>
-    StudentForEnrollment.fromStudentsAndCertificationCandidates({ student, certificationCandidates })
+function _buildStudentsForEnrollment({
+  students,
+  certificationCandidates
+}: any) {
+  return students.map((student: any) => StudentForEnrollment.fromStudentsAndCertificationCandidates({ student, certificationCandidates })
   );
 }
 
-function _emptyResponse(page) {
+function _emptyResponse(page: any) {
   return {
     data: [],
     pagination: { page: page.number, pageSize: page.size, rowCount: 0, pageCount: 0 },

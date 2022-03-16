@@ -1,4 +1,6 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Joi'.
 const Joi = require('joi');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_'.
 const _ = require('lodash');
 
 const postgreSQLSequenceDefaultStart = 1;
@@ -16,8 +18,9 @@ const implementationType = {
 
 const valuesToExport = {};
 
-function _assignValueToExport(array, implementationType) {
-  _.each(array, function (value) {
+function _assignValueToExport(array: any, implementationType: any) {
+  _.each(array, function (value: any) {
+    // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
     valuesToExport[value] = implementationType;
   });
 }
@@ -54,9 +57,11 @@ _assignValueToExport(typesPositiveInteger32bits, implementationType.positiveInte
 _assignValueToExport(typesAlphanumeric, implementationType.alphanumeric);
 _assignValueToExport(typesAlphanumeric255, implementationType.alphanumeric255);
 
+// @ts-expect-error ts-migrate(2339) FIXME: Property 'positiveInteger32bits' does not exist on... Remove this comment to see the full error message
 valuesToExport.positiveInteger32bits = {
   min: postgreSQLSequenceDefaultStart,
   max: postgreSQLSequenceEnd,
 };
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = valuesToExport;

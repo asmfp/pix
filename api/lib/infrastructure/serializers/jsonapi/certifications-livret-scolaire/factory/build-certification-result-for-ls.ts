@@ -1,8 +1,13 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Certificat... Remove this comment to see the full error message
 const Certificate = require('../../../../../../lib/infrastructure/serializers/jsonapi/certifications-livret-scolaire/response-objects/Certificate');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Competence... Remove this comment to see the full error message
 const CompetenceResults = require('../../../../../../lib/infrastructure/serializers/jsonapi/certifications-livret-scolaire/response-objects/CompetenceResults');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Certificat... Remove this comment to see the full error message
 const CertificationsResults = require('../../../../../../lib/infrastructure/serializers/jsonapi/certifications-livret-scolaire/response-objects/CertificationsResults');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const buildCompetenceForLS = require('./build-competences-for-ls');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'buildAreaF... Remove this comment to see the full error message
 const buildAreaForLS = require('./build-area-for-ls');
 
 function buildReferentialOfCompetences() {
@@ -50,13 +55,14 @@ function buildReferentialOfCompetences() {
   ];
 }
 
-function _buildCompetenceResult(level = 5, competenceId) {
+function _buildCompetenceResult(level = 5, competenceId: any) {
   return new CompetenceResults({ level, competenceId });
 }
 
 function _buildCompetenceResults() {
   const competenceResults = buildReferentialOfCompetences();
-  return competenceResults.map((competence) => _buildCompetenceResult(4, competence.id));
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'map' does not exist on type '{}'.
+  return competenceResults.map((competence: any) => _buildCompetenceResult(4, competence.id));
 }
 
 function buildCertificateForLS({
@@ -95,8 +101,9 @@ function buildCertificateForLS({
   return certificate;
 }
 
-function buildCertificationsResults(certifications, competences = buildReferentialOfCompetences()) {
+function buildCertificationsResults(certifications: any, competences = buildReferentialOfCompetences()) {
   return new CertificationsResults({ certifications, competences });
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = { buildCertificateForLS, buildReferentialOfCompetences, buildCertificationsResults };

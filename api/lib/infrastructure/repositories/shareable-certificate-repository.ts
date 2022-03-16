@@ -1,32 +1,53 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_'.
 const _ = require('lodash');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'knex'.
 const { knex } = require('../../../db/knex-database-connection');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'ShareableC... Remove this comment to see the full error message
 const ShareableCertificate = require('../../domain/models/ShareableCertificate');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Assessment... Remove this comment to see the full error message
 const AssessmentResult = require('../../domain/models/AssessmentResult');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'CleaCertif... Remove this comment to see the full error message
 const CleaCertificationResult = require('../../../lib/domain/models/CleaCertificationResult');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'CertifiedB... Remove this comment to see the full error message
 const CertifiedBadgeImage = require('../../../lib/domain/read-models/CertifiedBadgeImage');
 const {
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PIX_EMPLOI... Remove this comment to see the full error message
   PIX_EMPLOI_CLEA,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PIX_EMPLOI... Remove this comment to see the full error message
   PIX_EMPLOI_CLEA_V2,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PIX_DROIT_... Remove this comment to see the full error message
   PIX_DROIT_MAITRE_CERTIF,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PIX_DROIT_... Remove this comment to see the full error message
   PIX_DROIT_EXPERT_CERTIF,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PIX_EDU_FO... Remove this comment to see the full error message
   PIX_EDU_FORMATION_INITIALE_2ND_DEGRE_INITIE,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PIX_EDU_FO... Remove this comment to see the full error message
   PIX_EDU_FORMATION_INITIALE_2ND_DEGRE_CONFIRME,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PIX_EDU_FO... Remove this comment to see the full error message
   PIX_EDU_FORMATION_CONTINUE_2ND_DEGRE_CONFIRME,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PIX_EDU_FO... Remove this comment to see the full error message
   PIX_EDU_FORMATION_CONTINUE_2ND_DEGRE_AVANCE,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PIX_EDU_FO... Remove this comment to see the full error message
   PIX_EDU_FORMATION_CONTINUE_2ND_DEGRE_EXPERT,
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 } = require('../../domain/models/Badge').keys;
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'NotFoundEr... Remove this comment to see the full error message
 const { NotFoundError } = require('../../../lib/domain/errors');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'competence... Remove this comment to see the full error message
 const competenceTreeRepository = require('./competence-tree-repository');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'ResultComp... Remove this comment to see the full error message
 const ResultCompetenceTree = require('../../domain/models/ResultCompetenceTree');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
-  async getByVerificationCode(verificationCode) {
+  async getByVerificationCode(verificationCode: any) {
     const shareableCertificateDTO = await _selectShareableCertificates()
       .groupBy('certification-courses.id', 'sessions.id', 'assessments.id', 'assessment-results.id')
       .where({ verificationCode })
       .first();
 
     if (!shareableCertificateDTO) {
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
       throw new NotFoundError(`There is no certification course with verification code "${verificationCode}"`);
     }
 
@@ -35,6 +56,7 @@ module.exports = {
     const cleaCertificationResult = await _getCleaCertificationResult(shareableCertificateDTO.id);
     const certifiedBadgeImages = await _getCertifiedBadgeImages(shareableCertificateDTO.id);
 
+    // @ts-expect-error ts-migrate(2554) FIXME: Expected 1 arguments, but got 4.
     return _toDomain(shareableCertificateDTO, competenceTree, cleaCertificationResult, certifiedBadgeImages);
   },
 };
@@ -71,7 +93,7 @@ function _selectShareableCertificates() {
     .where('certification-courses.isCancelled', false);
 }
 
-function _filterMostRecentValidatedAssessmentResult(qb) {
+function _filterMostRecentValidatedAssessmentResult(qb: any) {
   return qb
     .whereNotExists(
       knex
@@ -84,7 +106,7 @@ function _filterMostRecentValidatedAssessmentResult(qb) {
     .where('assessment-results.status', AssessmentResult.status.VALIDATED);
 }
 
-async function _getCleaCertificationResult(certificationCourseId) {
+async function _getCleaCertificationResult(certificationCourseId: any) {
   const result = await knex
     .select('acquired')
     .from('partner-certifications')
@@ -98,7 +120,7 @@ async function _getCleaCertificationResult(certificationCourseId) {
   return CleaCertificationResult.buildFrom(result);
 }
 
-async function _getCertifiedBadgeImages(certificationCourseId) {
+async function _getCertifiedBadgeImages(certificationCourseId: any) {
   const handledBadgeKeys = [
     PIX_DROIT_EXPERT_CERTIF,
     PIX_DROIT_MAITRE_CERTIF,
@@ -117,13 +139,17 @@ async function _getCertifiedBadgeImages(certificationCourseId) {
     })
     .orderBy('partnerKey');
   return _.compact(
-    _.map(results, ({ partnerKey, temporaryPartnerKey }) =>
+    _.map(results, ({
+      partnerKey,
+      temporaryPartnerKey
+    }: any) =>
       CertifiedBadgeImage.fromPartnerKey(partnerKey, temporaryPartnerKey)
     )
   );
 }
 
-function _toDomain(shareableCertificateDTO, competenceTree, cleaCertificationResult, certifiedBadgeImages) {
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_toDomain'... Remove this comment to see the full error message
+function _toDomain(shareableCertificateDTO: any, competenceTree: any, cleaCertificationResult: any, certifiedBadgeImages: any) {
   const resultCompetenceTree = ResultCompetenceTree.generateTreeFromCompetenceMarks({
     competenceTree,
     competenceMarks: _.compact(shareableCertificateDTO.competenceMarks),

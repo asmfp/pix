@@ -1,12 +1,19 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
 const moment = require('moment');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'tokenServi... Remove this comment to see the full error message
 const tokenService = require('./token-service');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const mailer = require('../../infrastructure/mailers/mailer');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'settings'.
 const settings = require('../../config');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const frTranslations = require('../../../translations/fr');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const enTranslations = require('../../../translations/en');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'ENGLISH_SP... Remove this comment to see the full error message
 const { ENGLISH_SPOKEN, FRENCH_FRANCE, FRENCH_SPOKEN } = require('../../domain/constants').LOCALE;
 
 const EMAIL_ADDRESS_NO_RESPONSE = 'ne-pas-repondre@pix.fr';
@@ -22,7 +29,7 @@ const EMAIL_CHANGE_TAG = 'EMAIL_CHANGE';
 const EMAIL_VERIFICATION_CODE_TAG = 'EMAIL_VERIFICATION_CODE';
 const SCO_ACCOUNT_RECOVERY_TAG = 'SCO_ACCOUNT_RECOVERY';
 
-function sendAccountCreationEmail(email, locale, redirectionUrl) {
+function sendAccountCreationEmail(email: any, locale: any, redirectionUrl: any) {
   let pixName;
   let accountCreationEmailSubject;
   let variables;
@@ -81,8 +88,8 @@ function sendCertificationResultEmail({
   sessionDate,
   certificationCenterName,
   resultRecipientEmail,
-  daysBeforeExpiration,
-}) {
+  daysBeforeExpiration
+}: any) {
   const pixName = PIX_NAME_FR;
   const formattedSessionDate = moment(sessionDate).locale('fr').format('L');
   const token = tokenService.createCertificationResultsByRecipientEmailLinkToken({
@@ -108,7 +115,11 @@ function sendCertificationResultEmail({
   });
 }
 
-function sendResetPasswordDemandEmail({ email, locale, temporaryKey }) {
+function sendResetPasswordDemandEmail({
+  email,
+  locale,
+  temporaryKey
+}: any) {
   const localeParam = locale ? locale : FRENCH_FRANCE;
 
   let pixName = PIX_NAME_FR;
@@ -157,7 +168,14 @@ function sendResetPasswordDemandEmail({ email, locale, temporaryKey }) {
   });
 }
 
-function sendOrganizationInvitationEmail({ email, organizationName, organizationInvitationId, code, locale, tags }) {
+function sendOrganizationInvitationEmail({
+  email,
+  organizationName,
+  organizationInvitationId,
+  code,
+  locale,
+  tags
+}: any) {
   locale = locale ? locale : FRENCH_FRANCE;
   let pixOrgaName = PIX_ORGA_NAME_FR;
   let sendOrganizationInvitationEmailSubject = frTranslations['organization-invitation-email'].subject;
@@ -223,8 +241,8 @@ function sendScoOrganizationInvitationEmail({
   organizationInvitationId,
   code,
   locale,
-  tags,
-}) {
+  tags
+}: any) {
   locale = locale ? locale : FRENCH_FRANCE;
 
   let variables = {
@@ -266,7 +284,10 @@ function sendScoOrganizationInvitationEmail({
   });
 }
 
-function notifyEmailChange({ email, locale }) {
+function notifyEmailChange({
+  email,
+  locale
+}: any) {
   const options = {
     from: EMAIL_ADDRESS_NO_RESPONSE,
     fromName: PIX_NAME_FR,
@@ -276,8 +297,10 @@ function notifyEmailChange({ email, locale }) {
   };
 
   if (locale === FRENCH_SPOKEN) {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'subject' does not exist on type '{ from:... Remove this comment to see the full error message
     options.subject = frTranslations['email-change-email'].subject;
 
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'variables' does not exist on type '{ fro... Remove this comment to see the full error message
     options.variables = {
       homeName: `pix${settings.domain.tldOrg}`,
       homeUrl: `${settings.domain.pix + settings.domain.tldOrg}/fr/`,
@@ -285,8 +308,10 @@ function notifyEmailChange({ email, locale }) {
       ...frTranslations['email-change-email'].body,
     };
   } else if (locale === FRENCH_FRANCE) {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'subject' does not exist on type '{ from:... Remove this comment to see the full error message
     options.subject = frTranslations['email-change-email'].subject;
 
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'variables' does not exist on type '{ fro... Remove this comment to see the full error message
     options.variables = {
       homeName: `pix${settings.domain.tldFr}`,
       homeUrl: `${settings.domain.pix + settings.domain.tldFr}`,
@@ -294,8 +319,10 @@ function notifyEmailChange({ email, locale }) {
       ...frTranslations['email-change-email'].body,
     };
   } else if (locale === ENGLISH_SPOKEN) {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'subject' does not exist on type '{ from:... Remove this comment to see the full error message
     options.subject = enTranslations['email-change-email'].subject;
 
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'variables' does not exist on type '{ fro... Remove this comment to see the full error message
     options.variables = {
       homeName: `pix${settings.domain.tldOrg}`,
       homeUrl: `${settings.domain.pix + settings.domain.tldOrg}/en-gb/`,
@@ -307,7 +334,11 @@ function notifyEmailChange({ email, locale }) {
   return mailer.sendEmail(options);
 }
 
-function sendAccountRecoveryEmail({ email, firstName, temporaryKey }) {
+function sendAccountRecoveryEmail({
+  email,
+  firstName,
+  temporaryKey
+}: any) {
   const pixName = PIX_NAME_FR;
   const redirectionUrl = `${settings.domain.pixApp + settings.domain.tldFr}/recuperer-mon-compte/${temporaryKey}`;
   const variables = {
@@ -328,7 +359,12 @@ function sendAccountRecoveryEmail({ email, firstName, temporaryKey }) {
   });
 }
 
-function sendVerificationCodeEmail({ code, email, locale, translate }) {
+function sendVerificationCodeEmail({
+  code,
+  email,
+  locale,
+  translate
+}: any) {
   const options = {
     from: EMAIL_ADDRESS_NO_RESPONSE,
     fromName: PIX_NAME_FR,
@@ -338,8 +374,10 @@ function sendVerificationCodeEmail({ code, email, locale, translate }) {
   };
 
   if (locale === FRENCH_SPOKEN) {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'subject' does not exist on type '{ from:... Remove this comment to see the full error message
     options.subject = translate({ phrase: 'verification-code-email.subject', locale: 'fr' }, { code });
 
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'variables' does not exist on type '{ fro... Remove this comment to see the full error message
     options.variables = {
       code,
       homeName: `pix${settings.domain.tldOrg}`,
@@ -348,8 +386,10 @@ function sendVerificationCodeEmail({ code, email, locale, translate }) {
       ...frTranslations['verification-code-email'].body,
     };
   } else if (locale === FRENCH_FRANCE) {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'subject' does not exist on type '{ from:... Remove this comment to see the full error message
     options.subject = translate({ phrase: 'verification-code-email.subject', locale: 'fr' }, { code });
 
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'variables' does not exist on type '{ fro... Remove this comment to see the full error message
     options.variables = {
       code,
       homeName: `pix${settings.domain.tldFr}`,
@@ -358,8 +398,10 @@ function sendVerificationCodeEmail({ code, email, locale, translate }) {
       ...frTranslations['verification-code-email'].body,
     };
   } else if (locale === ENGLISH_SPOKEN) {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'subject' does not exist on type '{ from:... Remove this comment to see the full error message
     options.subject = translate({ phrase: 'verification-code-email.subject', locale: 'en' }, { code });
 
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'variables' does not exist on type '{ fro... Remove this comment to see the full error message
     options.variables = {
       code,
       homeName: `pix${settings.domain.tldOrg}`,
@@ -372,6 +414,7 @@ function sendVerificationCodeEmail({ code, email, locale, translate }) {
   return mailer.sendEmail(options);
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
   sendAccountCreationEmail,
   sendAccountRecoveryEmail,

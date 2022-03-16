@@ -1,5 +1,8 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'HigherScho... Remove this comment to see the full error message
 const HigherSchoolingRegistration = require('./HigherSchoolingRegistration');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'checkValid... Remove this comment to see the full error message
 const { checkValidation } = require('../validators/higher-schooling-registration-set-validator');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'areTwoStri... Remove this comment to see the full error message
 const { areTwoStringsCloseEnough } = require('../services/string-comparison-service');
 
 const RATIO = 0.25;
@@ -33,14 +36,18 @@ const DIPLOMAS = [
 
 const UNKNOWN = 'csv-import-values.higher-schooling-registrations.unknown';
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'HigherScho... Remove this comment to see the full error message
 class HigherSchoolingRegistrationSet {
-  constructor(i18n) {
+  i18n: any;
+  registrations: any;
+  warnings: any;
+  constructor(i18n: any) {
     this.i18n = i18n;
     this.registrations = [];
     this.warnings = [];
   }
 
-  addRegistration(registrationAttributes) {
+  addRegistration(registrationAttributes: any) {
     const registration = new HigherSchoolingRegistration(registrationAttributes);
     this._checkStudyScheme(registration);
     this._checkDiploma(registration);
@@ -49,27 +56,27 @@ class HigherSchoolingRegistrationSet {
     checkValidation(this);
   }
 
-  addWarning(studentNumber, field, value, code) {
+  addWarning(studentNumber: any, field: any, value: any, code: any) {
     this.warnings.push({ studentNumber, field, value, code });
   }
 
-  _checkStudyScheme(registration) {
+  _checkStudyScheme(registration: any) {
     const { studentNumber, studyScheme } = registration;
     if (this._isValidI18nValue(STUDY_SCHEMES, studyScheme)) return;
     this.addWarning(studentNumber, 'study-scheme', registration.studyScheme, 'unknown');
     registration.studyScheme = this.i18n.__(UNKNOWN);
   }
 
-  _checkDiploma(registration) {
+  _checkDiploma(registration: any) {
     const { studentNumber, diploma } = registration;
     if (this._isValidI18nValue(DIPLOMAS, diploma)) return;
     this.addWarning(studentNumber, 'diploma', registration.diploma, 'unknown');
     registration.diploma = this.i18n.__(UNKNOWN);
   }
 
-  _isValidI18nValue(keys, valueToCheck) {
+  _isValidI18nValue(keys: any, valueToCheck: any) {
     if (!valueToCheck) return false;
-    return keys.some((key) => {
+    return keys.some((key: any) => {
       const reference = this.i18n.__(key).toLowerCase();
       const input = valueToCheck.toLowerCase();
       return areTwoStringsCloseEnough(input, reference, RATIO);
@@ -77,4 +84,5 @@ class HigherSchoolingRegistrationSet {
   }
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = HigherSchoolingRegistrationSet;

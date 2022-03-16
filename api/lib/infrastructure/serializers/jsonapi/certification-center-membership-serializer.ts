@@ -1,9 +1,11 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Serializer... Remove this comment to see the full error message
 const { Serializer } = require('jsonapi-serializer');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
-  serialize(certificationCenterMemberships) {
+  serialize(certificationCenterMemberships: any) {
     return new Serializer('certificationCenterMemberships', {
-      transform: function (record) {
+      transform: function (record: any) {
         record.certificationCenter.sessions = [];
         return record;
       },
@@ -16,7 +18,7 @@ module.exports = {
           ref: 'id',
           ignoreRelationshipData: true,
           relationshipLinks: {
-            related: function (record, current, parent) {
+            related: function (record: any, current: any, parent: any) {
               return `/api/certification-centers/${parent.id}/sessions`;
             },
           },
@@ -30,9 +32,9 @@ module.exports = {
     }).serialize(certificationCenterMemberships);
   },
 
-  serializeMembers(certificationCenterMemberships) {
+  serializeMembers(certificationCenterMemberships: any) {
     return new Serializer('members', {
-      transform: function (record) {
+      transform: function (record: any) {
         const { id, firstName, lastName } = record.user;
         return { id, firstName, lastName };
       },

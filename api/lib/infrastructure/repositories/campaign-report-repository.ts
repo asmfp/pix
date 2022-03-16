@@ -1,17 +1,32 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'knex'.
 const { knex } = require('../bookshelf');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'CampaignRe... Remove this comment to see the full error message
 const CampaignReport = require('../../domain/read-models/CampaignReport');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'TargetProf... Remove this comment to see the full error message
 const TargetProfileForSpecifier = require('../../domain/read-models/campaign/TargetProfileForSpecifier');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'CampaignPa... Remove this comment to see the full error message
 const CampaignParticipationStatuses = require('../../domain/models/CampaignParticipationStatuses');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'fetchPage'... Remove this comment to see the full error message
 const { fetchPage } = require('../utils/knex-utils');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'NotFoundEr... Remove this comment to see the full error message
 const { NotFoundError } = require('../../domain/errors');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_'.
 const _ = require('lodash');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'skillDataS... Remove this comment to see the full error message
 const skillDataSource = require('../datasources/learning-content/skill-datasource');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'SHARED'.
 const { SHARED } = CampaignParticipationStatuses;
 
-function _setSearchFiltersForQueryBuilder(qb, { name, ongoing = true, ownerName, isOwnedByMe }, userId) {
+// @ts-expect-error ts-migrate(2393) FIXME: Duplicate function implementation.
+function _setSearchFiltersForQueryBuilder(qb: any, {
+  name,
+  ongoing = true,
+  ownerName,
+  isOwnedByMe
+}: any, userId: any) {
   if (name) {
     qb.whereRaw('LOWER("name") LIKE ?', `%${name.toLowerCase()}%`);
   }
@@ -31,8 +46,9 @@ function _setSearchFiltersForQueryBuilder(qb, { name, ongoing = true, ownerName,
   }
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
-  async get(id) {
+  async get(id: any) {
     const result = await knex('campaigns')
       .select({
         id: 'campaigns.id',
@@ -72,6 +88,7 @@ module.exports = {
       .first();
 
     if (!result) {
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
       throw new NotFoundError(`La campagne d'id ${id} n'existe pas ou son accès est restreint`);
     }
 
@@ -81,24 +98,30 @@ module.exports = {
       id: result.targetProfileId,
       name: result.targetProfileName,
       skills,
-      thematicResults: _.uniq(result.badgeIds).filter((id) => id),
-      hasStage: result.stageIds.some((stage) => stage),
+      thematicResults: _.uniq(result.badgeIds).filter((id: any) => id),
+      hasStage: result.stageIds.some((stage: any) => stage),
       description: result.targetProfileDescription,
     });
 
     return new CampaignReport({ ...result, id, targetProfileForSpecifier: targetProfile });
   },
 
-  async findMasteryRates(campaignId) {
+  async findMasteryRates(campaignId: any) {
     const results = await knex('campaign-participations')
       .select('masteryRate')
       .where('isImproved', false)
       .andWhere('status', SHARED)
       .andWhere({ campaignId });
-    return results.map((result) => Number(result.masteryRate));
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Number'.
+    return results.map((result: any) => Number(result.masteryRate));
   },
 
-  async findPaginatedFilteredByOrganizationId({ organizationId, filter, page, userId }) {
+  async findPaginatedFilteredByOrganizationId({
+    organizationId,
+    filter,
+    page,
+    userId
+  }: any) {
     const query = knex('campaigns')
       .distinct('campaigns.id')
       .select(
@@ -121,9 +144,10 @@ module.exports = {
 
     const { results, pagination } = await fetchPage(query, page);
     const atLeastOneCampaign = await knex('campaigns').select('id').where({ organizationId }).first(1);
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Boolean'.
     const hasCampaigns = Boolean(atLeastOneCampaign);
 
-    const campaignReports = results.map((result) => new CampaignReport(result));
+    const campaignReports = results.map((result: any) => new CampaignReport(result));
     return { models: campaignReports, meta: { ...pagination, hasCampaigns } };
   },
 };

@@ -1,14 +1,20 @@
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const BookshelfCompetenceMark = require('../orm-models/CompetenceMark');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Competence... Remove this comment to see the full error message
 const CompetenceMark = require('../../domain/models/CompetenceMark');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'knex'.
 const { knex } = require('../bookshelf');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'DomainTran... Remove this comment to see the full error message
 const DomainTransaction = require('../DomainTransaction');
 
-function _toDomain(competenceMark) {
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_toDomain'... Remove this comment to see the full error message
+function _toDomain(competenceMark: any) {
   return new CompetenceMark(competenceMark);
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
-  async save(competenceMark, domainTransaction = DomainTransaction.emptyTransaction()) {
+  async save(competenceMark: any, domainTransaction = DomainTransaction.emptyTransaction()) {
     await competenceMark.validate();
     const savedCompetenceMark = await new BookshelfCompetenceMark(competenceMark).save(null, {
       transacting: domainTransaction.knexTransaction,
@@ -16,12 +22,12 @@ module.exports = {
     return savedCompetenceMark.toDomainEntity();
   },
 
-  async findByAssessmentResultId(assessmentResultId) {
+  async findByAssessmentResultId(assessmentResultId: any) {
     const competenceMarks = await BookshelfCompetenceMark.where({ assessmentResultId }).fetchAll();
-    return competenceMarks.models.map((model) => _toDomain(model.attributes));
+    return competenceMarks.models.map((model: any) => _toDomain(model.attributes));
   },
 
-  async findByCertificationCourseId(certificationCourseId) {
+  async findByCertificationCourseId(certificationCourseId: any) {
     const competenceMarks = await knex
       .select(
         'competence-marks.id',

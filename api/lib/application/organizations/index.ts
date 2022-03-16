@@ -1,15 +1,22 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Joi'.
 const Joi = require('joi');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'sendJsonAp... Remove this comment to see the full error message
 const { sendJsonApiError, PayloadTooLargeError, NotFoundError, BadRequestError } = require('../http-errors');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'securityPr... Remove this comment to see the full error message
 const securityPreHandlers = require('../security-pre-handlers');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const organizationController = require('./organization-controller');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'identifier... Remove this comment to see the full error message
 const identifiersType = require('../../domain/types/identifiers-type');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'ERRORS'.
 const ERRORS = {
   PAYLOAD_TOO_LARGE: 'PAYLOAD_TOO_LARGE',
 };
 
-exports.register = async (server) => {
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
+exports.register = async (server: any) => {
   server.route([
     {
       method: 'POST',
@@ -49,7 +56,7 @@ exports.register = async (server) => {
             'page[number]': Joi.number().integer().empty('').allow(null).optional(),
             'page[size]': Joi.number().integer().empty('').allow(null).optional(),
           }),
-          failAction: (request, h) => {
+          failAction: (request: any, h: any) => {
             return sendJsonApiError(new BadRequestError('Un des champs de recherche saisis est invalide.'), h);
           },
         },
@@ -349,7 +356,8 @@ exports.register = async (server) => {
               },
             },
           }).options({ allowUnknown: true }),
-          failAction: (request, h) => {
+          failAction: (request: any, h: any) => {
+            // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
             return sendJsonApiError(new NotFoundError("L'id d'un des profils cible n'est pas valide"), h);
           },
         },
@@ -405,7 +413,7 @@ exports.register = async (server) => {
         payload: {
           maxBytes: 1048576 * 20, // 20MB
           output: 'file',
-          failAction: (request, h) => {
+          failAction: (request: any, h: any) => {
             return sendJsonApiError(
               new PayloadTooLargeError('An error occurred, payload is too large', ERRORS.PAYLOAD_TOO_LARGE, {
                 maxSize: '20',
@@ -441,7 +449,7 @@ exports.register = async (server) => {
         payload: {
           maxBytes: 1048576 * 10, // 10MB
           parse: 'gunzip',
-          failAction: (request, h) => {
+          failAction: (request: any, h: any) => {
             return sendJsonApiError(
               new PayloadTooLargeError('An error occurred, payload is too large', ERRORS.PAYLOAD_TOO_LARGE, {
                 maxSize: '10',
@@ -477,7 +485,7 @@ exports.register = async (server) => {
         payload: {
           maxBytes: 1048576 * 10, // 10MB
           parse: 'gunzip',
-          failAction: (request, h) => {
+          failAction: (request: any, h: any) => {
             return sendJsonApiError(
               new PayloadTooLargeError('An error occurred, payload is too large', ERRORS.PAYLOAD_TOO_LARGE, {
                 maxSize: '10',
@@ -658,4 +666,5 @@ exports.register = async (server) => {
   ]);
 };
 
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.name = 'organization-api';

@@ -1,20 +1,33 @@
 /* eslint-disable  no-restricted-syntax */
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const checkUserHasRolePixMasterUseCase = require('./usecases/checkUserHasRolePixMaster');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const checkUserIsAdminInOrganizationUseCase = require('./usecases/checkUserIsAdminInOrganization');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const checkUserBelongsToOrganizationManagingStudentsUseCase = require('./usecases/checkUserBelongsToOrganizationManagingStudents');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const checkUserBelongsToScoOrganizationAndManagesStudentsUseCase = require('./usecases/checkUserBelongsToScoOrganizationAndManagesStudents');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const checkUserBelongsToSupOrganizationAndManagesStudentsUseCase = require('./usecases/checkUserBelongsToSupOrganizationAndManagesStudents');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const checkUserBelongsToOrganizationUseCase = require('./usecases/checkUserBelongsToOrganization');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const checkUserIsAdminAndManagingStudentsForOrganization = require('./usecases/checkUserIsAdminAndManagingStudentsForOrganization');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const checkUserIsMemberOfAnOrganizationUseCase = require('./usecases/checkUserIsMemberOfAnOrganization');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const checkUserIsMemberOfCertificationCenterUsecase = require('./usecases/checkUserIsMemberOfCertificationCenter');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const checkAuthorizationToManageCampaignUsecase = require('./usecases/checkAuthorizationToManageCampaign');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Organizati... Remove this comment to see the full error message
 const Organization = require('../../lib/domain/models/Organization');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'JSONAPIErr... Remove this comment to see the full error message
 const JSONAPIError = require('jsonapi-serializer').Error;
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_'.
 const _ = require('lodash');
 
-function _replyForbiddenError(h) {
+function _replyForbiddenError(h: any) {
   const errorHttpStatusCode = 403;
 
   const jsonApiError = new JSONAPIError({
@@ -26,7 +39,7 @@ function _replyForbiddenError(h) {
   return h.response(jsonApiError).code(errorHttpStatusCode).takeover();
 }
 
-async function checkUserHasRolePixMaster(request, h) {
+async function checkUserHasRolePixMaster(request: any, h: any) {
   if (!request.auth.credentials || !request.auth.credentials.userId) {
     return _replyForbiddenError(h);
   }
@@ -44,18 +57,19 @@ async function checkUserHasRolePixMaster(request, h) {
   }
 }
 
-function checkRequestedUserIsAuthenticatedUser(request, h) {
+function checkRequestedUserIsAuthenticatedUser(request: any, h: any) {
   if (!request.auth.credentials || !request.auth.credentials.userId) {
     return _replyForbiddenError(h);
   }
 
   const authenticatedUserId = request.auth.credentials.userId;
+  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'parseInt'.
   const requestedUserId = parseInt(request.params.userId) || parseInt(request.params.id);
 
   return authenticatedUserId === requestedUserId ? h.response(true) : _replyForbiddenError(h);
 }
 
-function checkUserIsAdminInOrganization(request, h) {
+function checkUserIsAdminInOrganization(request: any, h: any) {
   if (!request.auth.credentials || !request.auth.credentials.userId) {
     return _replyForbiddenError(h);
   }
@@ -66,11 +80,12 @@ function checkUserIsAdminInOrganization(request, h) {
   const organizationId =
     request.path && request.path.includes('memberships')
       ? request.payload.data.relationships.organization.data.id
+      // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'parseInt'.
       : parseInt(request.params.id);
 
   return checkUserIsAdminInOrganizationUseCase
     .execute(userId, organizationId)
-    .then((isAdminInOrganization) => {
+    .then((isAdminInOrganization: any) => {
       if (isAdminInOrganization) {
         return h.response(true);
       }
@@ -79,17 +94,18 @@ function checkUserIsAdminInOrganization(request, h) {
     .catch(() => _replyForbiddenError(h));
 }
 
-function checkUserIsMemberOfCertificationCenter(request, h) {
+function checkUserIsMemberOfCertificationCenter(request: any, h: any) {
   if (!request.auth.credentials || !request.auth.credentials.userId) {
     return _replyForbiddenError(h);
   }
 
   const userId = request.auth.credentials.userId;
+  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'parseInt'.
   const certificationCenterId = parseInt(request.params.certificationCenterId);
 
   return checkUserIsMemberOfCertificationCenterUsecase
     .execute(userId, certificationCenterId)
-    .then((isMemberInCertificationCenter) => {
+    .then((isMemberInCertificationCenter: any) => {
       if (isMemberInCertificationCenter) {
         return h.response(true);
       }
@@ -98,12 +114,13 @@ function checkUserIsMemberOfCertificationCenter(request, h) {
     .catch(() => _replyForbiddenError(h));
 }
 
-async function checkUserBelongsToOrganizationOrHasRolePixMaster(request, h) {
+async function checkUserBelongsToOrganizationOrHasRolePixMaster(request: any, h: any) {
   if (!request.auth.credentials || !request.auth.credentials.userId) {
     return _replyForbiddenError(h);
   }
 
   const userId = request.auth.credentials.userId;
+  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'parseInt'.
   const organizationId = parseInt(request.params.id);
 
   const belongsToOrganization = await checkUserBelongsToOrganizationUseCase.execute(userId, organizationId);
@@ -119,12 +136,13 @@ async function checkUserBelongsToOrganizationOrHasRolePixMaster(request, h) {
   return _replyForbiddenError(h);
 }
 
-async function checkUserBelongsToOrganizationManagingStudents(request, h) {
+async function checkUserBelongsToOrganizationManagingStudents(request: any, h: any) {
   if (!_.has(request, 'auth.credentials.userId')) {
     return _replyForbiddenError(h);
   }
 
   const userId = request.auth.credentials.userId;
+  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'parseInt'.
   const organizationId = parseInt(request.params.id);
 
   try {
@@ -137,12 +155,13 @@ async function checkUserBelongsToOrganizationManagingStudents(request, h) {
   return _replyForbiddenError(h);
 }
 
-async function checkUserBelongsToScoOrganizationAndManagesStudents(request, h) {
+async function checkUserBelongsToScoOrganizationAndManagesStudents(request: any, h: any) {
   if (!request.auth.credentials || !request.auth.credentials.userId) {
     return _replyForbiddenError(h);
   }
 
   const userId = request.auth.credentials.userId;
+  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'parseInt'.
   const organizationId = parseInt(request.params.id) || parseInt(request.payload.data.attributes['organization-id']);
 
   let belongsToScoOrganizationAndManageStudents;
@@ -160,12 +179,13 @@ async function checkUserBelongsToScoOrganizationAndManagesStudents(request, h) {
   return _replyForbiddenError(h);
 }
 
-async function checkUserBelongsToSupOrganizationAndManagesStudents(request, h) {
+async function checkUserBelongsToSupOrganizationAndManagesStudents(request: any, h: any) {
   if (!request.auth.credentials || !request.auth.credentials.userId) {
     return _replyForbiddenError(h);
   }
 
   const userId = request.auth.credentials.userId;
+  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'parseInt'.
   const organizationId = parseInt(request.params.id) || parseInt(request.payload.data.attributes['organization-id']);
 
   let belongsToSupOrganizationAndManageStudents;
@@ -183,8 +203,9 @@ async function checkUserBelongsToSupOrganizationAndManagesStudents(request, h) {
   return _replyForbiddenError(h);
 }
 
-async function checkUserIsAdminInSCOOrganizationManagingStudents(request, h) {
+async function checkUserIsAdminInSCOOrganizationManagingStudents(request: any, h: any) {
   const userId = request.auth.credentials.userId;
+  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'parseInt'.
   const organizationId = parseInt(request.params.id);
 
   if (
@@ -195,8 +216,9 @@ async function checkUserIsAdminInSCOOrganizationManagingStudents(request, h) {
   return _replyForbiddenError(h);
 }
 
-async function checkUserIsAdminInSUPOrganizationManagingStudents(request, h) {
+async function checkUserIsAdminInSUPOrganizationManagingStudents(request: any, h: any) {
   const userId = request.auth.credentials.userId;
+  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'parseInt'.
   const organizationId = parseInt(request.params.id);
 
   if (
@@ -208,12 +230,13 @@ async function checkUserIsAdminInSUPOrganizationManagingStudents(request, h) {
   return _replyForbiddenError(h);
 }
 
-async function checkUserBelongsToOrganization(request, h) {
+async function checkUserBelongsToOrganization(request: any, h: any) {
   if (!request.auth.credentials || !request.auth.credentials.userId) {
     return _replyForbiddenError(h);
   }
 
   const userId = request.auth.credentials.userId;
+  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'parseInt'.
   const organizationId = parseInt(request.params.id);
 
   const belongsToOrganization = await checkUserBelongsToOrganizationUseCase.execute(userId, organizationId);
@@ -223,7 +246,7 @@ async function checkUserBelongsToOrganization(request, h) {
   return _replyForbiddenError(h);
 }
 
-async function checkUserIsMemberOfAnOrganization(request, h) {
+async function checkUserIsMemberOfAnOrganization(request: any, h: any) {
   if (!request.auth.credentials || !request.auth.credentials.userId) {
     return _replyForbiddenError(h);
   }
@@ -243,7 +266,7 @@ async function checkUserIsMemberOfAnOrganization(request, h) {
   return _replyForbiddenError(h);
 }
 
-async function checkAuthorizationToManageCampaign(request, h) {
+async function checkAuthorizationToManageCampaign(request: any, h: any) {
   const userId = request.auth.credentials.userId;
   const campaignId = request.params.id;
   const isAdminOrOwnerOfTheCampaign = await checkAuthorizationToManageCampaignUsecase.execute({
@@ -257,6 +280,7 @@ async function checkAuthorizationToManageCampaign(request, h) {
 
 /* eslint-enable no-restricted-syntax */
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
   checkRequestedUserIsAuthenticatedUser,
   checkUserBelongsToOrganizationOrHasRolePixMaster,

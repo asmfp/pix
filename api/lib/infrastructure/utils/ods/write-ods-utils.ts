@@ -1,16 +1,22 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'loadOdsZip... Remove this comment to see the full error message
 const { loadOdsZip } = require('./common-ods-utils');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const { DOMParser, XMLSerializer } = require('xmldom');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_'.
 const _ = require('lodash');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const AddedCellOption = require('./added-cell-option');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'CONTENT_XM... Remove this comment to see the full error message
 const CONTENT_XML_IN_ODS = 'content.xml';
 
 class OdsUtilsBuilder {
-  constructor(stringifiedXml) {
+  xmlDom: any;
+  constructor(stringifiedXml: any) {
     this.xmlDom = _buildXmlDomFromXmlString(stringifiedXml);
   }
 
-  withData(dataToInject, templateValues) {
+  withData(dataToInject: any, templateValues: any) {
     const intermediateXmlDom = _.cloneDeep(this.xmlDom);
     for (const { placeholder, propertyName } of templateValues) {
       const targetXmlDomElement = _getXmlDomElementByText(intermediateXmlDom, placeholder);
@@ -25,7 +31,12 @@ class OdsUtilsBuilder {
     return this;
   }
 
-  withTooltipOnCell({ xmlDom, tooltipName, tooltipTitle, tooltipContentLines }) {
+  withTooltipOnCell({
+    xmlDom,
+    tooltipName,
+    tooltipTitle,
+    tooltipContentLines
+  }: any) {
     return this.withValidatorRestrictedList({
       xmlDom,
       validatorName: tooltipName,
@@ -40,15 +51,15 @@ class OdsUtilsBuilder {
     restrictedList,
     allowEmptyCell = true,
     tooltipTitle,
-    tooltipContentLines,
-  }) {
+    tooltipContentLines
+  }: any) {
     const contentValidations = this.xmlDom.getElementsByTagName('table:content-validations').item(0);
     const validator = this.xmlDom.createElement('table:content-validation');
     validator.setAttribute('table:name', validatorName);
     if (restrictedList?.length) {
       validator.setAttribute(
         'table:condition',
-        `of:cell-content-is-in-list(${restrictedList.map((val) => `"${val}"`).join(';')})`
+        `of:cell-content-is-in-list(${restrictedList.map((val: any) => `"${val}"`).join(';')})`
       );
       validator.setAttribute('table:allow-empty-cell', allowEmptyCell);
     }
@@ -57,7 +68,7 @@ class OdsUtilsBuilder {
     helpMessage.setAttribute('table:title', tooltipTitle);
     helpMessage.setAttribute('table:display', 'true');
 
-    const helpMessageWithContent = tooltipContentLines.reduce((helpMessageAccumulator, line) => {
+    const helpMessageWithContent = tooltipContentLines.reduce((helpMessageAccumulator: any, line: any) => {
       const paragraph = this.xmlDom.createElement('text:p');
       paragraph.textContent = line;
       helpMessageAccumulator.appendChild(paragraph);
@@ -76,7 +87,14 @@ class OdsUtilsBuilder {
     return this;
   }
 
-  withColumnGroup({ groupHeaderLabel, columns, startsAt, headerRowSpan, tableHeaderRow, tableFirstRow }) {
+  withColumnGroup({
+    groupHeaderLabel,
+    columns,
+    startsAt,
+    headerRowSpan,
+    tableHeaderRow,
+    tableFirstRow
+  }: any) {
     this.withColumnGroupHeader({
       headerLabel: groupHeaderLabel,
       numberOfColumns: columns.length,
@@ -84,7 +102,7 @@ class OdsUtilsBuilder {
       rowspan: headerRowSpan,
     });
 
-    columns.forEach((col) => this._addColumn(col, tableHeaderRow, tableFirstRow));
+    columns.forEach((col: any) => this._addColumn(col, tableHeaderRow, tableFirstRow));
 
     this.incrementRowsColumnSpan({
       startLine: 0,
@@ -93,16 +111,23 @@ class OdsUtilsBuilder {
     });
   }
 
-  incrementRowsColumnSpan({ startLine, endLine, increment }) {
+  incrementRowsColumnSpan({
+    startLine,
+    endLine,
+    increment
+  }: any) {
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Array'.
     const rows = Array.from(this.xmlDom.getElementsByTagName('table:table-row'));
 
     for (let i = startLine; i <= endLine; i++) {
+      // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Array'.
       const element = Array.from(rows[i].getElementsByTagName('table:table-cell'))
         .reverse()
-        .find((element) => element.hasAttribute('table:number-columns-spanned'));
+        .find((element: any) => element.hasAttribute('table:number-columns-spanned'));
       if (element) {
         element.setAttribute(
           'table:number-columns-spanned',
+          // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'parseInt'.
           parseInt(element.getAttribute('table:number-columns-spanned')) + increment
         );
       }
@@ -111,7 +136,12 @@ class OdsUtilsBuilder {
     return this;
   }
 
-  withColumnGroupHeader({ headerLabel, numberOfColumns, lineNumber, rowspan }) {
+  withColumnGroupHeader({
+    headerLabel,
+    numberOfColumns,
+    lineNumber,
+    rowspan
+  }: any) {
     const headerLabelWords = headerLabel.split(' ');
 
     let addedCellOption = new AddedCellOption({
@@ -139,7 +169,11 @@ class OdsUtilsBuilder {
     return this;
   }
 
-  _withCellToEndOfLineWithStyleOfCellLabelled({ lineNumber, cellToCopyLabel, addedCellOption }) {
+  _withCellToEndOfLineWithStyleOfCellLabelled({
+    lineNumber,
+    cellToCopyLabel,
+    addedCellOption
+  }: any) {
     const cellToCopy = _getXmlDomElementByText(this.xmlDom, cellToCopyLabel).parentNode;
     const clonedCell = _deepCloneDomElement(cellToCopy);
 
@@ -171,14 +205,20 @@ class OdsUtilsBuilder {
     }
   }
 
-  addCellToEndOfLine({ lineNumber, cell, positionOffset }) {
+  addCellToEndOfLine({
+    lineNumber,
+    cell,
+    positionOffset
+  }: any) {
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Array'.
     const line = Array.from(this.xmlDom.getElementsByTagName('table:table-row'))[lineNumber];
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Array'.
     const lineChildNodes = Array.from(line.childNodes);
     line.insertBefore(cell, lineChildNodes[lineChildNodes.length - positionOffset]);
     return this;
   }
 
-  _addColumn(column, tableHeaderRow, tableFirstRow) {
+  _addColumn(column: any, tableHeaderRow: any, tableFirstRow: any) {
     this._withCellToEndOfLineWithStyleOfCellLabelled({
       lineNumber: tableHeaderRow,
       cellToCopyLabel: 'Temps majoré ?',
@@ -192,7 +232,11 @@ class OdsUtilsBuilder {
     });
   }
 
-  updateXmlRows({ rowMarkerPlaceholder, rowTemplateValues, dataToInject }) {
+  updateXmlRows({
+    rowMarkerPlaceholder,
+    rowTemplateValues,
+    dataToInject
+  }: any) {
     const { referenceRowElement, rowsContainerElement } = _getRefRowAndContainerDomElements(
       this.xmlDom,
       rowMarkerPlaceholder
@@ -201,7 +245,7 @@ class OdsUtilsBuilder {
     const cloneRowElement = _deepCloneDomElement(referenceRowElement);
     rowsContainerElement.removeChild(referenceRowElement);
 
-    _.each(dataToInject, (rowDataToInject) => {
+    _.each(dataToInject, (rowDataToInject: any) => {
       const currentCloneRowElement = _deepCloneDomElement(cloneRowElement);
       _updateXmlElementWithData(currentCloneRowElement, rowDataToInject, rowTemplateValues);
       rowsContainerElement.appendChild(currentCloneRowElement);
@@ -210,27 +254,44 @@ class OdsUtilsBuilder {
     return this;
   }
 
-  async build({ templateFilePath }) {
+  async build({
+    templateFilePath
+  }: any) {
     const stringifiedXML = new XMLSerializer().serializeToString(this.xmlDom);
     return this.generateODSBuffer({ stringifiedXML, templateFilePath });
   }
 
-  async generateODSBuffer({ stringifiedXML, templateFilePath }) {
+  async generateODSBuffer({
+    stringifiedXML,
+    templateFilePath
+  }: any) {
     const inMemoryZippedTemplate = await loadOdsZip(templateFilePath);
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'file' does not exist on type 'unknown'.
     await inMemoryZippedTemplate.file(CONTENT_XML_IN_ODS, stringifiedXML);
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'generateAsync' does not exist on type 'u... Remove this comment to see the full error message
     const odsBuffer = await inMemoryZippedTemplate.generateAsync({ type: 'nodebuffer' });
     return odsBuffer;
   }
 }
 
-async function makeUpdatedOdsByContentXml({ stringifiedXml, odsFilePath }) {
+async function makeUpdatedOdsByContentXml({
+  stringifiedXml,
+  odsFilePath
+}: any) {
   const zip = await loadOdsZip(odsFilePath);
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'file' does not exist on type 'unknown'.
   await zip.file(CONTENT_XML_IN_ODS, stringifiedXml);
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'generateAsync' does not exist on type 'u... Remove this comment to see the full error message
   const odsBuffer = await zip.generateAsync({ type: 'nodebuffer' });
   return odsBuffer;
 }
 
-function updateXmlRows({ stringifiedXml, rowMarkerPlaceholder, rowTemplateValues, dataToInject }) {
+function updateXmlRows({
+  stringifiedXml,
+  rowMarkerPlaceholder,
+  rowTemplateValues,
+  dataToInject
+}: any) {
   const parsedXmlDom = _buildXmlDomFromXmlString(stringifiedXml);
 
   const { referenceRowElement, rowsContainerElement } = _getRefRowAndContainerDomElements(
@@ -241,7 +302,7 @@ function updateXmlRows({ stringifiedXml, rowMarkerPlaceholder, rowTemplateValues
   const cloneRowElement = _deepCloneDomElement(referenceRowElement);
   rowsContainerElement.removeChild(referenceRowElement);
 
-  _.each(dataToInject, (rowDataToInject) => {
+  _.each(dataToInject, (rowDataToInject: any) => {
     const currentCloneRowElement = _deepCloneDomElement(cloneRowElement);
     _updateXmlElementWithData(currentCloneRowElement, rowDataToInject, rowTemplateValues);
     rowsContainerElement.appendChild(currentCloneRowElement);
@@ -250,17 +311,25 @@ function updateXmlRows({ stringifiedXml, rowMarkerPlaceholder, rowTemplateValues
   return _buildStringifiedXmlFromXmlDom(parsedXmlDom);
 }
 
-function incrementRowsColumnSpan({ stringifiedXml, startLine, endLine, increment }) {
+function incrementRowsColumnSpan({
+  stringifiedXml,
+  startLine,
+  endLine,
+  increment
+}: any) {
   const parsedXmlDom = _buildXmlDomFromXmlString(stringifiedXml);
+  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Array'.
   const rows = Array.from(parsedXmlDom.getElementsByTagName('table:table-row'));
 
   for (let i = startLine; i <= endLine; i++) {
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Array'.
     const element = Array.from(rows[i].getElementsByTagName('table:table-cell'))
       .reverse()
-      .find((element) => element.hasAttribute('table:number-columns-spanned'));
+      .find((element: any) => element.hasAttribute('table:number-columns-spanned'));
     if (element) {
       element.setAttribute(
         'table:number-columns-spanned',
+        // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'parseInt'.
         parseInt(element.getAttribute('table:number-columns-spanned')) + increment
       );
     }
@@ -269,7 +338,12 @@ function incrementRowsColumnSpan({ stringifiedXml, startLine, endLine, increment
   return _buildStringifiedXmlFromXmlDom(parsedXmlDom);
 }
 
-function addCellToEndOfLineWithStyleOfCellLabelled({ stringifiedXml, lineNumber, cellToCopyLabel, addedCellOption }) {
+function addCellToEndOfLineWithStyleOfCellLabelled({
+  stringifiedXml,
+  lineNumber,
+  cellToCopyLabel,
+  addedCellOption
+}: any) {
   const parsedXmlDom = _buildXmlDomFromXmlString(stringifiedXml);
   const cellToCopy = _getXmlDomElementByText(parsedXmlDom, cellToCopyLabel).parentNode;
   const clonedCell = _deepCloneDomElement(cellToCopy);
@@ -306,7 +380,10 @@ function addCellToEndOfLineWithStyleOfCellLabelled({ stringifiedXml, lineNumber,
   return _buildStringifiedXmlFromXmlDom(parsedXmlDom);
 }
 
-function _updateCellTextContent({ clonedCell, textContent }) {
+function _updateCellTextContent({
+  clonedCell,
+  textContent
+}: any) {
   const textNode = clonedCell.getElementsByTagName('text:p').item(0);
   _updateStringXmlElement(textNode.childNodes.item(0), textContent[0]);
   for (let i = 1; i < textContent.length; i++) {
@@ -316,8 +393,15 @@ function _updateCellTextContent({ clonedCell, textContent }) {
   }
 }
 
-function _addCellToEndOfLine({ parsedXmlDom, lineNumber, cell, positionOffset }) {
+function _addCellToEndOfLine({
+  parsedXmlDom,
+  lineNumber,
+  cell,
+  positionOffset
+}: any) {
+  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Array'.
   const line = Array.from(parsedXmlDom.getElementsByTagName('table:table-row'))[lineNumber];
+  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Array'.
   const lineChildNodes = Array.from(line.childNodes);
   line.insertBefore(cell, lineChildNodes[lineChildNodes.length - positionOffset]);
 }
@@ -328,8 +412,8 @@ function addValidatorRestrictedList({
   restrictedList,
   allowEmptyCell = true,
   tooltipTitle,
-  tooltipContentLines,
-}) {
+  tooltipContentLines
+}: any) {
   const parsedXmlDom = _buildXmlDomFromXmlString(stringifiedXml);
   const contentValidations = parsedXmlDom.getElementsByTagName('table:content-validations').item(0);
   const validator = parsedXmlDom.createElement('table:content-validation');
@@ -337,7 +421,7 @@ function addValidatorRestrictedList({
   if (restrictedList?.length) {
     validator.setAttribute(
       'table:condition',
-      `of:cell-content-is-in-list(${restrictedList.map((val) => `"${val}"`).join(';')})`
+      `of:cell-content-is-in-list(${restrictedList.map((val: any) => `"${val}"`).join(';')})`
     );
     validator.setAttribute('table:allow-empty-cell', allowEmptyCell);
   }
@@ -346,7 +430,7 @@ function addValidatorRestrictedList({
   helpMessage.setAttribute('table:title', tooltipTitle);
   helpMessage.setAttribute('table:display', 'true');
 
-  const helpMessageWithContent = tooltipContentLines.reduce((helpMessageAccumulator, line) => {
+  const helpMessageWithContent = tooltipContentLines.reduce((helpMessageAccumulator: any, line: any) => {
     const paragraph = parsedXmlDom.createElement('text:p');
     paragraph.textContent = line;
     helpMessageAccumulator.appendChild(paragraph);
@@ -365,7 +449,12 @@ function addValidatorRestrictedList({
   return _buildStringifiedXmlFromXmlDom(parsedXmlDom);
 }
 
-function addTooltipOnCell({ stringifiedXml, tooltipName, tooltipTitle, tooltipContentLines }) {
+function addTooltipOnCell({
+  stringifiedXml,
+  tooltipName,
+  tooltipTitle,
+  tooltipContentLines
+}: any) {
   return addValidatorRestrictedList({
     stringifiedXml,
     validatorName: tooltipName,
@@ -375,7 +464,7 @@ function addTooltipOnCell({ stringifiedXml, tooltipName, tooltipTitle, tooltipCo
   });
 }
 
-function _getRefRowAndContainerDomElements(parsedXmlDom, rowMarkerPlaceholder) {
+function _getRefRowAndContainerDomElements(parsedXmlDom: any, rowMarkerPlaceholder: any) {
   const referenceRowElement = _getXmlDomElementByText(parsedXmlDom, rowMarkerPlaceholder).parentNode.parentNode;
   return {
     referenceRowElement,
@@ -383,16 +472,16 @@ function _getRefRowAndContainerDomElements(parsedXmlDom, rowMarkerPlaceholder) {
   };
 }
 
-function _deepCloneDomElement(domElement) {
+function _deepCloneDomElement(domElement: any) {
   const isDeep = true;
   return domElement.cloneNode(isDeep);
 }
 
-function _buildXmlDomFromXmlString(stringifiedXml) {
+function _buildXmlDomFromXmlString(stringifiedXml: any) {
   return new DOMParser().parseFromString(stringifiedXml);
 }
 
-function _updateXmlElementWithData(xmlElement, dataToInject, templateValues) {
+function _updateXmlElementWithData(xmlElement: any, dataToInject: any, templateValues: any) {
   for (const { placeholder, propertyName, validator } of templateValues) {
     const targetXmlDomElement = _getXmlDomElementByText(xmlElement, placeholder);
     if (targetXmlDomElement) {
@@ -406,7 +495,7 @@ function _updateXmlElementWithData(xmlElement, dataToInject, templateValues) {
   }
 }
 
-function _updateXmlElementByType(xmlElement, xmlElementTextChild, data, validator) {
+function _updateXmlElementByType(xmlElement: any, xmlElementTextChild: any, data: any, validator: any) {
   if (validator) {
     xmlElement.setAttribute('table:content-validation-name', validator);
   }
@@ -430,7 +519,7 @@ function _updateXmlElementByType(xmlElement, xmlElementTextChild, data, validato
   }
 }
 
-function _clearXmlElement(xmlElement, xmlElementTextChild) {
+function _clearXmlElement(xmlElement: any, xmlElementTextChild: any) {
   xmlElement.removeChild(xmlElementTextChild);
   xmlElement.removeAttribute('office:value-type');
   xmlElement.removeAttribute('office:date-value');
@@ -438,21 +527,22 @@ function _clearXmlElement(xmlElement, xmlElementTextChild) {
   xmlElement.removeAttribute('office:value');
 }
 
-function _updateStringXmlElement(xmlElementTextChild, data) {
+function _updateStringXmlElement(xmlElementTextChild: any, data: any) {
   xmlElementTextChild.textContent = data;
 }
 
-function _updateDateXmlElement(xmlElement, xmlElementTextChild, data) {
+function _updateDateXmlElement(xmlElement: any, xmlElementTextChild: any, data: any) {
   xmlElement.setAttribute('office:date-value', data);
   xmlElement.removeChild(xmlElementTextChild);
 }
 
-function _updatePercentageXmlElement(xmlElement, xmlElementTextChild, data) {
+function _updatePercentageXmlElement(xmlElement: any, xmlElementTextChild: any, data: any) {
   xmlElement.setAttribute('office:value', data);
   xmlElement.removeChild(xmlElementTextChild);
 }
 
-function _getXmlDomElementByText(parsedXmlDom, text) {
+function _getXmlDomElementByText(parsedXmlDom: any, text: any) {
+  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Array'.
   for (const xmlDomElement of Array.from(parsedXmlDom.getElementsByTagName('text:p'))) {
     if (xmlDomElement.textContent === text) {
       return xmlDomElement;
@@ -460,17 +550,21 @@ function _getXmlDomElementByText(parsedXmlDom, text) {
   }
 }
 
-function _buildStringifiedXmlFromXmlDom(parsedXmlDom) {
+function _buildStringifiedXmlFromXmlDom(parsedXmlDom: any) {
   return new XMLSerializer().serializeToString(parsedXmlDom);
 }
 
-function updateXmlSparseValues({ stringifiedXml, templateValues, dataToInject }) {
+function updateXmlSparseValues({
+  stringifiedXml,
+  templateValues,
+  dataToInject
+}: any) {
   const parsedXmlDom = _buildXmlDomFromXmlString(stringifiedXml);
   const parsedXmlDomUpdated = _updateXmlDomWithData(parsedXmlDom, dataToInject, templateValues);
   return _buildStringifiedXmlFromXmlDom(parsedXmlDomUpdated);
 }
 
-function _updateXmlDomWithData(parsedXmlDom, dataToInject, templateValues) {
+function _updateXmlDomWithData(parsedXmlDom: any, dataToInject: any, templateValues: any) {
   const parsedXmlDomUpdated = _.cloneDeep(parsedXmlDom);
   for (const { placeholder, propertyName } of templateValues) {
     const targetXmlDomElement = _getXmlDomElementByText(parsedXmlDomUpdated, placeholder);
@@ -482,6 +576,7 @@ function _updateXmlDomWithData(parsedXmlDom, dataToInject, templateValues) {
   return parsedXmlDomUpdated;
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
   makeUpdatedOdsByContentXml,
   updateXmlSparseValues,

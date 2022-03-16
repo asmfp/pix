@@ -1,12 +1,14 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Certificat... Remove this comment to see the full error message
 const CertificationDetails = require('../read-models/CertificationDetails');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = async function getCertificationDetails({
   certificationCourseId,
   competenceMarkRepository,
   certificationAssessmentRepository,
   placementProfileService,
-  scoringCertificationService,
-}) {
+  scoringCertificationService
+}: any) {
   const certificationAssessment = await certificationAssessmentRepository.getByCertificationCourseId({
     certificationCourseId,
   });
@@ -25,9 +27,9 @@ module.exports = async function getCertificationDetails({
 };
 
 async function _computeCertificationDetailsOnTheFly(
-  certificationAssessment,
-  placementProfileService,
-  scoringCertificationService
+  certificationAssessment: any,
+  placementProfileService: any,
+  scoringCertificationService: any
 ) {
   const certificationAssessmentScore = await scoringCertificationService.calculateCertificationAssessmentScore({
     certificationAssessment,
@@ -47,9 +49,9 @@ async function _computeCertificationDetailsOnTheFly(
 }
 
 async function _retrievePersistedCertificationDetails(
-  competenceMarks,
-  certificationAssessment,
-  placementProfileService
+  competenceMarks: any,
+  certificationAssessment: any,
+  placementProfileService: any
 ) {
   const placementProfile = await placementProfileService.getPlacementProfile({
     userId: certificationAssessment.userId,

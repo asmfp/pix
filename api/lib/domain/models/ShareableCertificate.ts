@@ -1,4 +1,20 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'ShareableC... Remove this comment to see the full error message
 class ShareableCertificate {
+  birthdate: any;
+  birthplace: any;
+  certificationCenter: any;
+  certifiedBadgeImages: any;
+  cleaCertificationResult: any;
+  date: any;
+  deliveredAt: any;
+  firstName: any;
+  id: any;
+  isPublished: any;
+  lastName: any;
+  maxReachableLevelOnCertificationDate: any;
+  pixScore: any;
+  resultCompetenceTree: any;
+  userId: any;
   constructor({
     id,
     firstName,
@@ -14,8 +30,8 @@ class ShareableCertificate {
     cleaCertificationResult,
     certifiedBadgeImages,
     resultCompetenceTree = null,
-    maxReachableLevelOnCertificationDate,
-  } = {}) {
+    maxReachableLevelOnCertificationDate
+  }: any = {}) {
     this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
@@ -33,9 +49,10 @@ class ShareableCertificate {
     this.maxReachableLevelOnCertificationDate = maxReachableLevelOnCertificationDate;
   }
 
-  setResultCompetenceTree(resultCompetenceTree) {
+  setResultCompetenceTree(resultCompetenceTree: any) {
     this.resultCompetenceTree = resultCompetenceTree;
   }
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = ShareableCertificate;

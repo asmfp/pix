@@ -1,4 +1,6 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Joi'.
 const Joi = require('joi').extend(require('@joi/date'));
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'InvalidCer... Remove this comment to see the full error message
 const { InvalidCertificationCandidate } = require('../errors');
 
 const scoCertificationCandidateValidationJoiSchema = Joi.object({
@@ -13,7 +15,18 @@ const scoCertificationCandidateValidationJoiSchema = Joi.object({
   schoolingRegistrationId: Joi.number().required().empty(null),
 });
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'SCOCertifi... Remove this comment to see the full error message
 class SCOCertificationCandidate {
+  birthCity: any;
+  birthCountry: any;
+  birthINSEECode: any;
+  birthdate: any;
+  firstName: any;
+  id: any;
+  lastName: any;
+  schoolingRegistrationId: any;
+  sessionId: any;
+  sex: any;
   constructor({
     id,
     firstName,
@@ -24,8 +37,8 @@ class SCOCertificationCandidate {
     birthCity,
     sex,
     sessionId,
-    schoolingRegistrationId,
-  } = {}) {
+    schoolingRegistrationId
+  }: any = {}) {
     this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
@@ -47,4 +60,5 @@ class SCOCertificationCandidate {
   }
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = SCOCertificationCandidate;

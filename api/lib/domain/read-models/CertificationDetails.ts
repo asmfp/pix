@@ -1,8 +1,21 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_'.
 const _ = require('lodash');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'AnswerColl... Remove this comment to see the full error message
 const AnswerCollectionForScoring = require('../models/AnswerCollectionForScoring');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Reproducib... Remove this comment to see the full error message
 const { ReproducibilityRate } = require('../models/ReproducibilityRate');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Certificat... Remove this comment to see the full error message
 class CertificationDetails {
+  competencesWithMark: any;
+  completedAt: any;
+  createdAt: any;
+  id: any;
+  listChallengesAndAnswers: any;
+  percentageCorrectAnswers: any;
+  status: any;
+  totalScore: any;
+  userId: any;
   constructor({
     id,
     userId,
@@ -12,8 +25,8 @@ class CertificationDetails {
     totalScore,
     percentageCorrectAnswers,
     competencesWithMark,
-    listChallengesAndAnswers,
-  }) {
+    listChallengesAndAnswers
+  }: any) {
     this.id = id;
     this.userId = userId;
     this.createdAt = createdAt;
@@ -25,7 +38,11 @@ class CertificationDetails {
     this.listChallengesAndAnswers = listChallengesAndAnswers;
   }
 
-  static from({ certificationAssessment, competenceMarks, placementProfile }) {
+  static from({
+    certificationAssessment,
+    competenceMarks,
+    placementProfile
+  }: any) {
     const answerCollection = AnswerCollectionForScoring.from({
       answers: certificationAssessment.certificationAnswersByDate,
       challenges: certificationAssessment.certificationChallenges,
@@ -50,7 +67,11 @@ class CertificationDetails {
     });
   }
 
-  static fromCertificationAssessmentScore({ certificationAssessmentScore, certificationAssessment, placementProfile }) {
+  static fromCertificationAssessmentScore({
+    certificationAssessmentScore,
+    certificationAssessment,
+    placementProfile
+  }: any) {
     const competenceMarks = certificationAssessmentScore.getCompetenceMarks();
     const competencesWithMark = _buildCompetencesWithMark({ competenceMarks, placementProfile });
     const listChallengesAndAnswers = _buildListChallengesAndAnswers({ certificationAssessment, competencesWithMark });
@@ -83,8 +104,11 @@ class CertificationDetails {
   }
 }
 
-function _buildCompetencesWithMark({ competenceMarks, placementProfile }) {
-  return _.map(competenceMarks, (competenceMark) => {
+function _buildCompetencesWithMark({
+  competenceMarks,
+  placementProfile
+}: any) {
+  return _.map(competenceMarks, (competenceMark: any) => {
     const userCompetence = placementProfile.getUserCompetence(competenceMark.competenceId);
 
     return {
@@ -100,10 +124,13 @@ function _buildCompetencesWithMark({ competenceMarks, placementProfile }) {
   });
 }
 
-function _buildListChallengesAndAnswers({ certificationAssessment, competencesWithMark }) {
+function _buildListChallengesAndAnswers({
+  certificationAssessment,
+  competencesWithMark
+}: any) {
   const answeredChallengesAndAnswers = _.map(
     certificationAssessment.certificationAnswersByDate,
-    (certificationAnswer) => {
+    (certificationAnswer: any) => {
       const challengeForAnswer = certificationAssessment.getCertificationChallenge(certificationAnswer.challengeId);
       const competenceIndex = _getCompetenceIndexForChallenge(challengeForAnswer, competencesWithMark);
 
@@ -120,9 +147,9 @@ function _buildListChallengesAndAnswers({ certificationAssessment, competencesWi
   );
 
   const unansweredChallengesAndAnswers = _(certificationAssessment.certificationChallenges)
-    .map((challenge) => {
+    .map((challenge: any) => {
       const answer = certificationAssessment.certificationAnswersByDate.find(
-        (answer) => answer.challengeId === challenge.challengeId
+        (answer: any) => answer.challengeId === challenge.challengeId
       );
       if (answer) {
         return null;
@@ -133,8 +160,10 @@ function _buildListChallengesAndAnswers({ certificationAssessment, competencesWi
         competence: competenceIndex,
         isNeutralized: challenge.isNeutralized,
         hasBeenSkippedAutomatically: challenge.hasBeenSkippedAutomatically,
+        // @ts-expect-error ts-migrate(7018) FIXME: Object literal's property 'result' implicitly has ... Remove this comment to see the full error message
         result: undefined,
         skill: challenge.associatedSkillName,
+        // @ts-expect-error ts-migrate(7018) FIXME: Object literal's property 'value' implicitly has a... Remove this comment to see the full error message
         value: undefined,
       };
     })
@@ -145,9 +174,10 @@ function _buildListChallengesAndAnswers({ certificationAssessment, competencesWi
   return answeredChallengesAndAnswers.concat(unansweredChallengesAndAnswers);
 }
 
-function _getCompetenceIndexForChallenge(certificationChallenge, competencesWithMark) {
+function _getCompetenceIndexForChallenge(certificationChallenge: any, competencesWithMark: any) {
   const competenceWithMark = _.find(competencesWithMark, { id: certificationChallenge.competenceId });
   return competenceWithMark ? competenceWithMark.index : '';
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = CertificationDetails;

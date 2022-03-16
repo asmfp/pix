@@ -1,4 +1,6 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_'.
 const _ = require('lodash');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'config'.
 const config = require('../../../config');
 
 const CAMPAIGN_TYPE = 'EVALUATION';
@@ -6,20 +8,34 @@ const STRUCTURE_NAME = 'Pix';
 const STRUCTURE_TYPE = 'externe';
 const CAMPAIGN_URL = `${config.domain.pixApp}${config.domain.tldFr}/campagnes`;
 const TEST_STATE = { STARTED: 2, FINISHED: 3, SHARED: 4 };
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'UNITS'.
 const UNITS = { PERCENTAGE: 'A', SCORE: 'B' };
 const EVALUATION_CATEGORY = 'competence';
 const EVALUATION_TYPE = 'competence Pix';
 const PROGRESSION = { STARTED: 0, FINISHED: 100 };
 const PROFILE_TYPES = { DI: 'DI', PC: 'PC', CP: 'CP' };
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PoleEmploi... Remove this comment to see the full error message
 class PoleEmploiPayload {
-  constructor({ individu, campagne, test }) {
+  campagne: any;
+  individu: any;
+  test: any;
+  constructor({
+    individu,
+    campagne,
+    test
+  }: any) {
     this.individu = individu;
     this.campagne = campagne;
     this.test = test;
   }
 
-  static buildForParticipationStarted({ user, campaign, targetProfile, participation }) {
+  static buildForParticipationStarted({
+    user,
+    campaign,
+    targetProfile,
+    participation
+  }: any) {
     return new PoleEmploiPayload({
       individu: _buildIndividu({ user }),
       campagne: _buildCampaign({ campaign }),
@@ -27,7 +43,13 @@ class PoleEmploiPayload {
     });
   }
 
-  static buildForParticipationFinished({ user, campaign, targetProfile, participation, assessment }) {
+  static buildForParticipationFinished({
+    user,
+    campaign,
+    targetProfile,
+    participation,
+    assessment
+  }: any) {
     return new PoleEmploiPayload({
       individu: _buildIndividu({ user }),
       campagne: _buildCampaign({ campaign }),
@@ -35,7 +57,13 @@ class PoleEmploiPayload {
     });
   }
 
-  static buildForParticipationShared({ user, campaign, targetProfile, participation, participationResult }) {
+  static buildForParticipationShared({
+    user,
+    campaign,
+    targetProfile,
+    participation,
+    participationResult
+  }: any) {
     return new PoleEmploiPayload({
       individu: _buildIndividu({ user }),
       campagne: _buildCampaign({ campaign }),
@@ -44,6 +72,7 @@ class PoleEmploiPayload {
   }
 
   toString() {
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'JSON'.
     return JSON.stringify({
       campagne: this.campagne,
       individu: this.individu,
@@ -52,14 +81,18 @@ class PoleEmploiPayload {
   }
 }
 
-function _buildIndividu({ user }) {
+function _buildIndividu({
+  user
+}: any) {
   return {
     nom: user.lastName,
     prenom: user.firstName,
   };
 }
 
-function _buildCampaign({ campaign }) {
+function _buildCampaign({
+  campaign
+}: any) {
   return {
     nom: campaign.name,
     dateDebut: campaign.createdAt,
@@ -72,7 +105,13 @@ function _buildCampaign({ campaign }) {
   };
 }
 
-function _buildTest({ etat, targetProfile, participation, participationResult, assessment }) {
+function _buildTest({
+  etat,
+  targetProfile,
+  participation,
+  participationResult,
+  assessment
+}: any) {
   let progression = null;
   let dateProgression = null;
   let dateValidation = null;
@@ -110,7 +149,7 @@ function _buildTest({ etat, targetProfile, participation, participationResult, a
   };
 }
 
-function _buildElementEvalue(competence) {
+function _buildElementEvalue(competence: any) {
   return {
     libelle: competence.name,
     categorie: EVALUATION_CATEGORY,
@@ -125,7 +164,7 @@ function _buildElementEvalue(competence) {
   };
 }
 
-function _getTypeTest(targetProfileName) {
+function _getTypeTest(targetProfileName: any) {
   if (targetProfileName.includes('Diagnostic initial')) {
     return PROFILE_TYPES.DI;
   } else if (targetProfileName.includes('Parcours complet')) {
@@ -134,4 +173,5 @@ function _getTypeTest(targetProfileName) {
   return PROFILE_TYPES.CP;
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = PoleEmploiPayload;

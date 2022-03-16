@@ -1,24 +1,29 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_'.
 const _ = require('lodash');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'EventDispa... Remove this comment to see the full error message
 class EventDispatcher {
-  constructor(logger) {
+  _logger: any;
+  _subscriptions: any;
+  constructor(logger: any) {
     this._subscriptions = [];
     this._logger = logger;
   }
 
-  subscribe(event, eventHandler) {
+  subscribe(event: any, eventHandler: any) {
     this._preventDuplicateSubscription(event, eventHandler);
     this._subscriptions.push({ event: event.prototype.constructor, eventHandler: eventHandler });
   }
 
-  _preventDuplicateSubscription(event, eventHandler) {
+  _preventDuplicateSubscription(event: any, eventHandler: any) {
     const foundDuplicateSubscription = _.some(this._subscriptions, _.matches({ event, eventHandler }));
     if (foundDuplicateSubscription) {
+      // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Error'.
       throw new Error('Cannot subscribe twice to a given event with the same handler');
     }
   }
 
-  async dispatch(dispatchedEvent, domainTransaction) {
+  async dispatch(dispatchedEvent: any, domainTransaction: any) {
     const eventQueue = new EventQueue();
     eventQueue.push(dispatchedEvent);
 
@@ -41,20 +46,23 @@ class EventDispatcher {
     }
   }
 
-  _findEventHandlersByEventType(eventToDispatch) {
+  _findEventHandlersByEventType(eventToDispatch: any) {
     return this._subscriptions
+      // @ts-expect-error ts-migrate(7031) FIXME: Binding element 'subscribedEvent' implicitly has a... Remove this comment to see the full error message
       .filter(({ event: subscribedEvent }) => eventToDispatch instanceof subscribedEvent)
-      .map((subscription) => subscription.eventHandler);
+      .map((subscription: any) => subscription.eventHandler);
   }
 }
 
 class EventQueue {
+  events: any;
   constructor() {
     this.events = [];
   }
 
-  push(eventOrEvents) {
+  push(eventOrEvents: any) {
     if (eventOrEvents) {
+      // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Array'.
       if (!Array.isArray(eventOrEvents)) {
         this.events.push(eventOrEvents);
       } else {
@@ -72,4 +80,5 @@ class EventQueue {
   }
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = EventDispatcher;

@@ -1,9 +1,14 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Serializer... Remove this comment to see the full error message
 const { Serializer } = require('jsonapi-serializer');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
-  serialize(campaignReports, meta, { tokenForCampaignResults } = {}) {
+  serialize(campaignReports: any, meta: any, {
+    tokenForCampaignResults
+  }: any = {}) {
     return new Serializer('campaign', {
-      transform: (record) => {
+      transform: (record: any) => {
+        // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Object'.
         const campaign = Object.assign({}, record);
         campaign.tokenForCampaignResults = tokenForCampaignResults;
         campaign.isArchived = record.isArchived;
@@ -54,7 +59,7 @@ module.exports = {
         ignoreRelationshipData: true,
         nullIfMissing: true,
         relationshipLinks: {
-          related(record, current, parent) {
+          related(record: any, current: any, parent: any) {
             return `/api/campaigns/${parent.id}/collective-results`;
           },
         },
@@ -64,7 +69,7 @@ module.exports = {
         ignoreRelationshipData: true,
         nullIfMissing: true,
         relationshipLinks: {
-          related(record, current, parent) {
+          related(record: any, current: any, parent: any) {
             return `/api/campaigns/${parent.id}/analyses`;
           },
         },
@@ -74,7 +79,7 @@ module.exports = {
         ignoreRelationshipData: true,
         nullIfMissing: true,
         relationshipLinks: {
-          related(record, current, parent) {
+          related(record: any, current: any, parent: any) {
             return `/api/campaigns/${parent.id}/divisions`;
           },
         },
@@ -84,7 +89,7 @@ module.exports = {
         ignoreRelationshipData: true,
         nullIfMissing: true,
         relationshipLinks: {
-          related(record, current, parent) {
+          related(record: any, current: any, parent: any) {
             return `/api/campaigns/${parent.id}/groups`;
           },
         },

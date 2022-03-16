@@ -1,17 +1,27 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Joi'.
 const Joi = require('joi').extend(require('@joi/date'));
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'XRegExp'.
 const XRegExp = require('xregexp');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'securityPr... Remove this comment to see the full error message
 const securityPreHandlers = require('../security-pre-handlers');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'sendJsonAp... Remove this comment to see the full error message
 const { sendJsonApiError, BadRequestError } = require('../http-errors');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'passwordVa... Remove this comment to see the full error message
 const { passwordValidationPattern } = require('../../config').account;
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'identifier... Remove this comment to see the full error message
 const identifiersType = require('../../domain/types/identifiers-type');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'inePattern... Remove this comment to see the full error message
 const inePattern = new RegExp('^[0-9]{9}[a-zA-Z]{2}$');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'inaPattern... Remove this comment to see the full error message
 const inaPattern = new RegExp('^[0-9]{10}[a-zA-Z]{1}$');
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const schoolingRegistrationDependentUserController = require('./schooling-registration-dependent-user-controller');
 
-exports.register = async function (server) {
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
+exports.register = async function (server: any) {
   server.route([
     {
       method: 'POST',
@@ -98,7 +108,7 @@ exports.register = async function (server) {
               },
             },
           }),
-          failAction: (request, h) => {
+          failAction: (request: any, h: any) => {
             return sendJsonApiError(
               new BadRequestError('The server could not understand the request due to invalid syntax.'),
               h
@@ -174,4 +184,5 @@ exports.register = async function (server) {
   ]);
 };
 
+// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'exports'.
 exports.name = 'schooling-registration-dependent-users-api';

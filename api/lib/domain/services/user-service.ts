@@ -1,11 +1,18 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'DomainTran... Remove this comment to see the full error message
 const DomainTransaction = require('../../infrastructure/DomainTransaction');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Authentica... Remove this comment to see the full error message
 const AuthenticationMethod = require('../../domain/models/AuthenticationMethod');
 
-function _buildPasswordAuthenticationMethod({ userId, hashedPassword }) {
+function _buildPasswordAuthenticationMethod({
+  userId,
+  hashedPassword
+}: any) {
   return new AuthenticationMethod({
     userId,
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'identityProviders' does not exist on typ... Remove this comment to see the full error message
     identityProvider: AuthenticationMethod.identityProviders.PIX,
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'PixAuthenticationComplement' does not ex... Remove this comment to see the full error message
     authenticationComplement: new AuthenticationMethod.PixAuthenticationComplement({
       password: hashedPassword,
       shouldChangePassword: false,
@@ -13,19 +20,29 @@ function _buildPasswordAuthenticationMethod({ userId, hashedPassword }) {
   });
 }
 
-function _buildGARAuthenticationMethod({ externalIdentifier, userId }) {
+function _buildGARAuthenticationMethod({
+  externalIdentifier,
+  userId
+}: any) {
   return new AuthenticationMethod({
     externalIdentifier,
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'identityProviders' does not exist on typ... Remove this comment to see the full error message
     identityProvider: AuthenticationMethod.identityProviders.GAR,
     userId,
     authenticationComplement: null,
   });
 }
 
-async function createUserWithPassword({ user, hashedPassword, userRepository, authenticationMethodRepository }) {
+async function createUserWithPassword({
+  user,
+  hashedPassword,
+  userRepository,
+  authenticationMethodRepository
+}: any) {
   let savedUser;
 
-  await DomainTransaction.execute(async (domainTransaction) => {
+  // @ts-expect-error ts-migrate(2697) FIXME: An async function or method must return a 'Promise... Remove this comment to see the full error message
+  await DomainTransaction.execute(async (domainTransaction: any) => {
     savedUser = await userRepository.create({ user, domainTransaction });
 
     const authenticationMethod = _buildPasswordAuthenticationMethod({
@@ -47,9 +64,9 @@ async function updateUsernameAndAddPassword({
   username,
   hashedPassword,
   authenticationMethodRepository,
-  userRepository,
-}) {
-  return DomainTransaction.execute(async (domainTransaction) => {
+  userRepository
+}: any) {
+  return DomainTransaction.execute(async (domainTransaction: any) => {
     await userRepository.updateUsername({ id: userId, username, domainTransaction });
     return authenticationMethodRepository.createPasswordThatShouldBeChanged({
       userId,
@@ -66,9 +83,9 @@ async function createAndReconcileUserToSchoolingRegistration({
   user,
   authenticationMethodRepository,
   schoolingRegistrationRepository,
-  userRepository,
-}) {
-  return DomainTransaction.execute(async (domainTransaction) => {
+  userRepository
+}: any) {
+  return DomainTransaction.execute(async (domainTransaction: any) => {
     let authenticationMethod;
 
     const createdUser = await userRepository.create({
@@ -103,6 +120,7 @@ async function createAndReconcileUserToSchoolingRegistration({
   });
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
   createAndReconcileUserToSchoolingRegistration,
   createUserWithPassword,

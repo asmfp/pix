@@ -1,12 +1,21 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'isNil'.
 const isNil = require('lodash/isNil');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const endsWith = require('lodash/endsWith');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Joi'.
 const Joi = require('joi').extend(require('@joi/date'));
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PIX_PLUS_D... Remove this comment to see the full error message
 const { PIX_PLUS_DROIT, CLEA } = require('./ComplementaryCertification');
 const {
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'InvalidCer... Remove this comment to see the full error message
   InvalidCertificationCandidate,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Certificat... Remove this comment to see the full error message
   CertificationCandidatePersonalInfoFieldMissingError,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Certificat... Remove this comment to see the full error message
   CertificationCandidatePersonalInfoWrongFormat,
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 } = require('../errors');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'featureTog... Remove this comment to see the full error message
 const { featureToggles } = require('../../config');
 
 const BILLING_MODES = {
@@ -34,6 +43,7 @@ const certificationCandidateValidationJoiSchema_v1_5 = Joi.object({
     then: Joi.when('$isSco', {
       is: false,
       then: Joi.string()
+        // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Object'.
         .valid(...Object.values(BILLING_MODES))
         .required(),
     }),
@@ -68,12 +78,36 @@ const certificationCandidateParticipationJoiSchema = Joi.object({
   schoolingRegistrationId: Joi.any().allow(null).optional(),
   complementaryCertifications: Joi.array(),
   billingMode: Joi.string()
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Object'.
     .valid(...Object.values(BILLING_MODES))
     .empty(null),
   prepaymentCode: Joi.string().allow(null).optional(),
 });
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Certificat... Remove this comment to see the full error message
 class CertificationCandidate {
+  authorizedToStart: any;
+  billingMode: any;
+  birthCity: any;
+  birthCountry: any;
+  birthINSEECode: any;
+  birthPostalCode: any;
+  birthProvinceCode: any;
+  birthdate: any;
+  complementaryCertifications: any;
+  createdAt: any;
+  email: any;
+  externalId: any;
+  extraTimePercentage: any;
+  firstName: any;
+  id: any;
+  lastName: any;
+  prepaymentCode: any;
+  resultRecipientEmail: any;
+  schoolingRegistrationId: any;
+  sessionId: any;
+  sex: any;
+  userId: any;
   constructor({
     id,
     firstName,
@@ -96,8 +130,8 @@ class CertificationCandidate {
     schoolingRegistrationId = null,
     complementaryCertifications = [],
     billingMode = null,
-    prepaymentCode = null,
-  } = {}) {
+    prepaymentCode = null
+  }: any = {}) {
     this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
@@ -111,6 +145,7 @@ class CertificationCandidate {
     this.resultRecipientEmail = resultRecipientEmail;
     this.externalId = externalId;
     this.birthdate = birthdate;
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'parseFloat'.
     this.extraTimePercentage = !isNil(extraTimePercentage) ? parseFloat(extraTimePercentage) : extraTimePercentage;
     this.createdAt = createdAt;
     this.authorizedToStart = authorizedToStart;
@@ -122,7 +157,7 @@ class CertificationCandidate {
     this.prepaymentCode = prepaymentCode;
   }
 
-  static translateBillingMode(value) {
+  static translateBillingMode(value: any) {
     switch (value) {
       case 'FREE':
         return 'Gratuite';
@@ -169,6 +204,7 @@ class CertificationCandidate {
     }
   }
 
+  // @ts-expect-error ts-migrate(1056) FIXME: Accessors are only available when targeting ECMASc... Remove this comment to see the full error message
   get translatedBillingMode() {
     return CertificationCandidate.translateBillingMode(this.billingMode);
   }
@@ -181,11 +217,16 @@ class CertificationCandidate {
     return !isNil(this.userId);
   }
 
-  isLinkedToUserId(userId) {
+  isLinkedToUserId(userId: any) {
     return this.userId === userId;
   }
 
-  updateBirthInformation({ birthCountry, birthINSEECode, birthPostalCode, birthCity }) {
+  updateBirthInformation({
+    birthCountry,
+    birthINSEECode,
+    birthPostalCode,
+    birthCity
+  }: any) {
     this.birthCountry = birthCountry;
     this.birthINSEECode = birthINSEECode;
     this.birthPostalCode = birthPostalCode;
@@ -193,18 +234,21 @@ class CertificationCandidate {
   }
 
   isGrantedPixPlusDroit() {
-    return this.complementaryCertifications.find((comp) => comp.name === PIX_PLUS_DROIT);
+    return this.complementaryCertifications.find((comp: any) => comp.name === PIX_PLUS_DROIT);
   }
 
   isGrantedCleA() {
-    return this.complementaryCertifications.find((comp) => comp.name === CLEA);
+    return this.complementaryCertifications.find((comp: any) => comp.name === CLEA);
   }
 
   isBillingModePrepaid() {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'BILLING_MODES' does not exist on type 't... Remove this comment to see the full error message
     return this.billingMode === CertificationCandidate.BILLING_MODES.PREPAID;
   }
 }
 
+// @ts-expect-error ts-migrate(2339) FIXME: Property 'BILLING_MODES' does not exist on type 't... Remove this comment to see the full error message
 CertificationCandidate.BILLING_MODES = BILLING_MODES;
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = CertificationCandidate;

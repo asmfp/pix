@@ -1,12 +1,18 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_'.
 const _ = require('lodash');
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 const BookshelfCertificationCenter = require('../orm-models/CertificationCenter');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Certificat... Remove this comment to see the full error message
 const CertificationCenter = require('../../domain/models/CertificationCenter');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Complement... Remove this comment to see the full error message
 const ComplementaryCertification = require('../../domain/models/ComplementaryCertification');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'NotFoundEr... Remove this comment to see the full error message
 const { NotFoundError } = require('../../domain/errors');
 
-function _toDomain(bookshelfCertificationCenter) {
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_toDomain'... Remove this comment to see the full error message
+function _toDomain(bookshelfCertificationCenter: any) {
   const dbCertificationCenter = bookshelfCertificationCenter.toJSON();
-  const habilitations = _.map(dbCertificationCenter.habilitations, (dbComplementaryCertification) => {
+  const habilitations = _.map(dbCertificationCenter.habilitations, (dbComplementaryCertification: any) => {
     return new ComplementaryCertification({
       id: dbComplementaryCertification.id,
       name: dbComplementaryCertification.name,
@@ -26,7 +32,7 @@ function _toDomain(bookshelfCertificationCenter) {
   });
 }
 
-function _setSearchFiltersForQueryBuilder(filters, qb) {
+function _setSearchFiltersForQueryBuilder(filters: any, qb: any) {
   const { id, name, type, externalId } = filters;
 
   if (id) {
@@ -43,13 +49,14 @@ function _setSearchFiltersForQueryBuilder(filters, qb) {
   }
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = {
-  async get(id) {
+  async get(id: any) {
     const certificationCenterBookshelf = await BookshelfCertificationCenter.where({ id }).fetch({
       require: false,
       withRelated: [
         {
-          habilitations: function (query) {
+          habilitations: function (query: any) {
             query.orderBy('id');
           },
         },
@@ -59,19 +66,20 @@ module.exports = {
     if (certificationCenterBookshelf) {
       return _toDomain(certificationCenterBookshelf);
     }
+    // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
     throw new NotFoundError(`Certification center with id: ${id} not found`);
   },
 
-  async getBySessionId(sessionId) {
+  async getBySessionId(sessionId: any) {
     const certificationCenterBookshelf = await BookshelfCertificationCenter.where({ 'sessions.id': sessionId })
-      .query((qb) => {
+      .query((qb: any) => {
         qb.innerJoin('sessions', 'sessions.certificationCenterId', 'certification-centers.id');
       })
       .fetch({
         require: false,
         withRelated: [
           {
-            habilitations: function (query) {
+            habilitations: function (query: any) {
               query.orderBy('id');
             },
           },
@@ -81,15 +89,16 @@ module.exports = {
     if (certificationCenterBookshelf) {
       return _toDomain(certificationCenterBookshelf);
     }
+    // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
     throw new NotFoundError(`Could not find certification center for sessionId ${sessionId}.`);
   },
 
   //to delete when feature toggleisEndTestScreenRemovalEnabled is removed
-  async getByCertificationCourseId(certificationCourseId) {
+  async getByCertificationCourseId(certificationCourseId: any) {
     const certificationCenterBookshelf = await BookshelfCertificationCenter.where({
       'certification-courses.id': certificationCourseId,
     })
-      .query((qb) => {
+      .query((qb: any) => {
         qb.innerJoin('sessions', 'sessions.certificationCenterId', 'certification-centers.id');
         qb.innerJoin('certification-courses', 'certification-courses.sessionId', 'sessions.id');
       })
@@ -97,7 +106,7 @@ module.exports = {
         require: false,
         withRelated: [
           {
-            habilitations: function (query) {
+            habilitations: function (query: any) {
               query.orderBy('id');
             },
           },
@@ -107,25 +116,28 @@ module.exports = {
     if (certificationCenterBookshelf) {
       return _toDomain(certificationCenterBookshelf);
     }
+    // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
     throw new NotFoundError(`Could not find certification center for certificationCourseId ${certificationCourseId}.`);
   },
 
-  async save(certificationCenter) {
+  async save(certificationCenter: any) {
     const cleanedCertificationCenter = _.omit(certificationCenter, ['createdAt', 'habilitations']);
     const certificationCenterBookshelf = await new BookshelfCertificationCenter(cleanedCertificationCenter).save();
     await certificationCenterBookshelf.related('habilitations').fetch();
     return _toDomain(certificationCenterBookshelf);
   },
 
-  async findPaginatedFiltered({ filter, page }) {
-    const certificationCenterBookshelf = await BookshelfCertificationCenter.query((qb) =>
-      _setSearchFiltersForQueryBuilder(filter, qb)
+  async findPaginatedFiltered({
+    filter,
+    page
+  }: any) {
+    const certificationCenterBookshelf = await BookshelfCertificationCenter.query((qb: any) => _setSearchFiltersForQueryBuilder(filter, qb)
     ).fetchPage({
       page: page.number,
       pageSize: page.size,
       withRelated: [
         {
-          habilitations: function (query) {
+          habilitations: function (query: any) {
             query.orderBy('id');
           },
         },
@@ -135,12 +147,14 @@ module.exports = {
     return { models: models.map(_toDomain), pagination };
   },
 
-  async findByExternalId({ externalId }) {
+  async findByExternalId({
+    externalId
+  }: any) {
     const certificationCenterBookshelf = await BookshelfCertificationCenter.where({ externalId }).fetch({
       require: false,
       withRelated: [
         {
-          habilitations: function (query) {
+          habilitations: function (query: any) {
             query.orderBy('id');
           },
         },

@@ -1,6 +1,9 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Joi'.
 const Joi = require('joi');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'validateEn... Remove this comment to see the full error message
 const { validateEntity } = require('../validators/entity-validator');
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'schema'.
 const schema = Joi.object({
   id: Joi.number().integer().optional(),
   level: Joi.number().integer().min(-1).max(8).required(),
@@ -11,8 +14,24 @@ const schema = Joi.object({
   assessmentResultId: Joi.number().optional(),
 });
 
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Competence... Remove this comment to see the full error message
 class CompetenceMark {
-  constructor({ id, area_code, competence_code, competenceId, level, score, assessmentResultId } = {}) {
+  area_code: any;
+  assessmentResultId: any;
+  competenceId: any;
+  competence_code: any;
+  id: any;
+  level: any;
+  score: any;
+  constructor({
+    id,
+    area_code,
+    competence_code,
+    competenceId,
+    level,
+    score,
+    assessmentResultId
+  }: any = {}) {
     this.id = id;
     this.area_code = area_code;
     this.competence_code = competence_code;
@@ -27,4 +46,5 @@ class CompetenceMark {
   }
 }
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = CompetenceMark;

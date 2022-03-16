@@ -1,20 +1,32 @@
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable '_'.
 const _ = require('lodash');
+// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Certificat... Remove this comment to see the full error message
 const CertificationEligibility = require('../read-models/CertificationEligibility');
 const {
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PIX_DROIT_... Remove this comment to see the full error message
   PIX_DROIT_MAITRE_CERTIF,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PIX_DROIT_... Remove this comment to see the full error message
   PIX_DROIT_EXPERT_CERTIF,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PIX_EDU_FO... Remove this comment to see the full error message
   PIX_EDU_FORMATION_INITIALE_2ND_DEGRE_INITIE,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PIX_EDU_FO... Remove this comment to see the full error message
   PIX_EDU_FORMATION_INITIALE_2ND_DEGRE_CONFIRME,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PIX_EDU_FO... Remove this comment to see the full error message
   PIX_EDU_FORMATION_CONTINUE_2ND_DEGRE_CONFIRME,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PIX_EDU_FO... Remove this comment to see the full error message
   PIX_EDU_FORMATION_CONTINUE_2ND_DEGRE_AVANCE,
+  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'PIX_EDU_FO... Remove this comment to see the full error message
   PIX_EDU_FORMATION_CONTINUE_2ND_DEGRE_EXPERT,
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'require'. Do you need to install... Remove this comment to see the full error message
 } = require('../models/Badge').keys;
 
+// @ts-expect-error ts-migrate(2580) FIXME: Cannot find name 'module'. Do you need to install ... Remove this comment to see the full error message
 module.exports = async function getUserCertificationEligibility({
   userId,
   placementProfileService,
-  certificationBadgesService,
-}) {
+  certificationBadgesService
+}: any) {
+  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Date'.
   const now = new Date();
   const placementProfile = await placementProfileService.getPlacementProfile({ userId, limitDate: now });
   const pixCertificationEligible = placementProfile.isCertifiable();
@@ -24,11 +36,17 @@ module.exports = async function getUserCertificationEligibility({
     certificationBadgesService,
   });
   const {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'pixPlusDroitMaitreCertificationEligible'... Remove this comment to see the full error message
     pixPlusDroitMaitreCertificationEligible,
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'pixPlusDroitExpertCertificationEligible'... Remove this comment to see the full error message
     pixPlusDroitExpertCertificationEligible,
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'pixPlusEduInitieCertificationEligible' d... Remove this comment to see the full error message
     pixPlusEduInitieCertificationEligible,
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'pixPlusEduConfirmeCertificationEligible'... Remove this comment to see the full error message
     pixPlusEduConfirmeCertificationEligible,
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'pixPlusEduAvanceCertificationEligible' d... Remove this comment to see the full error message
     pixPlusEduAvanceCertificationEligible,
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'pixPlusEduExpertCertificationEligible' d... Remove this comment to see the full error message
     pixPlusEduExpertCertificationEligible,
   } = await _computePixPlusCertificationEligibility({
     userId,
@@ -49,7 +67,11 @@ module.exports = async function getUserCertificationEligibility({
   });
 };
 
-async function _computeCleaCertificationEligibility({ userId, pixCertificationEligible, certificationBadgesService }) {
+async function _computeCleaCertificationEligibility({
+  userId,
+  pixCertificationEligible,
+  certificationBadgesService
+}: any) {
   if (!pixCertificationEligible) return false;
   return certificationBadgesService.hasStillValidCleaBadgeAcquisition({ userId });
 }
@@ -57,8 +79,8 @@ async function _computeCleaCertificationEligibility({ userId, pixCertificationEl
 async function _computePixPlusCertificationEligibility({
   userId,
   pixCertificationEligible,
-  certificationBadgesService,
-}) {
+  certificationBadgesService
+}: any) {
   if (!pixCertificationEligible) {
     return {
       pixPlusDroitMaitreCertificationEligible: false,
@@ -81,7 +103,7 @@ async function _computePixPlusCertificationEligibility({
   const pixPlusEduInitieBadgeAcquisition = _.find(stillValidCertifiableBadgeAcquisitions, {
     badgeKey: PIX_EDU_FORMATION_INITIALE_2ND_DEGRE_INITIE,
   });
-  const pixPlusEduConfirmeBadgeAcquisition = _.find(stillValidCertifiableBadgeAcquisitions, (badgeAcquisition) => {
+  const pixPlusEduConfirmeBadgeAcquisition = _.find(stillValidCertifiableBadgeAcquisitions, (badgeAcquisition: any) => {
     return (
       badgeAcquisition.badgeKey === PIX_EDU_FORMATION_INITIALE_2ND_DEGRE_CONFIRME ||
       badgeAcquisition.badgeKey === PIX_EDU_FORMATION_CONTINUE_2ND_DEGRE_CONFIRME
@@ -94,11 +116,17 @@ async function _computePixPlusCertificationEligibility({
     badgeKey: PIX_EDU_FORMATION_CONTINUE_2ND_DEGRE_EXPERT,
   });
 
+  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Boolean'.
   const pixPlusDroitMaitreCertificationEligible = Boolean(pixPlusDroitMaitreBadgeAcquisition);
+  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Boolean'.
   const pixPlusDroitExpertCertificationEligible = Boolean(pixPlusDroitExpertBadgeAcquisition);
+  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Boolean'.
   const pixPlusEduInitieCertificationEligible = Boolean(pixPlusEduInitieBadgeAcquisition);
+  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Boolean'.
   const pixPlusEduConfirmeCertificationEligible = Boolean(pixPlusEduConfirmeBadgeAcquisition);
+  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Boolean'.
   const pixPlusEduAvanceCertificationEligible = Boolean(pixPlusEduAvanceBadgeAcquisition);
+  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'Boolean'.
   const pixPlusEduExpertCertificationEligible = Boolean(pixPlusEduExpertBadgeAcquisition);
   return {
     pixPlusDroitMaitreCertificationEligible,
