@@ -1,9 +1,9 @@
-import { IAccountRecoveryDemand, AccountRecoveryDemand } from './../../domain/models/AccountRecoveryDemand';
 import _ from 'lodash';
 import { knex } from '../../../db/knex-database-connection';
 
 import { NotFoundError } from '../../domain/errors';
-import DomainTransaction from '../DomainTransaction';
+import { AccountRecoveryDemand, IAccountRecoveryDemand } from 'lib/domain/models/AccountRecoveryDemand';
+import DomainTransaction from 'lib/infrastructure/DomainTransaction';
 
 const _toDomain = (accountRecoveryDemandDTO: IAccountRecoveryDemand): IAccountRecoveryDemand => {
   return new AccountRecoveryDemand({
