@@ -27,15 +27,15 @@ exports.register = async function (server) {
         tags: ['api', 'framework'],
         notes: [
           "Cette route est restreinte aux utilisateurs authentifiés membre d'une organisation",
-          "Elle permet de récupérer toutes les données du référentiel Pix jusqu'aux sujets",
+          'Elle permet de récupérer la liste des frameworks disponibles',
         ],
       },
     },
     {
       method: 'GET',
-      path: '/api/frameworks/{id}',
+      path: '/api/frameworks/{id}/areas',
       config: {
-        handler: frameworkController.getFramework,
+        handler: frameworkController.getFrameworkAreas,
         pre: [{ method: securityPreHandlers.checkUserHasRolePixMaster }],
         validate: {
           params: Joi.object({
