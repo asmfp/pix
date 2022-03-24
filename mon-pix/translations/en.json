@@ -1125,6 +1125,7 @@
       "errors": {
         "archived": "It is no longer possible to submit your profile as the organiser has archived the collection of profiles."
       },
+      "disabled-share": "This customised test has been deactivated by the organiser.'<br>'It is no longer possible to submit results.",
       "first-title": "Submitting your Pix profile",
       "form": {
         "continue": "Continue my Pix experience",
