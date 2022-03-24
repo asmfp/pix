@@ -59,6 +59,7 @@ module.exports = function buildCampaignParticipation({
     schoolingRegistrationId,
     createdAt,
     sharedAt,
+    deletedAt,
     participantExternalId,
     validatedSkillsCount,
     masteryRate,
