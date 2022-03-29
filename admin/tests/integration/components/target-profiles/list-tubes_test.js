@@ -7,7 +7,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import moment from 'moment';
 import sinon from 'sinon';
 
-module('Integration | Component | tube:list', function (hooks) {
+module('Integration | Component | targetProfiles:listTubes', function (hooks) {
   setupRenderingTest(hooks);
   let orderedAreasBySelectedFrameworks;
   let momentStub;
