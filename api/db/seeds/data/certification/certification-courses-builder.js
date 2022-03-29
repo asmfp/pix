@@ -4,6 +4,7 @@ const {
   CERTIF_SCO_STUDENT_ID,
   CERTIF_FAILURE_USER_ID,
   CERTIF_REGULAR_USER5_ID,
+  CERTIF_REGULAR_USER1_ID,
 } = require('./users');
 const {
   TO_FINALIZE_SESSION_ID,
@@ -11,6 +12,7 @@ const {
   PROBLEMS_FINALIZED_SESSION_ID,
   PUBLISHED_SESSION_ID,
   PUBLISHED_SCO_SESSION_ID,
+  PRO_TO_FINALIZE_SESSION_ID,
 } = require('./certification-sessions-builder');
 const {
   CANDIDATE_DATA_SUCCESS,
@@ -18,8 +20,11 @@ const {
   CANDIDATE_DATA_STARTED,
   CANDIDATE_SCO_DATA_SUCCESS,
 } = require('./certification-candidates-builder');
-const { CERTIFICATION_CHALLENGES_DATA } = require('./certification-data');
-const { CertificationIssueReportCategories } = require('./../../../../lib/domain/models/CertificationIssueReportCategory');
+const { CERTIFICATION_CHALLENGES_DATA, CERTIFICATION_QUICK_CHALLENGES_DATA } = require('./certification-data');
+const {
+  CertificationIssueReportCategories,
+  CertificationIssueReportSubcategories,
+} = require('./../../../../lib/domain/models/CertificationIssueReportCategory');
 
 const ASSESSMENT_SUCCESS_IN_SESSION_TO_FINALIZE_ID = 100;
 const ASSESSMENT_FAILURE_IN_SESSION_TO_FINALIZE_ID = 101;
@@ -31,6 +36,7 @@ const ASSESSMENT_STARTED_IN_PROBLEMS_FINALIZED_SESSION_ID = 106;
 const ASSESSMENT_SUCCESS_PUBLISHED_SESSION_ID = 107;
 const ASSESSMENT_FAILURE_PUBLISHED_SESSION_ID = 108;
 const ASSESSMENT_SUCCESS_PUBLISHED_SESSION_SCO_ID = 109;
+const ASSESSMENT_SUCCESS_IN_PRO_SESSION_TO_FINALIZE_ID = 110;
 const CERTIFICATION_COURSE_SUCCESS_ID = 200;
 const CERTIFICATION_COURSE_FAILURE_ID = 403;
 
@@ -138,7 +144,21 @@ function certificationCoursesBuilder({ databaseBuilder }) {
       verificationCode: 'BCD258',
     },
   ], (certificationCourseData) => {
-    _buildCertificationCourse(databaseBuilder, certificationCourseData);
+    _buildCertificationCourse(databaseBuilder, certificationCourseData, CERTIFICATION_CHALLENGES_DATA);
+  });
+
+  _.each([
+    {
+      userId: CERTIF_REGULAR_USER1_ID,
+      sessionId: PRO_TO_FINALIZE_SESSION_ID,
+      assessmentId: ASSESSMENT_SUCCESS_IN_PRO_SESSION_TO_FINALIZE_ID,
+      candidateData: CANDIDATE_DATA_SUCCESS,
+      examinerComment: null,
+      hasSeenEndTestScreen: true,
+      isPublished: false,
+      verificationCode: 'COOKI3',
+    }], (certificationCourseData) => {
+    _buildFocusedOutCertificationCourse(databaseBuilder, certificationCourseData, CERTIFICATION_QUICK_CHALLENGES_DATA);
   });
 }
 
@@ -152,7 +172,7 @@ function _buildCertificationCourse(databaseBuilder, {
   hasSeenEndTestScreen,
   isPublished,
   verificationCode,
-}) {
+}, challenges) {
   const createdAt = new Date('2020-01-31T00:00:00Z');
   const certificationCourseId = databaseBuilder.factory.buildCertificationCourse({
     ...candidateData,
@@ -192,13 +212,76 @@ function _buildCertificationCourse(databaseBuilder, {
     id: assessmentId, certificationCourseId, type: 'CERTIFICATION', state: assessmentState, userId, competenceId: null,
     campaignParticipationId: null, isImproving: false, createdAt,
   });
-  _.each(CERTIFICATION_CHALLENGES_DATA, (challenge) => {
+  _.each(challenges, (challenge) => {
     databaseBuilder.factory.buildCertificationChallenge({
       ...challenge,
       courseId: certificationCourseId,
       associatedSkillId: null,
       createdAt,
     });
+  });
+}
+
+function _buildFocusedOutCertificationCourse(databaseBuilder, {
+  id,
+  assessmentId,
+  userId,
+  sessionId,
+  candidateData,
+  examinerComment,
+  hasSeenEndTestScreen,
+  isPublished,
+  verificationCode,
+}, challenges) {
+  const createdAt = new Date('2020-01-31T00:00:00Z');
+  const certificationCourseId = databaseBuilder.factory.buildCertificationCourse({
+    ...candidateData,
+    id,
+    createdAt,
+    isPublished,
+    isV2Certification: true,
+    examinerComment,
+    hasSeenEndTestScreen,
+    sessionId,
+    userId,
+    verificationCode,
+  }).id;
+  databaseBuilder.factory.buildAssessment({
+    id: assessmentId, certificationCourseId, type: 'CERTIFICATION', state: 'completed', userId, competenceId: null,
+    campaignParticipationId: null, isImproving: false, createdAt,
+  });
+  _.each(challenges, (challenge) => {
+    databaseBuilder.factory.buildCertificationChallenge({
+      ...challenge,
+      courseId: certificationCourseId,
+      associatedSkillId: null,
+      createdAt,
+    });
+  });
+
+  databaseBuilder.factory.buildCertificationIssueReport({
+    certificationCourseId,
+    category: CertificationIssueReportCategories.IN_CHALLENGE,
+    subcategory: CertificationIssueReportSubcategories.UNINTENTIONAL_FOCUS_OUT,
+    description: 'Le candidat a perdu le focus à cause de son navigateur',
+    questionNumber: 3,
+    resolvedAt: null,
+  });
+  databaseBuilder.factory.buildCertificationIssueReport({
+    certificationCourseId,
+    category: CertificationIssueReportCategories.IN_CHALLENGE,
+    subcategory: CertificationIssueReportSubcategories.SOFTWARE_NOT_WORKING,
+    description: 'Problème de logiciel',
+    questionNumber: 6,
+    resolvedAt: null,
+  });
+  databaseBuilder.factory.buildCertificationIssueReport({
+    certificationCourseId,
+    category: CertificationIssueReportCategories.IN_CHALLENGE,
+    subcategory: CertificationIssueReportSubcategories.WEBSITE_BLOCKED,
+    description: 'Le site demandé était inaccessible',
+    questionNumber: 10,
+    resolvedAt: null,
   });
 }
 
@@ -214,6 +297,7 @@ module.exports = {
   ASSESSMENT_SUCCESS_PUBLISHED_SESSION_ID,
   ASSESSMENT_FAILURE_PUBLISHED_SESSION_ID,
   ASSESSMENT_SUCCESS_PUBLISHED_SESSION_SCO_ID,
+  ASSESSMENT_SUCCESS_IN_PRO_SESSION_TO_FINALIZE_ID,
   CERTIFICATION_COURSE_FAILURE_ID,
   CERTIFICATION_COURSE_SUCCESS_ID,
 };

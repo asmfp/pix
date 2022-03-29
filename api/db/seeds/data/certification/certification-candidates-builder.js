@@ -10,11 +10,13 @@ const {
   SCO_NO_MANAGING_STUDENTS_AEFE_SESSION_ID,
   PIX_DROIT_SESSION_ID,
   COMPLEMENTARY_CERTIFICATIONS_SESSION_ID,
+  PRO_TO_FINALIZE_SESSION_ID,
 } = require('./certification-sessions-builder');
 const {
   CERTIF_SUCCESS_USER_ID,
   CERTIF_FAILED_USER_ID,
   CERTIF_REGULAR_USER5_ID,
+  CERTIF_REGULAR_USER1_ID,
   CERTIF_SCO_STUDENT_ID,
 } = require('./users');
 const {
@@ -85,12 +87,26 @@ const CANDIDATE_DROIT_2 = {
   birthCity: 'Ici',
   resultRecipientEmail: null,
 };
+const CANDIDATE_PRO_TO_FINALIZE_1 = {
+  firstName: 'AnneNormale1',
+  lastName: 'Certif1',
+  birthdate: '2000-01-01',
+  birthCity: 'Ici',
+  resultRecipientEmail: null,
+};
 
 function certificationCandidatesBuilder({ databaseBuilder }) {
 
   // Few candidates for the started session
   _.each([CANDIDATE_DATA_SUCCESS, CANDIDATE_DATA_FAILURE, CANDIDATE_DATA_MISSING], (candidate) => {
     databaseBuilder.factory.buildCertificationCandidate({ ...candidate, sessionId: STARTED_SESSION_ID, userId: null });
+  });
+  _.each([CANDIDATE_PRO_TO_FINALIZE_1], (candidate) => {
+    databaseBuilder.factory.buildCertificationCandidate({
+      ...candidate,
+      sessionId: PRO_TO_FINALIZE_SESSION_ID,
+      userId: CERTIF_REGULAR_USER1_ID,
+    });
   });
 
   // A LOT of candidates for the BIG started session

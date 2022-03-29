@@ -7,6 +7,8 @@ const {
   DROIT_CERTIF_CENTER_NAME,
   SUP_CERTIF_CENTER_NAME,
   SUP_CERTIF_CENTER_ID,
+  PRO_CERTIF_CENTER_NAME,
+  PRO_CERTIF_CENTER_ID,
 } = require('./certification-centers-builder');
 const { PIX_MASTER_ID } = require('./../users-builder');
 const EMPTY_SESSION_ID = 1;
@@ -21,6 +23,7 @@ const SCO_NO_MANAGING_STUDENTS_AEFE_SESSION_ID = 12;
 const PIX_DROIT_SESSION_ID = 9;
 const PUBLISHED_SCO_SESSION_ID = 10;
 const COMPLEMENTARY_CERTIFICATIONS_SESSION_ID = 11;
+const PRO_TO_FINALIZE_SESSION_ID = 13;
 
 function certificationSessionsBuilder({ databaseBuilder }) {
   const certificationCenter = SCO_COLLEGE_CERTIF_CENTER_NAME;
@@ -215,6 +218,13 @@ function certificationSessionsBuilder({ databaseBuilder }) {
     finalizedAt: null,
     publishedAt: null,
   });
+
+  databaseBuilder.factory.buildSession({
+    id: PRO_TO_FINALIZE_SESSION_ID,
+    certificationCenter: PRO_CERTIF_CENTER_NAME, certificationCenterId: PRO_CERTIF_CENTER_ID,
+    description: 'Session pas encore finalisée, avec des candidats ayant passés leur test de certification.',
+    accessCode: 'ANNE04',
+  });
 }
 
 module.exports = {
@@ -231,4 +241,5 @@ module.exports = {
   SCO_NO_MANAGING_STUDENTS_AEFE_SESSION_ID,
   PIX_DROIT_SESSION_ID,
   COMPLEMENTARY_CERTIFICATIONS_SESSION_ID,
+  PRO_TO_FINALIZE_SESSION_ID,
 };
