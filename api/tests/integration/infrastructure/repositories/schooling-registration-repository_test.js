@@ -21,8 +21,8 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
   describe('#findByIds', function () {
     it('should return all the schoolingRegistrations for given schoolingRegistration IDs', async function () {
       // given
-      const student1 = databaseBuilder.factory.buildSchoolingRegistration();
-      const student2 = databaseBuilder.factory.buildSchoolingRegistration();
+      const student1 = databaseBuilder.factory.buildOrganizationLearner();
+      const student2 = databaseBuilder.factory.buildOrganizationLearner();
       const ids = [student1.id, student2.id];
       await databaseBuilder.commit();
 
@@ -40,8 +40,8 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
 
     it('should return empty array when there are no result', async function () {
       // given
-      databaseBuilder.factory.buildSchoolingRegistration({ id: 1 });
-      databaseBuilder.factory.buildSchoolingRegistration({ id: 2 });
+      databaseBuilder.factory.buildOrganizationLearner({ id: 1 });
+      databaseBuilder.factory.buildOrganizationLearner({ id: 2 });
       const notFoundIds = [3, 4];
       await databaseBuilder.commit();
 
@@ -57,7 +57,7 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
     it('should return instances of SchoolingRegistration', async function () {
       // given
       const organization = databaseBuilder.factory.buildOrganization();
-      const schoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration({
+      const schoolingRegistration = databaseBuilder.factory.buildOrganizationLearner({
         organizationId: organization.id,
         userId: null,
       });
@@ -85,14 +85,14 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
 
       const user = databaseBuilder.factory.buildUser();
 
-      const schoolingRegistration_1 = databaseBuilder.factory.buildSchoolingRegistration({
+      const schoolingRegistration_1 = databaseBuilder.factory.buildOrganizationLearner({
         organizationId: organization_1.id,
       });
-      const schoolingRegistration_2 = databaseBuilder.factory.buildSchoolingRegistration({
+      const schoolingRegistration_2 = databaseBuilder.factory.buildOrganizationLearner({
         organizationId: organization_1.id,
         userId: user.id,
       });
-      databaseBuilder.factory.buildSchoolingRegistration({ organizationId: organization_2.id });
+      databaseBuilder.factory.buildOrganizationLearner({ organizationId: organization_2.id });
 
       await databaseBuilder.commit();
 
@@ -112,21 +112,21 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
       // given
       const organization = databaseBuilder.factory.buildOrganization();
 
-      const schoolingRegistration_1 = databaseBuilder.factory.buildSchoolingRegistration({
+      const schoolingRegistration_1 = databaseBuilder.factory.buildOrganizationLearner({
         organizationId: organization.id,
         lastName: 'Grenier',
       });
-      const schoolingRegistration_2 = databaseBuilder.factory.buildSchoolingRegistration({
+      const schoolingRegistration_2 = databaseBuilder.factory.buildOrganizationLearner({
         organizationId: organization.id,
         lastName: 'Avatar',
         firstName: 'Xavier',
       });
-      const schoolingRegistration_3 = databaseBuilder.factory.buildSchoolingRegistration({
+      const schoolingRegistration_3 = databaseBuilder.factory.buildOrganizationLearner({
         organizationId: organization.id,
         lastName: 'Avatar',
         firstName: 'Arthur',
       });
-      const schoolingRegistration_4 = databaseBuilder.factory.buildSchoolingRegistration({
+      const schoolingRegistration_4 = databaseBuilder.factory.buildOrganizationLearner({
         organizationId: organization.id,
         lastName: 'Avatar',
         firstName: 'MATHURIN',
@@ -169,7 +169,7 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
     it('should return instances of SchoolingRegistration', async function () {
       // given
       const organization = databaseBuilder.factory.buildOrganization();
-      const schoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration({
+      const schoolingRegistration = databaseBuilder.factory.buildOrganizationLearner({
         organizationId: organization.id,
         userId: null,
         division: '3A',
@@ -204,18 +204,18 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
 
       const user = databaseBuilder.factory.buildUser();
 
-      const schoolingRegistration_1 = databaseBuilder.factory.buildSchoolingRegistration({
+      const schoolingRegistration_1 = databaseBuilder.factory.buildOrganizationLearner({
         organizationId: organization_1.id,
         division: '3A',
         updatedAt: new Date(AFTER_BEGINNING_OF_THE_2020_SCHOOL_YEAR),
       });
-      const schoolingRegistration_2 = databaseBuilder.factory.buildSchoolingRegistration({
+      const schoolingRegistration_2 = databaseBuilder.factory.buildOrganizationLearner({
         organizationId: organization_1.id,
         userId: user.id,
         division: '3A',
         updatedAt: new Date(AFTER_BEGINNING_OF_THE_2020_SCHOOL_YEAR),
       });
-      databaseBuilder.factory.buildSchoolingRegistration({ organizationId: organization_2.id });
+      databaseBuilder.factory.buildOrganizationLearner({ organizationId: organization_2.id });
 
       await databaseBuilder.commit();
 
@@ -249,13 +249,13 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
       // given
       const organization = databaseBuilder.factory.buildOrganization();
       const user = databaseBuilder.factory.buildUser();
-      const notDisabledSchoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration({
+      const notDisabledSchoolingRegistration = databaseBuilder.factory.buildOrganizationLearner({
         isDisabled: false,
         organizationId: organization.id,
         division: '3A',
         updatedAt: new Date(AFTER_BEGINNING_OF_THE_2020_SCHOOL_YEAR),
       });
-      databaseBuilder.factory.buildSchoolingRegistration({
+      databaseBuilder.factory.buildOrganizationLearner({
         isDisabled: true,
         organizationId: organization.id,
         userId: user.id,
@@ -288,38 +288,38 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
       // given
       const organization = databaseBuilder.factory.buildOrganization();
 
-      const schoolingRegistration3B = databaseBuilder.factory.buildSchoolingRegistration({
+      const schoolingRegistration3B = databaseBuilder.factory.buildOrganizationLearner({
         organizationId: organization.id,
         division: '3b',
         updatedAt: new Date(AFTER_BEGINNING_OF_THE_2020_SCHOOL_YEAR),
       });
-      const schoolingRegistration3ABA = databaseBuilder.factory.buildSchoolingRegistration({
+      const schoolingRegistration3ABA = databaseBuilder.factory.buildOrganizationLearner({
         organizationId: organization.id,
         division: '3A',
         lastName: 'B',
         firstName: 'A',
         updatedAt: new Date(AFTER_BEGINNING_OF_THE_2020_SCHOOL_YEAR),
       });
-      const schoolingRegistration3ABB = databaseBuilder.factory.buildSchoolingRegistration({
+      const schoolingRegistration3ABB = databaseBuilder.factory.buildOrganizationLearner({
         organizationId: organization.id,
         division: '3A',
         lastName: 'B',
         firstName: 'B',
         updatedAt: new Date(AFTER_BEGINNING_OF_THE_2020_SCHOOL_YEAR),
       });
-      const schoolingRegistrationT2 = databaseBuilder.factory.buildSchoolingRegistration({
+      const schoolingRegistrationT2 = databaseBuilder.factory.buildOrganizationLearner({
         organizationId: organization.id,
         division: 'T2',
         updatedAt: new Date(AFTER_BEGINNING_OF_THE_2020_SCHOOL_YEAR),
       });
-      const schoolingRegistrationT1CB = databaseBuilder.factory.buildSchoolingRegistration({
+      const schoolingRegistrationT1CB = databaseBuilder.factory.buildOrganizationLearner({
         organizationId: organization.id,
         division: 't1',
         lastName: 'C',
         firstName: 'B',
         updatedAt: new Date(AFTER_BEGINNING_OF_THE_2020_SCHOOL_YEAR),
       });
-      const schoolingRegistrationT1CA = databaseBuilder.factory.buildSchoolingRegistration({
+      const schoolingRegistrationT1CA = databaseBuilder.factory.buildOrganizationLearner({
         organizationId: organization.id,
         division: 't1',
         lastName: 'C',
@@ -379,13 +379,13 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
       // given
       const organization = databaseBuilder.factory.buildOrganization();
 
-      const schoolingRegistration3B = databaseBuilder.factory.buildSchoolingRegistration({
+      const schoolingRegistration3B = databaseBuilder.factory.buildOrganizationLearner({
         organizationId: organization.id,
         division: '3b',
         updatedAt: new Date(AFTER_BEGINNING_OF_THE_2020_SCHOOL_YEAR),
       });
 
-      databaseBuilder.factory.buildSchoolingRegistration({
+      databaseBuilder.factory.buildOrganizationLearner({
         organizationId: organization.id,
         division: '3A',
         lastName: 'B',
@@ -420,8 +420,8 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
 
       const beforeTheDate = new Date('2020-08-14T10:00:00Z');
       const afterTheDate = new Date('2020-08-16T10:00:00Z');
-      databaseBuilder.factory.buildSchoolingRegistration({ organizationId: organization.id, updatedAt: beforeTheDate });
-      const earlierSchoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration({
+      databaseBuilder.factory.buildOrganizationLearner({ organizationId: organization.id, updatedAt: beforeTheDate });
+      const earlierSchoolingRegistration = databaseBuilder.factory.buildOrganizationLearner({
         organizationId: organization.id,
         updatedAt: afterTheDate,
       });
@@ -453,7 +453,7 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
       // given
       const organization = databaseBuilder.factory.buildOrganization();
       const userId = databaseBuilder.factory.buildUser().id;
-      const schoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration({
+      const schoolingRegistration = databaseBuilder.factory.buildOrganizationLearner({
         organizationId: organization.id,
         userId,
       });
@@ -476,8 +476,8 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
       // given
       const userId = databaseBuilder.factory.buildUser().id;
 
-      const schoolingRegistration_1 = databaseBuilder.factory.buildSchoolingRegistration({ userId });
-      const schoolingRegistration_2 = databaseBuilder.factory.buildSchoolingRegistration({ userId });
+      const schoolingRegistration_1 = databaseBuilder.factory.buildOrganizationLearner({ userId });
+      const schoolingRegistration_2 = databaseBuilder.factory.buildOrganizationLearner({ userId });
 
       await databaseBuilder.commit();
 
@@ -494,10 +494,10 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
     it('should order schoolingRegistrations by id', async function () {
       // given
       const userId = databaseBuilder.factory.buildUser().id;
-      const schoolingRegistration_1 = databaseBuilder.factory.buildSchoolingRegistration({ userId });
-      const schoolingRegistration_2 = databaseBuilder.factory.buildSchoolingRegistration({ userId });
-      const schoolingRegistration_3 = databaseBuilder.factory.buildSchoolingRegistration({ userId });
-      const schoolingRegistration_4 = databaseBuilder.factory.buildSchoolingRegistration({ userId });
+      const schoolingRegistration_1 = databaseBuilder.factory.buildOrganizationLearner({ userId });
+      const schoolingRegistration_2 = databaseBuilder.factory.buildOrganizationLearner({ userId });
+      const schoolingRegistration_3 = databaseBuilder.factory.buildOrganizationLearner({ userId });
+      const schoolingRegistration_4 = databaseBuilder.factory.buildOrganizationLearner({ userId });
 
       await databaseBuilder.commit();
 
@@ -522,16 +522,16 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
       const firstScoOrganizationId = databaseBuilder.factory.buildOrganization({ type: 'SCO' }).id;
       const secondScoOrganizationId = databaseBuilder.factory.buildOrganization({ type: 'SCO' }).id;
       const supOrganizationId = databaseBuilder.factory.buildOrganization({ type: 'SUP' }).id;
-      const matchingSchoolingRegistrationId = databaseBuilder.factory.buildSchoolingRegistration({
+      const matchingSchoolingRegistrationId = databaseBuilder.factory.buildOrganizationLearner({
         userId,
         organizationId: firstScoOrganizationId,
       }).id;
-      databaseBuilder.factory.buildSchoolingRegistration({ userId, organizationId: secondScoOrganizationId });
-      databaseBuilder.factory.buildSchoolingRegistration({
+      databaseBuilder.factory.buildOrganizationLearner({ userId, organizationId: secondScoOrganizationId });
+      databaseBuilder.factory.buildOrganizationLearner({
         userId: otherUserId,
         organizationId: secondScoOrganizationId,
       });
-      databaseBuilder.factory.buildSchoolingRegistration({ userId, organizationId: supOrganizationId });
+      databaseBuilder.factory.buildOrganizationLearner({ userId, organizationId: supOrganizationId });
       await databaseBuilder.commit();
 
       // when
@@ -559,10 +559,10 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
   describe('#disableAllSchoolingRegistrationsInOrganization', function () {
     it('should disable all schooling registration for the given organization', async function () {
       const organization = databaseBuilder.factory.buildOrganization();
-      const schoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration({
+      const schoolingRegistration = databaseBuilder.factory.buildOrganizationLearner({
         organizationId: organization.id,
       });
-      const otherSchoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration();
+      const otherSchoolingRegistration = databaseBuilder.factory.buildOrganizationLearner();
       await databaseBuilder.commit();
 
       await DomainTransaction.execute((domainTransaction) => {
@@ -580,7 +580,7 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
     });
 
     it('should update the date when a schooling registration is disabled', async function () {
-      const schoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration({
+      const schoolingRegistration = databaseBuilder.factory.buildOrganizationLearner({
         updatedAt: new Date('1970-01-01'),
       });
       await databaseBuilder.commit();
@@ -597,7 +597,7 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
     });
 
     it('should rollback when an error occurs during transaction', async function () {
-      const schoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration({
+      const schoolingRegistration = databaseBuilder.factory.buildOrganizationLearner({
         updatedAt: new Date('1970-01-01'),
       });
       await databaseBuilder.commit();
@@ -692,7 +692,7 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
           organizationId,
         };
 
-        databaseBuilder.factory.buildSchoolingRegistration(schoolingRegistration_1);
+        databaseBuilder.factory.buildOrganizationLearner(schoolingRegistration_1);
 
         await databaseBuilder.commit();
       });
@@ -751,7 +751,7 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
 
         beforeEach(async function () {
           otherOrganizationId = databaseBuilder.factory.buildOrganization().id;
-          schoolingRegistration_1_bis = databaseBuilder.factory.buildSchoolingRegistration({
+          schoolingRegistration_1_bis = databaseBuilder.factory.buildOrganizationLearner({
             firstName: 'Lucie',
             lastName: 'Handmad',
             birthdate: '1990-12-31',
@@ -821,7 +821,7 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
       context('when a schooling registration disabled already exists', function () {
         it('should enable the updated schooling registration', async function () {
           // given
-          const schoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration({
+          const schoolingRegistration = databaseBuilder.factory.buildOrganizationLearner({
             nationalStudentId: 'INE1',
             isDisabled: true,
           });
@@ -849,11 +849,11 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
       it('should save the schooling registration with userId as null', async function () {
         const { id: organizationId } = databaseBuilder.factory.buildOrganization();
         const { id: userId } = databaseBuilder.factory.buildUser();
-        databaseBuilder.factory.buildSchoolingRegistration({
+        databaseBuilder.factory.buildOrganizationLearner({
           nationalStudentId: 'INE1',
           userId,
         });
-        databaseBuilder.factory.buildSchoolingRegistration({
+        databaseBuilder.factory.buildOrganizationLearner({
           nationalStudentId: 'INE2',
           organizationId: organizationId,
           userId,
@@ -881,16 +881,16 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
       it('should update the schooling registration with userId as null', async function () {
         const { id: organizationId } = databaseBuilder.factory.buildOrganization();
         const { id: userId } = databaseBuilder.factory.buildUser();
-        databaseBuilder.factory.buildSchoolingRegistration({
+        databaseBuilder.factory.buildOrganizationLearner({
           nationalStudentId: 'INE1',
           userId,
         });
-        databaseBuilder.factory.buildSchoolingRegistration({
+        databaseBuilder.factory.buildOrganizationLearner({
           nationalStudentId: 'INE2',
           organizationId: organizationId,
           userId,
         });
-        databaseBuilder.factory.buildSchoolingRegistration({
+        databaseBuilder.factory.buildOrganizationLearner({
           nationalStudentId: 'INE1',
           organizationId: organizationId,
           userId: null,
@@ -920,11 +920,11 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
       it('should save both schooling registrations with userId as null', async function () {
         const { id: organizationId } = databaseBuilder.factory.buildOrganization();
         const { id: userId } = databaseBuilder.factory.buildUser();
-        databaseBuilder.factory.buildSchoolingRegistration({
+        databaseBuilder.factory.buildOrganizationLearner({
           nationalStudentId: 'INE1',
           userId,
         });
-        databaseBuilder.factory.buildSchoolingRegistration({
+        databaseBuilder.factory.buildOrganizationLearner({
           nationalStudentId: 'INE2',
           userId,
         });
@@ -965,7 +965,7 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
         userId = databaseBuilder.factory.buildUser().id;
         organizationId = databaseBuilder.factory.buildOrganization().id;
         const otherOrganizationId = databaseBuilder.factory.buildOrganization().id;
-        schoolingRegistrationInOtherOrganization = databaseBuilder.factory.buildSchoolingRegistration({
+        schoolingRegistrationInOtherOrganization = databaseBuilder.factory.buildOrganizationLearner({
           organizationId: otherOrganizationId,
           nationalStudentId: 'salut',
         });
@@ -989,7 +989,7 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
 
       it('should create schoolingRegistration and reconcile it thanks to another schoolingRegistration', async function () {
         // given
-        databaseBuilder.factory.buildSchoolingRegistration({ nationalStudentId, userId });
+        databaseBuilder.factory.buildOrganizationLearner({ nationalStudentId, userId });
         databaseBuilder.factory.buildCertificationCourse({ userId });
         await databaseBuilder.commit();
 
@@ -1012,8 +1012,8 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
 
       it('should update and reconcile schoolingRegistration thanks to another schoolingRegistration', async function () {
         // given
-        databaseBuilder.factory.buildSchoolingRegistration({ organizationId, nationalStudentId, userId: null });
-        databaseBuilder.factory.buildSchoolingRegistration({ nationalStudentId, userId });
+        databaseBuilder.factory.buildOrganizationLearner({ organizationId, nationalStudentId, userId: null });
+        databaseBuilder.factory.buildOrganizationLearner({ nationalStudentId, userId });
         databaseBuilder.factory.buildCertificationCourse({ userId });
         await databaseBuilder.commit();
 
@@ -1037,7 +1037,7 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
       context('when userId is already defined for a schoolingRegistration', function () {
         it('should update schoolingRegistration but not override userId', async function () {
           // given
-          const expectedUserId = databaseBuilder.factory.buildSchoolingRegistration({
+          const expectedUserId = databaseBuilder.factory.buildOrganizationLearner({
             organizationId,
             nationalStudentId,
           }).userId;
@@ -1072,7 +1072,7 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
 
       beforeEach(async function () {
         organizationId = databaseBuilder.factory.buildOrganization().id;
-        databaseBuilder.factory.buildSchoolingRegistration({
+        databaseBuilder.factory.buildOrganizationLearner({
           firstName: 'Lucy',
           lastName: 'Handmade',
           birthdate: '1990-12-31',
@@ -1198,8 +1198,7 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
           nationalStudentId: 'INE1',
           organizationId,
         };
-        const schoolingRegistrationId =
-          databaseBuilder.factory.buildSchoolingRegistration(baseSchoolingRegistration).id;
+        const schoolingRegistrationId = databaseBuilder.factory.buildOrganizationLearner(baseSchoolingRegistration).id;
         await databaseBuilder.commit();
         await knex('organization-learners')
           .update({ updatedAt: new Date('2019-01-01') })
@@ -1265,7 +1264,7 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
 
     beforeEach(async function () {
       organization = databaseBuilder.factory.buildOrganization();
-      databaseBuilder.factory.buildSchoolingRegistration({
+      databaseBuilder.factory.buildOrganizationLearner({
         organizationId: organization.id,
         userId: null,
         preferredLastName: 'Lee',
@@ -1277,7 +1276,7 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
         studentNumber: '123A',
         isDisabled: false,
       });
-      databaseBuilder.factory.buildSchoolingRegistration({
+      databaseBuilder.factory.buildOrganizationLearner({
         organizationId: organization.id,
         userId: null,
         lastName: 'See',
@@ -1306,7 +1305,7 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
     it('should return empty array when there are no active schooling-registrations', async function () {
       // given
       const birthdate = '2001-01-01';
-      databaseBuilder.factory.buildSchoolingRegistration({
+      databaseBuilder.factory.buildOrganizationLearner({
         organizationId: organization.id,
         userId: null,
         lastName: 'Stark',
@@ -1361,7 +1360,7 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
 
     beforeEach(async function () {
       const user = databaseBuilder.factory.buildUser();
-      schoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration({ userId: user.id });
+      schoolingRegistration = databaseBuilder.factory.buildOrganizationLearner({ userId: user.id });
       await databaseBuilder.commit();
     });
 
@@ -1386,7 +1385,7 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
 
     beforeEach(async function () {
       organization = databaseBuilder.factory.buildOrganization();
-      schoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration({
+      schoolingRegistration = databaseBuilder.factory.buildOrganizationLearner({
         organizationId: organization.id,
         userId: null,
         firstName: 'Steeve',
@@ -1438,7 +1437,7 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
 
     it('should return an error when the schooling registration is disabled', async function () {
       // given
-      const disabledSchoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration({
+      const disabledSchoolingRegistration = databaseBuilder.factory.buildOrganizationLearner({
         organizationId: organization.id,
         userId: null,
         isDisabled: true,
@@ -1467,7 +1466,7 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
 
       beforeEach(async function () {
         organization = databaseBuilder.factory.buildOrganization();
-        schoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration({
+        schoolingRegistration = databaseBuilder.factory.buildOrganizationLearner({
           organizationId: organization.id,
           userId: null,
           firstName: 'Steeve',
@@ -1548,7 +1547,7 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
       it('should return an error', async function () {
         const { id: organizationId } = databaseBuilder.factory.buildOrganization();
         const { id: userId } = databaseBuilder.factory.buildUser({ firstName: 'Natasha', lastName: 'Romanoff' });
-        const schoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration({
+        const schoolingRegistration = databaseBuilder.factory.buildOrganizationLearner({
           organizationId,
           userId: null,
           firstName: 'Natasha',
@@ -1577,7 +1576,7 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
     beforeEach(function () {
       organizationId = databaseBuilder.factory.buildOrganization().id;
       userId = databaseBuilder.factory.buildUser().id;
-      databaseBuilder.factory.buildSchoolingRegistration({ organizationId, userId });
+      databaseBuilder.factory.buildOrganizationLearner({ organizationId, userId });
       return databaseBuilder.commit();
     });
 
@@ -1628,7 +1627,7 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
     let schoolingRegistrationId;
 
     beforeEach(function () {
-      schoolingRegistrationId = databaseBuilder.factory.buildSchoolingRegistration().id;
+      schoolingRegistrationId = databaseBuilder.factory.buildOrganizationLearner().id;
       return databaseBuilder.commit();
     });
 
@@ -1657,7 +1656,7 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
     let schoolingRegistrationId;
 
     beforeEach(function () {
-      schoolingRegistrationId = databaseBuilder.factory.buildSchoolingRegistration().id;
+      schoolingRegistrationId = databaseBuilder.factory.buildOrganizationLearner().id;
       return databaseBuilder.commit();
     });
 
@@ -1697,7 +1696,7 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
         ine: '123456789AA',
         birthdate: '2000-12-07',
       };
-      databaseBuilder.factory.buildSchoolingRegistration({
+      databaseBuilder.factory.buildOrganizationLearner({
         id: 1,
         organizationId: latestOrganizationId,
         userId: expectedUserId,
@@ -1705,7 +1704,7 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
         nationalStudentId: studentInformation.ine,
         updatedAt: new Date('2013-01-01T15:00:00Z'),
       });
-      databaseBuilder.factory.buildSchoolingRegistration({
+      databaseBuilder.factory.buildOrganizationLearner({
         id: 80,
         organizationId: oldestOrganizationId,
         userId: expectedUserId,
@@ -1733,7 +1732,7 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
         ine: '123456789AB',
         birthdate: '2000-12-07',
       };
-      databaseBuilder.factory.buildSchoolingRegistration({
+      databaseBuilder.factory.buildOrganizationLearner({
         birthdate: studentInformation.birthdate,
         nationalStudentId: studentInformation.ine,
       });
@@ -1756,7 +1755,7 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
         ine: '123456789AB',
         birthdate: '2000-12-07',
       };
-      databaseBuilder.factory.buildSchoolingRegistration({
+      databaseBuilder.factory.buildOrganizationLearner({
         birthdate: studentInformation.birthdate,
         nationalStudentId: studentInformation.ine,
         userId: null,
@@ -1779,7 +1778,7 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
     it('should return instances of UserWithSchoolingRegistration', async function () {
       // given
       const organization = databaseBuilder.factory.buildOrganization();
-      databaseBuilder.factory.buildSchoolingRegistration({
+      databaseBuilder.factory.buildOrganizationLearner({
         organizationId: organization.id,
         userId: null,
       });
@@ -1801,14 +1800,14 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
 
       const user = databaseBuilder.factory.buildUser();
 
-      const schoolingRegistration_1 = databaseBuilder.factory.buildSchoolingRegistration({
+      const schoolingRegistration_1 = databaseBuilder.factory.buildOrganizationLearner({
         organizationId: organization_1.id,
       });
-      const schoolingRegistration_2 = databaseBuilder.factory.buildSchoolingRegistration({
+      const schoolingRegistration_2 = databaseBuilder.factory.buildOrganizationLearner({
         organizationId: organization_1.id,
         userId: user.id,
       });
-      databaseBuilder.factory.buildSchoolingRegistration({ organizationId: organization_2.id });
+      databaseBuilder.factory.buildOrganizationLearner({ organizationId: organization_2.id });
 
       await databaseBuilder.commit();
 
@@ -1824,11 +1823,11 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
     it('should return the schooling registrations not disabled', async function () {
       // given
       const organization = databaseBuilder.factory.buildOrganization();
-      const schoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration({
+      const schoolingRegistration = databaseBuilder.factory.buildOrganizationLearner({
         isDisabled: false,
         organizationId: organization.id,
       });
-      databaseBuilder.factory.buildSchoolingRegistration({ isDisabled: true, organizationId: organization.id });
+      databaseBuilder.factory.buildOrganizationLearner({ isDisabled: true, organizationId: organization.id });
       await databaseBuilder.commit();
 
       // when
@@ -1845,21 +1844,21 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
       // given
       const organization = databaseBuilder.factory.buildOrganization();
 
-      const schoolingRegistration_1 = databaseBuilder.factory.buildSchoolingRegistration({
+      const schoolingRegistration_1 = databaseBuilder.factory.buildOrganizationLearner({
         organizationId: organization.id,
         lastName: 'Grenier',
       });
-      const schoolingRegistration_2 = databaseBuilder.factory.buildSchoolingRegistration({
+      const schoolingRegistration_2 = databaseBuilder.factory.buildOrganizationLearner({
         organizationId: organization.id,
         lastName: 'Avatar',
         firstName: 'Xavier',
       });
-      const schoolingRegistration_3 = databaseBuilder.factory.buildSchoolingRegistration({
+      const schoolingRegistration_3 = databaseBuilder.factory.buildOrganizationLearner({
         organizationId: organization.id,
         lastName: 'Avatar',
         firstName: 'Arthur',
       });
-      const schoolingRegistration_4 = databaseBuilder.factory.buildSchoolingRegistration({
+      const schoolingRegistration_4 = databaseBuilder.factory.buildOrganizationLearner({
         organizationId: organization.id,
         lastName: 'Avatar',
         firstName: 'MATHURIN',
@@ -1886,9 +1885,9 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
         // given
         const organization = databaseBuilder.factory.buildOrganization();
 
-        databaseBuilder.factory.buildSchoolingRegistration({ organizationId: organization.id, lastName: 'Grenier' });
-        databaseBuilder.factory.buildSchoolingRegistration({ organizationId: organization.id, lastName: 'Avatar' });
-        databaseBuilder.factory.buildSchoolingRegistration({ organizationId: organization.id, lastName: 'UvAtur' });
+        databaseBuilder.factory.buildOrganizationLearner({ organizationId: organization.id, lastName: 'Grenier' });
+        databaseBuilder.factory.buildOrganizationLearner({ organizationId: organization.id, lastName: 'Avatar' });
+        databaseBuilder.factory.buildOrganizationLearner({ organizationId: organization.id, lastName: 'UvAtur' });
         await databaseBuilder.commit();
 
         // when
@@ -1905,17 +1904,17 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
         // given
         const organization = databaseBuilder.factory.buildOrganization();
 
-        databaseBuilder.factory.buildSchoolingRegistration({
+        databaseBuilder.factory.buildOrganizationLearner({
           organizationId: organization.id,
           firstName: 'Foo',
           lastName: '1',
         });
-        databaseBuilder.factory.buildSchoolingRegistration({
+        databaseBuilder.factory.buildOrganizationLearner({
           organizationId: organization.id,
           firstName: 'Bar',
           lastName: '2',
         });
-        databaseBuilder.factory.buildSchoolingRegistration({
+        databaseBuilder.factory.buildOrganizationLearner({
           organizationId: organization.id,
           firstName: 'Baz',
           lastName: '3',
@@ -1936,19 +1935,19 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
         // given
         const organization = databaseBuilder.factory.buildOrganization();
 
-        databaseBuilder.factory.buildSchoolingRegistration({
+        databaseBuilder.factory.buildOrganizationLearner({
           organizationId: organization.id,
           firstName: 'Foo',
           lastName: '1',
           studentNumber: 'FOO123',
         });
-        databaseBuilder.factory.buildSchoolingRegistration({
+        databaseBuilder.factory.buildOrganizationLearner({
           organizationId: organization.id,
           firstName: 'Bar',
           lastName: '2',
           studentNumber: 'BAR123',
         });
-        databaseBuilder.factory.buildSchoolingRegistration({
+        databaseBuilder.factory.buildOrganizationLearner({
           organizationId: organization.id,
           firstName: 'Baz',
           lastName: '3',
@@ -1970,17 +1969,17 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
         // given
         const organization = databaseBuilder.factory.buildOrganization();
 
-        databaseBuilder.factory.buildSchoolingRegistration({
+        databaseBuilder.factory.buildOrganizationLearner({
           organizationId: organization.id,
           lastName: '1',
           division: '4A',
         });
-        databaseBuilder.factory.buildSchoolingRegistration({
+        databaseBuilder.factory.buildOrganizationLearner({
           organizationId: organization.id,
           lastName: '2',
           division: '3B',
         });
-        databaseBuilder.factory.buildSchoolingRegistration({
+        databaseBuilder.factory.buildOrganizationLearner({
           organizationId: organization.id,
           lastName: '3',
           division: '3A',
@@ -2001,17 +2000,17 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
         // given
         const organization = databaseBuilder.factory.buildOrganization();
 
-        databaseBuilder.factory.buildSchoolingRegistration({
+        databaseBuilder.factory.buildOrganizationLearner({
           organizationId: organization.id,
           lastName: '1',
           group: '4A',
         });
-        databaseBuilder.factory.buildSchoolingRegistration({
+        databaseBuilder.factory.buildOrganizationLearner({
           organizationId: organization.id,
           lastName: '2',
           group: '3B',
         });
-        databaseBuilder.factory.buildSchoolingRegistration({
+        databaseBuilder.factory.buildOrganizationLearner({
           organizationId: organization.id,
           lastName: '3',
           group: '3A',
@@ -2032,17 +2031,17 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
         // given
         const organization = databaseBuilder.factory.buildOrganization();
 
-        databaseBuilder.factory.buildSchoolingRegistration({
+        databaseBuilder.factory.buildOrganizationLearner({
           organizationId: organization.id,
           firstName: 'John',
           lastName: 'Rambo',
         });
-        databaseBuilder.factory.buildSchoolingRegistration({
+        databaseBuilder.factory.buildOrganizationLearner({
           organizationId: organization.id,
           firstName: 'Jane',
           lastName: 'Rambo',
         });
-        databaseBuilder.factory.buildSchoolingRegistration({
+        databaseBuilder.factory.buildOrganizationLearner({
           organizationId: organization.id,
           firstName: 'Chuck',
           lastName: 'Norris',
@@ -2142,12 +2141,12 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
         // given
         const organization = databaseBuilder.factory.buildOrganization();
 
-        databaseBuilder.factory.buildSchoolingRegistration({
+        databaseBuilder.factory.buildOrganizationLearner({
           organizationId: organization.id,
           firstName: 'Foo',
           lastName: '1',
         });
-        databaseBuilder.factory.buildSchoolingRegistration({
+        databaseBuilder.factory.buildOrganizationLearner({
           organizationId: organization.id,
           firstName: 'Bar',
           lastName: '2',
@@ -2172,7 +2171,7 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
         const user = databaseBuilder.factory.buildUser({
           organizationId: organization.id,
         });
-        const schoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration({
+        const schoolingRegistration = databaseBuilder.factory.buildOrganizationLearner({
           organizationId: organization.id,
           userId: user.id,
         });
@@ -2215,7 +2214,7 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
           externalIdentifier: 'samlId',
           userId: user.id,
         });
-        const schoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration({
+        const schoolingRegistration = databaseBuilder.factory.buildOrganizationLearner({
           organizationId: organization.id,
           userId: user.id,
         });
@@ -2249,7 +2248,7 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
       it('should return empty email, username, userId', async function () {
         // given
         const organization = databaseBuilder.factory.buildOrganization();
-        const schoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration({
+        const schoolingRegistration = databaseBuilder.factory.buildOrganizationLearner({
           organizationId: organization.id,
           userId: null,
         });
@@ -2292,7 +2291,7 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
 
     it('should update userId if it was null before', async function () {
       // given
-      schoolingRegistrationId = databaseBuilder.factory.buildSchoolingRegistration({
+      schoolingRegistrationId = databaseBuilder.factory.buildOrganizationLearner({
         userId: null,
       }).id;
       await databaseBuilder.commit();
@@ -2309,7 +2308,7 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
 
     it('should throw where schoolingRegistration is already linked with a user', async function () {
       // given
-      schoolingRegistrationId = databaseBuilder.factory.buildSchoolingRegistration({
+      schoolingRegistrationId = databaseBuilder.factory.buildOrganizationLearner({
         userId,
       }).id;
       await databaseBuilder.commit();
@@ -2342,7 +2341,7 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
       const organizationId = databaseBuilder.factory.buildOrganization().id;
       const campaignId = databaseBuilder.factory.buildCampaign({ organizationId }).id;
       databaseBuilder.factory.buildCampaignParticipation({ userId, campaignId });
-      databaseBuilder.factory.buildSchoolingRegistration({ userId, organizationId, isDisabled: false });
+      databaseBuilder.factory.buildOrganizationLearner({ userId, organizationId, isDisabled: false });
       await databaseBuilder.commit();
 
       const isActive = await schoolingRegistrationRepository.isActive({ userId, campaignId });
@@ -2355,7 +2354,7 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
       const organizationId = databaseBuilder.factory.buildOrganization().id;
       const campaignId = databaseBuilder.factory.buildCampaign({ organizationId }).id;
       databaseBuilder.factory.buildCampaignParticipation({ userId, campaignId });
-      databaseBuilder.factory.buildSchoolingRegistration({ userId, organizationId, isDisabled: true });
+      databaseBuilder.factory.buildOrganizationLearner({ userId, organizationId, isDisabled: true });
       await databaseBuilder.commit();
 
       const isActive = await schoolingRegistrationRepository.isActive({ userId, campaignId });
@@ -2368,11 +2367,11 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
       const campaignId = databaseBuilder.factory.buildCampaign({ organizationId }).id;
       const userId = databaseBuilder.factory.buildUser().id;
       databaseBuilder.factory.buildCampaignParticipation({ userId, campaignId });
-      databaseBuilder.factory.buildSchoolingRegistration({ userId, organizationId, isDisabled: true });
+      databaseBuilder.factory.buildOrganizationLearner({ userId, organizationId, isDisabled: true });
 
       const otherUserId = databaseBuilder.factory.buildUser().id;
       databaseBuilder.factory.buildCampaignParticipation({ userId: otherUserId, campaignId });
-      databaseBuilder.factory.buildSchoolingRegistration({ userId: otherUserId, organizationId, isDisabled: false });
+      databaseBuilder.factory.buildOrganizationLearner({ userId: otherUserId, organizationId, isDisabled: false });
       await databaseBuilder.commit();
 
       const isActive = await schoolingRegistrationRepository.isActive({ userId: otherUserId, campaignId });
@@ -2385,12 +2384,12 @@ describe('Integration | Infrastructure | Repository | schooling-registration-rep
       const organizationId = databaseBuilder.factory.buildOrganization().id;
       const campaignId = databaseBuilder.factory.buildCampaign({ organizationId }).id;
       databaseBuilder.factory.buildCampaignParticipation({ userId, campaignId });
-      databaseBuilder.factory.buildSchoolingRegistration({ userId, organizationId, isDisabled: true });
+      databaseBuilder.factory.buildOrganizationLearner({ userId, organizationId, isDisabled: true });
 
       const otherOrganizationId = databaseBuilder.factory.buildOrganization().id;
       const otherCampaignId = databaseBuilder.factory.buildCampaign({ organizationId: otherOrganizationId }).id;
       databaseBuilder.factory.buildCampaignParticipation({ userId, campaignId: otherCampaignId });
-      databaseBuilder.factory.buildSchoolingRegistration({
+      databaseBuilder.factory.buildOrganizationLearner({
         userId,
         organizationId: otherOrganizationId,
         isDisabled: false,

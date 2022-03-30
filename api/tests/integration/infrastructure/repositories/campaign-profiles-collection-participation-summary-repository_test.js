@@ -200,7 +200,7 @@ describe('Integration | Repository | Campaign Profiles Collection Participation 
 
     describe('when there is a filter on division', function () {
       beforeEach(async function () {
-        const { id: schoolingRegistrationId1 } = databaseBuilder.factory.buildSchoolingRegistration({
+        const { id: schoolingRegistrationId1 } = databaseBuilder.factory.buildOrganizationLearner({
           organizationId,
           division: 'Barry',
         });
@@ -211,7 +211,7 @@ describe('Integration | Repository | Campaign Profiles Collection Participation 
         };
         databaseBuilder.factory.buildCampaignParticipation(participation1);
 
-        const { id: schoolingRegistrationId2 } = databaseBuilder.factory.buildSchoolingRegistration({
+        const { id: schoolingRegistrationId2 } = databaseBuilder.factory.buildOrganizationLearner({
           organizationId,
           division: 'White',
         });
@@ -222,7 +222,7 @@ describe('Integration | Repository | Campaign Profiles Collection Participation 
         };
         databaseBuilder.factory.buildCampaignParticipation(participation2);
 
-        const { id: schoolingRegistrationId3 } = databaseBuilder.factory.buildSchoolingRegistration({
+        const { id: schoolingRegistrationId3 } = databaseBuilder.factory.buildOrganizationLearner({
           organizationId,
           division: 'Marvin Gaye',
         });
@@ -256,7 +256,7 @@ describe('Integration | Repository | Campaign Profiles Collection Participation 
 
     describe('when there is a filter on group', function () {
       beforeEach(async function () {
-        const { id: schoolingRegistrationId1 } = databaseBuilder.factory.buildSchoolingRegistration({
+        const { id: schoolingRegistrationId1 } = databaseBuilder.factory.buildOrganizationLearner({
           organizationId,
           group: 'Barry',
         });
@@ -267,7 +267,7 @@ describe('Integration | Repository | Campaign Profiles Collection Participation 
         };
         databaseBuilder.factory.buildCampaignParticipation(participation1);
 
-        const { id: schoolingRegistrationId2 } = databaseBuilder.factory.buildSchoolingRegistration({
+        const { id: schoolingRegistrationId2 } = databaseBuilder.factory.buildOrganizationLearner({
           organizationId,
           group: 'White',
         });
@@ -278,7 +278,7 @@ describe('Integration | Repository | Campaign Profiles Collection Participation 
         };
         databaseBuilder.factory.buildCampaignParticipation(participation2);
 
-        const { id: schoolingRegistrationId3 } = databaseBuilder.factory.buildSchoolingRegistration({
+        const { id: schoolingRegistrationId3 } = databaseBuilder.factory.buildOrganizationLearner({
           organizationId,
           group: 'Marvin Gaye',
         });

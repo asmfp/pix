@@ -256,7 +256,7 @@ describe('Integration | Repository | Campaign Participation Info', function () {
         campaign = databaseBuilder.factory.buildCampaign({ type: Campaign.types.ASSESSMENT });
 
         const userId = databaseBuilder.factory.buildUser().id;
-        const schoolingRegistrationId = databaseBuilder.factory.buildSchoolingRegistration({
+        const schoolingRegistrationId = databaseBuilder.factory.buildOrganizationLearner({
           firstName: 'The',
           lastName: 'Narrator',
           division: null,
@@ -326,13 +326,13 @@ describe('Integration | Repository | Campaign Participation Info', function () {
         const organizationId = databaseBuilder.factory.buildOrganization().id;
         const userId = databaseBuilder.factory.buildUser().id;
         campaign = databaseBuilder.factory.buildCampaign({ organizationId });
-        const schoolingRegistrationId = databaseBuilder.factory.buildSchoolingRegistration({
+        const schoolingRegistrationId = databaseBuilder.factory.buildOrganizationLearner({
           organizationId,
           userId,
           firstName: 'John',
           lastName: 'Doe',
         }).id;
-        databaseBuilder.factory.buildSchoolingRegistration({
+        databaseBuilder.factory.buildOrganizationLearner({
           organizationId: otherOrganizationId,
           userId,
           firstName: 'Jane',
@@ -363,7 +363,7 @@ describe('Integration | Repository | Campaign Participation Info', function () {
       beforeEach(async function () {
         const userId = databaseBuilder.factory.buildUser().id;
         campaign = databaseBuilder.factory.buildCampaign();
-        schoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration({
+        schoolingRegistration = databaseBuilder.factory.buildOrganizationLearner({
           organizationId: campaign.organizationId,
           userId,
           studentNumber: 'Pipon et Jambon',
@@ -377,7 +377,7 @@ describe('Integration | Repository | Campaign Participation Info', function () {
         }).id;
         databaseBuilder.factory.buildAssessment({ campaignParticipationId, userId, state: 'started' });
 
-        databaseBuilder.factory.buildSchoolingRegistration({
+        databaseBuilder.factory.buildOrganizationLearner({
           userId,
           studentNumber: 'Yippee Ki Yay',
         });

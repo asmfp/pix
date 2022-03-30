@@ -142,7 +142,7 @@ describe('Integration | Domain | Services | user-service', function () {
     beforeEach(async function () {
       user = domainBuilder.buildUser();
       organizationId = databaseBuilder.factory.buildOrganization().id;
-      schoolingRegistrationId = databaseBuilder.factory.buildSchoolingRegistration({
+      schoolingRegistrationId = databaseBuilder.factory.buildOrganizationLearner({
         userId: null,
       }).id;
 
@@ -235,7 +235,7 @@ describe('Integration | Domain | Services | user-service', function () {
       it('should rollback after association fails', async function () {
         // given
         const userId = databaseBuilder.factory.buildUser().id;
-        schoolingRegistrationId = databaseBuilder.factory.buildSchoolingRegistration({
+        schoolingRegistrationId = databaseBuilder.factory.buildOrganizationLearner({
           userId,
           organizationId,
         }).id;

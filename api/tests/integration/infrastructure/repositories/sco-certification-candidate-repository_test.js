@@ -19,8 +19,8 @@ describe('Integration | Repository | SCOCertificationCandidate', function () {
 
     it('adds only the unenrolled candidates', async function () {
       // given
-      const schoolingRegistrationId1 = databaseBuilder.factory.buildSchoolingRegistration().id;
-      const schoolingRegistrationId2 = databaseBuilder.factory.buildSchoolingRegistration().id;
+      const schoolingRegistrationId1 = databaseBuilder.factory.buildOrganizationLearner().id;
+      const schoolingRegistrationId2 = databaseBuilder.factory.buildOrganizationLearner().id;
       const scoCandidateAlreadySaved1 = databaseBuilder.factory.buildCertificationCandidate({
         sessionId,
         schoolingRegistrationId: schoolingRegistrationId1,
@@ -29,8 +29,8 @@ describe('Integration | Repository | SCOCertificationCandidate', function () {
         sessionId,
         schoolingRegistrationId: schoolingRegistrationId2,
       });
-      const schoolingRegistrationId3 = databaseBuilder.factory.buildSchoolingRegistration().id;
-      const schoolingRegistrationId4 = databaseBuilder.factory.buildSchoolingRegistration().id;
+      const schoolingRegistrationId3 = databaseBuilder.factory.buildOrganizationLearner().id;
+      const schoolingRegistrationId4 = databaseBuilder.factory.buildOrganizationLearner().id;
       await databaseBuilder.commit();
 
       const scoCandidates = [
@@ -93,7 +93,7 @@ describe('Integration | Repository | SCOCertificationCandidate', function () {
       const sessionId = databaseBuilder.factory.buildSession().id;
       const anOrganizationId = databaseBuilder.factory.buildOrganization().id;
       const anotherOrganizationId = databaseBuilder.factory.buildOrganization().id;
-      const schoolingRegistrationId = databaseBuilder.factory.buildSchoolingRegistration({
+      const schoolingRegistrationId = databaseBuilder.factory.buildOrganizationLearner({
         organizationId: anOrganizationId,
         division: '3ème A',
       }).id;
@@ -117,7 +117,7 @@ describe('Integration | Repository | SCOCertificationCandidate', function () {
       // given
       const sessionId = databaseBuilder.factory.buildSession().id;
       const anOrganizationId = databaseBuilder.factory.buildOrganization().id;
-      const nonDisabledSchoolingRegistrationId = databaseBuilder.factory.buildSchoolingRegistration({
+      const nonDisabledSchoolingRegistrationId = databaseBuilder.factory.buildOrganizationLearner({
         organizationId: anOrganizationId,
         division: '3ème A',
         isDisabled: false,
@@ -127,7 +127,7 @@ describe('Integration | Repository | SCOCertificationCandidate', function () {
         schoolingRegistrationId: nonDisabledSchoolingRegistrationId,
       }).id;
 
-      const disabledSchoolingRegistrationId = databaseBuilder.factory.buildSchoolingRegistration({
+      const disabledSchoolingRegistrationId = databaseBuilder.factory.buildOrganizationLearner({
         organizationId: anOrganizationId,
         division: '3ème A',
         isDisabled: true,
@@ -152,11 +152,11 @@ describe('Integration | Repository | SCOCertificationCandidate', function () {
       // given
       const sessionId = databaseBuilder.factory.buildSession().id;
       const anOrganizationId = databaseBuilder.factory.buildOrganization().id;
-      const aSchoolingRegistrationId = databaseBuilder.factory.buildSchoolingRegistration({
+      const aSchoolingRegistrationId = databaseBuilder.factory.buildOrganizationLearner({
         organizationId: anOrganizationId,
         division: '3ème A',
       }).id;
-      const anotherSchoolingRegistrationId = databaseBuilder.factory.buildSchoolingRegistration({
+      const anotherSchoolingRegistrationId = databaseBuilder.factory.buildOrganizationLearner({
         organizationId: anOrganizationId,
         division: '3ème B',
       }).id;
@@ -184,15 +184,15 @@ describe('Integration | Repository | SCOCertificationCandidate', function () {
       // given
       const sessionId = databaseBuilder.factory.buildSession().id;
       const anOrganizationId = databaseBuilder.factory.buildOrganization().id;
-      const aSchoolingRegistrationId = databaseBuilder.factory.buildSchoolingRegistration({
+      const aSchoolingRegistrationId = databaseBuilder.factory.buildOrganizationLearner({
         organizationId: anOrganizationId,
         division: '3ème A',
       }).id;
-      const anotherSchoolingRegistrationId = databaseBuilder.factory.buildSchoolingRegistration({
+      const anotherSchoolingRegistrationId = databaseBuilder.factory.buildOrganizationLearner({
         organizationId: anOrganizationId,
         division: '3ème A',
       }).id;
-      const yetAnotherSchoolingRegistrationId = databaseBuilder.factory.buildSchoolingRegistration({
+      const yetAnotherSchoolingRegistrationId = databaseBuilder.factory.buildOrganizationLearner({
         organizationId: anOrganizationId,
         division: '3ème A',
       }).id;

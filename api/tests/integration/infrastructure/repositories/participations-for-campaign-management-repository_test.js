@@ -37,7 +37,7 @@ describe('Integration | Repository | Participations-For-Campaign-Management', fu
     context('when the given campaign has participations', function () {
       it('should return only participations for given campaign', async function () {
         // given
-        const schoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration();
+        const schoolingRegistration = databaseBuilder.factory.buildOrganizationLearner();
         const campaignParticipation = databaseBuilder.factory.buildCampaignParticipation({
           campaignId,
           schoolingRegistrationId: schoolingRegistration.id,
@@ -66,7 +66,7 @@ describe('Integration | Repository | Participations-For-Campaign-Management', fu
 
       it('should return participations with all attributes', async function () {
         // given
-        const schoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration({
+        const schoolingRegistration = databaseBuilder.factory.buildOrganizationLearner({
           lastName: 'King',
           firstName: 'Arthur',
         });
@@ -98,7 +98,7 @@ describe('Integration | Repository | Participations-For-Campaign-Management', fu
 
       it('should sort participations by ascending lastName and then ascending firstName', async function () {
         // given
-        const schoolingRegistrationId1 = databaseBuilder.factory.buildSchoolingRegistration({
+        const schoolingRegistrationId1 = databaseBuilder.factory.buildOrganizationLearner({
           lastName: 'Baobab',
           firstName: 'Anatole',
         }).id;
@@ -107,7 +107,7 @@ describe('Integration | Repository | Participations-For-Campaign-Management', fu
           schoolingRegistrationId: schoolingRegistrationId1,
           participantExternalId: '2',
         });
-        const schoolingRegistrationId2 = databaseBuilder.factory.buildSchoolingRegistration({
+        const schoolingRegistrationId2 = databaseBuilder.factory.buildOrganizationLearner({
           lastName: 'Baobab',
           firstName: 'Bernard',
         }).id;
@@ -116,7 +116,7 @@ describe('Integration | Repository | Participations-For-Campaign-Management', fu
           schoolingRegistrationId: schoolingRegistrationId2,
           participantExternalId: '3',
         });
-        const schoolingRegistrationId3 = databaseBuilder.factory.buildSchoolingRegistration({
+        const schoolingRegistrationId3 = databaseBuilder.factory.buildOrganizationLearner({
           lastName: 'Athele',
           firstName: 'Peu importe',
         }).id;

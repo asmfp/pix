@@ -355,7 +355,7 @@ function _buildParticipations({ databaseBuilder }) {
 function _buildUsers({ databaseBuilder, users }) {
   return users.map((user) => {
     const databaseUser = databaseBuilder.factory.buildUser.withRawPassword({ ...user, rawPassword: DEFAULT_PASSWORD });
-    databaseBuilder.factory.buildSchoolingRegistration({ firstName: user.firstName + '-Prescrit', lastName: user.lastName + '-Prescrit', id: databaseUser.id, userId: databaseUser.id, organizationId: PRO_COMPANY_ID });
+    databaseBuilder.factory.buildOrganizationLearner({ firstName: user.firstName + '-Prescrit', lastName: user.lastName + '-Prescrit', id: databaseUser.id, userId: databaseUser.id, organizationId: PRO_COMPANY_ID });
     return databaseUser;
   });
 }
@@ -413,7 +413,7 @@ function _buildProfilesCollectionParticipations({ databaseBuilder, users }) {
   const certifRegularUser5 = { id: CERTIF_REGULAR_USER5_ID, createdAt: new Date('2022-02-07') };
 
   [certifRegularUser1, certifRegularUser2, certifRegularUser3, certifRegularUser4, certifRegularUser5].forEach((certifUser, index) => {
-    databaseBuilder.factory.buildSchoolingRegistration({ lastName: `Certif${index}`, firstName: `User${index}`, id: certifUser.id, userId: certifUser.id, organizationId: PRO_COMPANY_ID });
+    databaseBuilder.factory.buildOrganizationLearner({ lastName: `Certif${index}`, firstName: `User${index}`, id: certifUser.id, userId: certifUser.id, organizationId: PRO_COMPANY_ID });
   });
 
   [...userIdsNotShared, certifRegularUser4, certifRegularUser5].forEach((user) => participateToProfilesCollectionCampaign({ databaseBuilder, campaignId: 6, user, schoolingRegistrationId: user.id, status: TO_SHARE }));
@@ -438,7 +438,7 @@ function _buildMedNumAssessmentParticipations({ databaseBuilder }) {
     isAnonymous: true,
     createdAt: new Date('2022-01-01'),
   });
-  const anonymousSchoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration({
+  const anonymousSchoolingRegistration = databaseBuilder.factory.buildOrganizationLearner({
     firstName: '',
     lastName: '',
     userId: anonymousUser.id,

@@ -22,7 +22,7 @@ describe('Acceptance | Route | Schooling-registration-dependent-user', function 
     beforeEach(async function () {
       // given
       organization = databaseBuilder.factory.buildOrganization();
-      schoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration({
+      schoolingRegistration = databaseBuilder.factory.buildOrganizationLearner({
         organizationId: organization.id,
         userId: null,
         nationalStudentId: 'salut',
@@ -68,7 +68,7 @@ describe('Acceptance | Route | Schooling-registration-dependent-user', function 
         it('should respond with a 409 - Conflict', async function () {
           // given
           const userId = databaseBuilder.factory.buildUser().id;
-          const schoolingRegistrationAlreadyLinked = databaseBuilder.factory.buildSchoolingRegistration({
+          const schoolingRegistrationAlreadyLinked = databaseBuilder.factory.buildOrganizationLearner({
             firstName: 'josé',
             lastName: 'bové',
             birthdate: '2020-01-01',
@@ -156,7 +156,7 @@ describe('Acceptance | Route | Schooling-registration-dependent-user', function 
         username: null,
       }).id;
       databaseBuilder.factory.buildMembership({ organizationId, userId });
-      schoolingRegistrationId = databaseBuilder.factory.buildSchoolingRegistration({
+      schoolingRegistrationId = databaseBuilder.factory.buildOrganizationLearner({
         organizationId,
         userId,
       }).id;
@@ -199,7 +199,7 @@ describe('Acceptance | Route | Schooling-registration-dependent-user', function 
 
     it("should return a 404 status when schoolingRegistration's userId does not exist", async function () {
       // given
-      const schoolingRegistrationId = databaseBuilder.factory.buildSchoolingRegistration({
+      const schoolingRegistrationId = databaseBuilder.factory.buildOrganizationLearner({
         organizationId,
         userId: null,
       }).id;
@@ -229,7 +229,7 @@ describe('Acceptance | Route | Schooling-registration-dependent-user', function 
     it('should return a 403 status when user does not belong to the same organization as schoolingRegistration', async function () {
       // given
       const wrongOrganization = databaseBuilder.factory.buildOrganization();
-      const schoolingRegistrationWithWrongOrganization = databaseBuilder.factory.buildSchoolingRegistration({
+      const schoolingRegistrationWithWrongOrganization = databaseBuilder.factory.buildOrganizationLearner({
         organizationId: wrongOrganization.id,
       });
       await databaseBuilder.commit();
@@ -274,7 +274,7 @@ describe('Acceptance | Route | Schooling-registration-dependent-user', function 
     it('should return a 200 status after having successfully updated the password', async function () {
       // given
       const userId = databaseBuilder.factory.buildUser.withRawPassword().id;
-      const schoolingRegistrationId = databaseBuilder.factory.buildSchoolingRegistration({
+      const schoolingRegistrationId = databaseBuilder.factory.buildOrganizationLearner({
         organizationId,
         userId,
       }).id;
@@ -302,7 +302,7 @@ describe('Acceptance | Route | Schooling-registration-dependent-user', function 
 
     it("should return a 404 status when schoolingRegistration's userId does not exist", async function () {
       // given
-      const schoolingRegistrationId = databaseBuilder.factory.buildSchoolingRegistration({
+      const schoolingRegistrationId = databaseBuilder.factory.buildOrganizationLearner({
         organizationId,
         userId: null,
       }).id;
@@ -320,7 +320,7 @@ describe('Acceptance | Route | Schooling-registration-dependent-user', function 
     it('should return a 403 status when user does not belong to the same organization as schoolingRegistration', async function () {
       // given
       const wrongOrganization = databaseBuilder.factory.buildOrganization();
-      const schoolingRegistrationWithWrongOrganization = databaseBuilder.factory.buildSchoolingRegistration({
+      const schoolingRegistrationWithWrongOrganization = databaseBuilder.factory.buildOrganizationLearner({
         organizationId: wrongOrganization.id,
       });
       await databaseBuilder.commit();
@@ -359,14 +359,14 @@ describe('Acceptance | Route | Schooling-registration-dependent-user', function 
         id: 2,
         name: 'Super Collège Hollywoodien',
       });
-      databaseBuilder.factory.buildSchoolingRegistration({
+      databaseBuilder.factory.buildOrganizationLearner({
         userId: user.id,
         ...studentInformation,
         nationalStudentId: studentInformation.ineIna,
         organizationId: organization.id,
         updatedAt: new Date('2005-01-01T15:00:00Z'),
       });
-      databaseBuilder.factory.buildSchoolingRegistration({
+      databaseBuilder.factory.buildOrganizationLearner({
         userId: user.id,
         ...studentInformation,
         nationalStudentId: studentInformation.ineIna,

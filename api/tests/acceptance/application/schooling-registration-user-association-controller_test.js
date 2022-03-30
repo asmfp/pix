@@ -36,7 +36,7 @@ describe('Acceptance | Controller | Schooling-registration-user-associations', f
 
       user = databaseBuilder.factory.buildUser();
       organization = databaseBuilder.factory.buildOrganization({ type: 'SCO' });
-      schoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration({
+      schoolingRegistration = databaseBuilder.factory.buildOrganizationLearner({
         firstName: 'france',
         lastName: 'gall',
         birthdate: '2001-01-01',
@@ -77,7 +77,7 @@ describe('Acceptance | Controller | Schooling-registration-user-associations', f
             username: null,
             email: 'john.harry@example.net',
           });
-          const schoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration({
+          const schoolingRegistration = databaseBuilder.factory.buildOrganizationLearner({
             organizationId: organization.id,
             userId: null,
           });
@@ -116,7 +116,7 @@ describe('Acceptance | Controller | Schooling-registration-user-associations', f
             username: 'john.harry0702',
             email: null,
           });
-          const schoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration({
+          const schoolingRegistration = databaseBuilder.factory.buildOrganizationLearner({
             organizationId: organization.id,
             userId: null,
           });
@@ -160,7 +160,7 @@ describe('Acceptance | Controller | Schooling-registration-user-associations', f
             userId: userWithSamlOnly.id,
           });
 
-          const schoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration({
+          const schoolingRegistration = databaseBuilder.factory.buildOrganizationLearner({
             organizationId: organization.id,
             userId: null,
           });
@@ -206,7 +206,7 @@ describe('Acceptance | Controller | Schooling-registration-user-associations', f
             userId: userWithSamlIdOnly.id,
           });
 
-          const otherSchoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration();
+          const otherSchoolingRegistration = databaseBuilder.factory.buildOrganizationLearner();
           otherSchoolingRegistration.nationalStudentId = schoolingRegistration.nationalStudentId;
           otherSchoolingRegistration.birthdate = schoolingRegistration.birthdate;
           otherSchoolingRegistration.firstName = schoolingRegistration.firstName;
@@ -246,7 +246,7 @@ describe('Acceptance | Controller | Schooling-registration-user-associations', f
             username: null,
             email: 'john.harry@example.net',
           });
-          const otherSchoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration();
+          const otherSchoolingRegistration = databaseBuilder.factory.buildOrganizationLearner();
           otherSchoolingRegistration.nationalStudentId = schoolingRegistration.nationalStudentId;
           otherSchoolingRegistration.birthdate = schoolingRegistration.birthdate;
           otherSchoolingRegistration.firstName = schoolingRegistration.firstName;
@@ -288,7 +288,7 @@ describe('Acceptance | Controller | Schooling-registration-user-associations', f
             username: 'john.harry0702',
           });
 
-          const otherSchoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration();
+          const otherSchoolingRegistration = databaseBuilder.factory.buildOrganizationLearner();
           otherSchoolingRegistration.nationalStudentId = schoolingRegistration.nationalStudentId;
           otherSchoolingRegistration.birthdate = schoolingRegistration.birthdate;
           otherSchoolingRegistration.firstName = schoolingRegistration.firstName;
@@ -533,7 +533,7 @@ describe('Acceptance | Controller | Schooling-registration-user-associations', f
       };
 
       organization = databaseBuilder.factory.buildOrganization({ identityProvider: 'SCO' });
-      schoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration({
+      schoolingRegistration = databaseBuilder.factory.buildOrganizationLearner({
         firstName: 'josé',
         lastName: 'bové',
         birthdate: '2020-01-01',
@@ -589,7 +589,7 @@ describe('Acceptance | Controller | Schooling-registration-user-associations', f
           });
 
           const otherOrganization = databaseBuilder.factory.buildOrganization({ type: 'SCO' });
-          databaseBuilder.factory.buildSchoolingRegistration({
+          databaseBuilder.factory.buildOrganizationLearner({
             organizationId: otherOrganization.id,
             firstName: schoolingRegistration.firstName,
             lastName: schoolingRegistration.lastName,
@@ -637,7 +637,7 @@ describe('Acceptance | Controller | Schooling-registration-user-associations', f
             userId: userWithSamlIdOnly.id,
           });
 
-          const schoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration({
+          const schoolingRegistration = databaseBuilder.factory.buildOrganizationLearner({
             organizationId: organization.id,
             userId: userWithSamlIdOnly.id,
             firstName: userWithSamlIdOnly.firstName,
@@ -720,7 +720,7 @@ describe('Acceptance | Controller | Schooling-registration-user-associations', f
       user = databaseBuilder.factory.buildUser();
       organization = databaseBuilder.factory.buildOrganization();
       campaign = databaseBuilder.factory.buildCampaign({ organizationId: organization.id });
-      databaseBuilder.factory.buildSchoolingRegistration({
+      databaseBuilder.factory.buildOrganizationLearner({
         organizationId: organization.id,
         userId: null,
         nationalStudentId,
@@ -731,7 +731,7 @@ describe('Acceptance | Controller | Schooling-registration-user-associations', f
 
     it('should return an 200 status after having successfully associated user to schoolingRegistration', async function () {
       // given
-      databaseBuilder.factory.buildSchoolingRegistration({ userId: user.id, nationalStudentId });
+      databaseBuilder.factory.buildOrganizationLearner({ userId: user.id, nationalStudentId });
       await databaseBuilder.commit();
 
       options.headers.authorization = generateValidRequestAuthorizationHeader(user.id);
@@ -799,7 +799,7 @@ describe('Acceptance | Controller | Schooling-registration-user-associations', f
       user = databaseBuilder.factory.buildUser();
       organization = databaseBuilder.factory.buildOrganization();
       campaign = databaseBuilder.factory.buildCampaign({ organizationId: organization.id });
-      databaseBuilder.factory.buildSchoolingRegistration({
+      databaseBuilder.factory.buildOrganizationLearner({
         firstName: 'Jean',
         lastName: 'Michel',
         birthdate: new Date('2010-01-01'),
@@ -843,7 +843,7 @@ describe('Acceptance | Controller | Schooling-registration-user-associations', f
       organization = databaseBuilder.factory.buildOrganization({ isManagingStudents: true });
       campaignCode = databaseBuilder.factory.buildCampaign({ organizationId: organization.id, code: 'YUTR789' }).code;
       user = databaseBuilder.factory.buildUser();
-      schoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration({
+      schoolingRegistration = databaseBuilder.factory.buildOrganizationLearner({
         firstName: 'josé',
         lastName: 'bové',
         birthdate: '2020-01-01',
@@ -956,7 +956,7 @@ describe('Acceptance | Controller | Schooling-registration-user-associations', f
         organizationId: organization.id,
       }).code;
       user = databaseBuilder.factory.buildUser();
-      schoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration({
+      schoolingRegistration = databaseBuilder.factory.buildOrganizationLearner({
         organizationId: organization.id,
         firstName: user.firstName,
         lastName: user.lastName,
@@ -1030,7 +1030,7 @@ describe('Acceptance | Controller | Schooling-registration-user-associations', f
             username: null,
             email: 'john.harry@example.net',
           });
-          const schoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration({
+          const schoolingRegistration = databaseBuilder.factory.buildOrganizationLearner({
             organizationId: organization.id,
             userId: userWithEmailOnly.id,
           });
@@ -1068,7 +1068,7 @@ describe('Acceptance | Controller | Schooling-registration-user-associations', f
             username: 'john.harry0702',
             email: null,
           });
-          const schoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration({
+          const schoolingRegistration = databaseBuilder.factory.buildOrganizationLearner({
             organizationId: organization.id,
             userId: userWithUsernameOnly.id,
           });
@@ -1111,7 +1111,7 @@ describe('Acceptance | Controller | Schooling-registration-user-associations', f
             userId: userWithEmailOnly.id,
           });
 
-          const schoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration({
+          const schoolingRegistration = databaseBuilder.factory.buildOrganizationLearner({
             firstName: 'Sam',
             lastName: 'Lebrave',
             birthdate: '2015-10-10',
@@ -1152,7 +1152,7 @@ describe('Acceptance | Controller | Schooling-registration-user-associations', f
       context('when schoolingRegistration is already associated in others organizations', function () {
         it('should respond with a 409 - Conflict', async function () {
           // given
-          const schoolingRegistrationAlreadyMatched = databaseBuilder.factory.buildSchoolingRegistration({
+          const schoolingRegistrationAlreadyMatched = databaseBuilder.factory.buildOrganizationLearner({
             birthdate: '2005-05-15',
             firstName: user.firstName,
             lastName: user.lastName,
@@ -1182,7 +1182,7 @@ describe('Acceptance | Controller | Schooling-registration-user-associations', f
             username: null,
             email: 'john.harry@example.net',
           });
-          databaseBuilder.factory.buildSchoolingRegistration({
+          databaseBuilder.factory.buildOrganizationLearner({
             nationalStudentId: schoolingRegistration.nationalStudentId,
             birthdate: schoolingRegistration.birthdate,
             firstName: schoolingRegistration.firstName,
@@ -1223,7 +1223,7 @@ describe('Acceptance | Controller | Schooling-registration-user-associations', f
             username: 'john.harry0702',
             email: null,
           });
-          databaseBuilder.factory.buildSchoolingRegistration({
+          databaseBuilder.factory.buildOrganizationLearner({
             nationalStudentId: schoolingRegistration.nationalStudentId,
             birthdate: schoolingRegistration.birthdate,
             firstName: schoolingRegistration.firstName,
@@ -1269,7 +1269,7 @@ describe('Acceptance | Controller | Schooling-registration-user-associations', f
             userId: userWithSamlIdOnly.id,
           });
 
-          databaseBuilder.factory.buildSchoolingRegistration({
+          databaseBuilder.factory.buildOrganizationLearner({
             nationalStudentId: schoolingRegistration.nationalStudentId,
             birthdate: schoolingRegistration.birthdate,
             firstName: schoolingRegistration.firstName,
@@ -1326,7 +1326,7 @@ describe('Acceptance | Controller | Schooling-registration-user-associations', f
         const organizationId = databaseBuilder.factory.buildOrganization({ isManagingStudents: true }).id;
         const pixMaster = await insertUserWithRolePixMaster();
         const userId = databaseBuilder.factory.buildUser().id;
-        const schoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration({ organizationId, userId });
+        const schoolingRegistration = databaseBuilder.factory.buildOrganizationLearner({ organizationId, userId });
 
         await databaseBuilder.commit();
 
@@ -1356,7 +1356,7 @@ describe('Acceptance | Controller | Schooling-registration-user-associations', f
 
       const user = databaseBuilder.factory.buildUser();
       authorizationToken = generateValidRequestAuthorizationHeader(user.id);
-      schoolingRegistrationId = databaseBuilder.factory.buildSchoolingRegistration({ organizationId }).id;
+      schoolingRegistrationId = databaseBuilder.factory.buildOrganizationLearner({ organizationId }).id;
       databaseBuilder.factory.buildMembership({
         organizationId,
         userId: user.id,

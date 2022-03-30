@@ -197,7 +197,7 @@ describe('Integration | Domain | Use Cases | start-writing-profiles-collection-c
         organization = databaseBuilder.factory.buildOrganization({ type: 'SCO', isManagingStudents: true });
         databaseBuilder.factory.buildMembership({ userId: user.id, organizationId: organization.id });
 
-        schoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration({
+        schoolingRegistration = databaseBuilder.factory.buildOrganizationLearner({
           userId: participant.id,
           firstName: '@Jean',
           lastName: '=Bono',
@@ -278,7 +278,7 @@ describe('Integration | Domain | Use Cases | start-writing-profiles-collection-c
         organization = databaseBuilder.factory.buildOrganization({ type: 'SUP', isManagingStudents: true });
         databaseBuilder.factory.buildMembership({ userId: user.id, organizationId: organization.id });
 
-        schoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration({
+        schoolingRegistration = databaseBuilder.factory.buildOrganizationLearner({
           userId: participant.id,
           studentNumber: '12345A',
           firstName: '@Jean',

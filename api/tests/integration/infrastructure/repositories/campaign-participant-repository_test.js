@@ -125,7 +125,7 @@ describe('Integration | Infrastructure | Repository | CampaignParticipant', func
       it('create a campaign participation linked to this schooling registration', async function () {
         //GIVEN
         const campaign = databaseBuilder.factory.buildCampaign({ idPixLabel: null });
-        const schoolingRegistrationId = databaseBuilder.factory.buildSchoolingRegistration().id;
+        const schoolingRegistrationId = databaseBuilder.factory.buildOrganizationLearner().id;
         await databaseBuilder.commit();
 
         const campaignToStartParticipation = new CampaignToStartParticipation(campaign);
@@ -533,7 +533,7 @@ describe('Integration | Infrastructure | Repository | CampaignParticipant', func
       it('find the schoolingRegistrationId', async function () {
         const campaignToStartParticipation = buildCampaignWithCompleteTargetProfile({ organizationId });
         const { id: userId } = databaseBuilder.factory.buildUser();
-        const { id: schoolingRegistrationId } = databaseBuilder.factory.buildSchoolingRegistration({
+        const { id: schoolingRegistrationId } = databaseBuilder.factory.buildOrganizationLearner({
           userId,
           organizationId,
         });
@@ -554,7 +554,7 @@ describe('Integration | Infrastructure | Repository | CampaignParticipant', func
       it('find only schoolingRegistration that are not disabled', async function () {
         const campaignToStartParticipation = buildCampaignWithCompleteTargetProfile({ organizationId });
         const { id: userId } = databaseBuilder.factory.buildUser();
-        databaseBuilder.factory.buildSchoolingRegistration({
+        databaseBuilder.factory.buildOrganizationLearner({
           userId,
           organizationId,
           isDisabled: true,
@@ -579,10 +579,10 @@ describe('Integration | Infrastructure | Repository | CampaignParticipant', func
         it('find the schoolingRegistrationId for the correct organization', async function () {
           const campaignToStartParticipation = buildCampaignWithCompleteTargetProfile({ organizationId });
           const { id: userId } = databaseBuilder.factory.buildUser();
-          databaseBuilder.factory.buildSchoolingRegistration({
+          databaseBuilder.factory.buildOrganizationLearner({
             userId,
           });
-          const { id: schoolingRegistrationId } = databaseBuilder.factory.buildSchoolingRegistration({
+          const { id: schoolingRegistrationId } = databaseBuilder.factory.buildOrganizationLearner({
             userId,
             organizationId,
           });
@@ -605,10 +605,10 @@ describe('Integration | Infrastructure | Repository | CampaignParticipant', func
         it('find the schoolingRegistrationId for the correct user', async function () {
           const campaignToStartParticipation = buildCampaignWithCompleteTargetProfile({ organizationId });
           const { id: userId } = databaseBuilder.factory.buildUser();
-          databaseBuilder.factory.buildSchoolingRegistration({
+          databaseBuilder.factory.buildOrganizationLearner({
             organizationId,
           });
-          const { id: schoolingRegistrationId } = databaseBuilder.factory.buildSchoolingRegistration({
+          const { id: schoolingRegistrationId } = databaseBuilder.factory.buildOrganizationLearner({
             userId,
             organizationId,
           });

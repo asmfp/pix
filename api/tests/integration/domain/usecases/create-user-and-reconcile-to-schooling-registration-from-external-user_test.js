@@ -177,7 +177,7 @@ describe('Integration | UseCases | create-user-and-reconcile-to-schooling-regist
 
     it('should create the external user, reconcile it and create GAR authentication method', async function () {
       // given
-      const schoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration({
+      const schoolingRegistration = databaseBuilder.factory.buildOrganizationLearner({
         firstName,
         lastName,
         organizationId,
@@ -216,7 +216,7 @@ describe('Integration | UseCases | create-user-and-reconcile-to-schooling-regist
       function () {
         it('should throw a SchoolingRegistrationAlreadyLinkedToUserError', async function () {
           // given
-          const schoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration({
+          const schoolingRegistration = databaseBuilder.factory.buildOrganizationLearner({
             firstName,
             lastName,
             organizationId,
@@ -248,7 +248,7 @@ describe('Integration | UseCases | create-user-and-reconcile-to-schooling-regist
         context('When reconciled in other organization', function () {
           it('should update existing account with the new samlId', async function () {
             // given
-            const schoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration({
+            const schoolingRegistration = databaseBuilder.factory.buildOrganizationLearner({
               firstName,
               lastName,
               organizationId,
@@ -265,7 +265,7 @@ describe('Integration | UseCases | create-user-and-reconcile-to-schooling-regist
             });
 
             const otherOrganization = databaseBuilder.factory.buildOrganization({ type: 'SCO' });
-            databaseBuilder.factory.buildSchoolingRegistration({
+            databaseBuilder.factory.buildOrganizationLearner({
               organizationId: otherOrganization.id,
               firstName: schoolingRegistration.firstName,
               lastName: schoolingRegistration.lastName,
@@ -319,7 +319,7 @@ describe('Integration | UseCases | create-user-and-reconcile-to-schooling-regist
               userId: otherAccount.id,
             });
 
-            const schoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration({
+            const schoolingRegistration = databaseBuilder.factory.buildOrganizationLearner({
               firstName,
               lastName,
               birthdate,
@@ -363,7 +363,7 @@ describe('Integration | UseCases | create-user-and-reconcile-to-schooling-regist
     context('When the external user is already created', function () {
       it('should not create again the user', async function () {
         // given
-        const schoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration({
+        const schoolingRegistration = databaseBuilder.factory.buildOrganizationLearner({
           firstName,
           lastName,
           organizationId,

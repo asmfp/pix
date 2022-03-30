@@ -93,7 +93,7 @@ describe('Acceptance | Controller | session-controller-enroll-students-to-sessio
           originalName: 'FRANCE',
         });
 
-        student = databaseBuilder.factory.buildSchoolingRegistration({
+        student = databaseBuilder.factory.buildOrganizationLearner({
           organizationId,
           birthCityCode,
           birthCountryCode: FRANCE_SCHOOLING_REGISTRATION_INSEE_CODE,

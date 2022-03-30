@@ -24,13 +24,13 @@ describe('Integration | UseCase | get-user-details-for-admin', function () {
     // given
     const userInDB = databaseBuilder.factory.buildUser();
     const firstOrganizationInDB = databaseBuilder.factory.buildOrganization({ type: 'SCO' });
-    const firstSchoolingRegistrationInDB = databaseBuilder.factory.buildSchoolingRegistration({
+    const firstSchoolingRegistrationInDB = databaseBuilder.factory.buildOrganizationLearner({
       id: 1,
       userId: userInDB.id,
       organizationId: firstOrganizationInDB.id,
     });
     const secondOrganizationInDB = databaseBuilder.factory.buildOrganization({ type: 'SCO' });
-    const secondSchoolingRegistrationInDB = databaseBuilder.factory.buildSchoolingRegistration({
+    const secondSchoolingRegistrationInDB = databaseBuilder.factory.buildOrganizationLearner({
       id: 2,
       userId: userInDB.id,
       organizationId: secondOrganizationInDB.id,

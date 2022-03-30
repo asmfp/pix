@@ -940,7 +940,7 @@ describe('Acceptance | Application | organization-controller', function () {
       let schoolingRegistration;
 
       beforeEach(async function () {
-        schoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration({
+        schoolingRegistration = databaseBuilder.factory.buildOrganizationLearner({
           organizationId: organization.id,
           userId: user.id,
         });
@@ -1497,7 +1497,7 @@ describe('Acceptance | Application | organization-controller', function () {
         organizationRole: Membership.roles.ADMIN,
       });
 
-      const schoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration({
+      const schoolingRegistration = databaseBuilder.factory.buildOrganizationLearner({
         organizationId: organization.id,
         division: 'aDivision',
       });
@@ -1561,7 +1561,7 @@ describe('Acceptance | Application | organization-controller', function () {
       });
 
       const student = databaseBuilder.factory.buildUser.withRawPassword();
-      const schoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration({
+      const schoolingRegistration = databaseBuilder.factory.buildOrganizationLearner({
         organizationId: organization.id,
         division: 'aDivision',
         userId: student.id,
@@ -1656,6 +1656,6 @@ describe('Acceptance | Application | organization-controller', function () {
 
 function _buildSchoolingRegistrations(organization, ...students) {
   return students.map((student) =>
-    databaseBuilder.factory.buildSchoolingRegistration({ organizationId: organization.id, ...student })
+    databaseBuilder.factory.buildOrganizationLearner({ organizationId: organization.id, ...student })
   );
 }

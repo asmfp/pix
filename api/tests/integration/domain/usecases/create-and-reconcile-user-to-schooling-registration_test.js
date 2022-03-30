@@ -111,7 +111,7 @@ describe('Integration | UseCases | create-and-reconcile-user-to-schooling-regist
       it('should nor create nor associate schoolingRegistration', async function () {
         // given
         const userId = databaseBuilder.factory.buildUser().id;
-        schoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration({
+        schoolingRegistration = databaseBuilder.factory.buildOrganizationLearner({
           organizationId,
           userId,
         });
@@ -149,7 +149,7 @@ describe('Integration | UseCases | create-and-reconcile-user-to-schooling-regist
       beforeEach(async function () {
         password = 'Password123';
 
-        schoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration({
+        schoolingRegistration = databaseBuilder.factory.buildOrganizationLearner({
           organizationId,
           userId: null,
         });
@@ -286,7 +286,7 @@ describe('Integration | UseCases | create-and-reconcile-user-to-schooling-regist
       beforeEach(async function () {
         password = 'Password123';
 
-        schoolingRegistration = databaseBuilder.factory.buildSchoolingRegistration({
+        schoolingRegistration = databaseBuilder.factory.buildOrganizationLearner({
           organizationId,
           userId: null,
         });
