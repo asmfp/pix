@@ -241,6 +241,10 @@ module.exports = (function () {
         source: 'poleEmploi',
       },
     ],
+
+    redis: {
+      database: 0,
+    },
   };
 
   if (config.environment === 'development') {
@@ -330,11 +334,11 @@ module.exports = (function () {
     config.logging.enableLogStartingEventDispatch = false;
     config.logging.enableLogEndingEventDispatch = false;
 
-    config.caching.redisUrl = null;
     config.caching.redisCacheEnabled = false;
     config.caching.redisCacheKeyLockTTL = 0;
     config.caching.redisCacheLockedWaitBeforeRetry = 0;
 
+    config.redis.database = 1;
     config.sentry.enabled = false;
   }
 
