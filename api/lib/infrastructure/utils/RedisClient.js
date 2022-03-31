@@ -35,7 +35,7 @@ module.exports = class RedisClient {
     const promisifiedGet = promisify(this._client.get);
     let value = await promisifiedGet.call(this._client, this._prefix + key, ...args);
     if (!value) {
-      value = await promisifiedGet.call(this._client, key, ...args);
+      value = await promisifiedGet.call(this._client, key.replace(/^.*:/, ''), ...args);
     }
     return value;
   }
